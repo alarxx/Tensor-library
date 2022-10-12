@@ -1,7 +1,14 @@
 package sheet.abstract_factory;
 
 
-public class OperationFactory {
+import com.ml.lib.interfaces.Operation;
+import com.ml.lib.linear_algebra.operations.MatMul;
+import com.ml.lib.linear_algebra.operations.elementary.*;
+import sheet.operation_simple_factory.OperationTypes;
+
+import static sheet.operation_simple_factory.OperationTypes.*;
+
+public class SimpleFactory {
 
     Operation createOperation(OperationTypes type){
         if(type == sum)

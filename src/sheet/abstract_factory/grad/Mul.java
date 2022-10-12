@@ -1,4 +1,4 @@
-package sheet.abstract_factory.methods;
+package sheet.abstract_factory.grad;
 
 import com.ml.lib.autograd.Method;
 import com.ml.lib.tensor.Tensor;

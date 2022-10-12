@@ -1,7 +1,8 @@
-package sheet.operation_factory;
+package sheet.operation_simple_factory;
 
 import com.ml.lib.interfaces.Operation;
 import com.ml.lib.tensor.Tensor;
+import sheet.operation_simple_factory.OperationTypes;
 
 import static com.ml.lib.Core.tensor;
 

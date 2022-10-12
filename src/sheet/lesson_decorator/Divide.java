@@ -17,6 +17,6 @@ public class Divide extends OperationDecorator {
     @Override
     public Tensor operation(Tensor tensor) {
         Tensor t = super.operation(tensor);
-        return tensor(t.getScalar() + v);
+        return tensor(t.getScalar() / v);
     }
 }
