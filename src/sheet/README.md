@@ -1,1 +1,1 @@
-# Study directory needed for university assignments only
+### Study directory needed for university assignments only
