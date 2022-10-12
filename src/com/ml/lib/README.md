@@ -30,7 +30,8 @@ Tensor b = Core.tensor(new float[][]{
         {6, 7}
 });
 
-Tensor c = Core.dot(a, b, true);
+boolean gradientNeeded = true;
+Tensor c = Core.dot(a, b, gradientNeeded);
 System.out.println(c);
 
 c._backward_();
