@@ -2,7 +2,7 @@ package com.ml.lib.interfaces;
 
 import com.ml.lib.tensor.Tensor;
 
-public interface OperationInterface {
+public interface Operation {
     /**
      * Метод не должен изменять состояние аргумента.
      * @param src2 may be null
