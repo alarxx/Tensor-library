@@ -1,2 +1,2 @@
 # ML_library
-An analogue ML-libraries like numpy and pytorch
+Analogue to ML-libraries like numpy or pytorch
