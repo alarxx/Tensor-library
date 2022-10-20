@@ -1,5 +1,5 @@
 ```
-public interface TensorInterface {
+interface TensorInterface {
     int[] dims();
 
     Tensor set(Tensor item, int ... indexes);
