@@ -78,7 +78,7 @@ public abstract class Operation implements com.ml.lib.interfaces.Operation {
                     lt2.get(i % lt2.size())
             );
 
-            System.out.println(res_lt.get(i));
+//            System.out.println(res_lt.get(i));
 
             res_lt.get(i).set(output);
         }
