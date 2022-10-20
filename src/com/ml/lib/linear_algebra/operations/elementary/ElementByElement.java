@@ -39,7 +39,7 @@ public abstract class ElementByElement extends Operation {
 
     @Override
     protected int[] resultTensorsDims(Tensor src1, Tensor src2) {
-        if(getRank()[0] == 0 && getRank()[1] == 0){
+        if(getRanks()[0] == 0 && getRanks()[1] == 0){
             if(numberOfElements(src1.dims()) > numberOfElements(src2.dims())){
                 return src1.dims();
             }
@@ -62,7 +62,7 @@ public abstract class ElementByElement extends Operation {
 
     @Override
     public Tensor operation(Tensor t1, Tensor t2) {
-        if (getRank()[0] == 0 && getRank()[1] == 0) {
+        if (getRanks()[0] == 0 && getRanks()[1] == 0) {
             float value = operation(t1.getScalar(), t2.getScalar());
             return tensor(value);
         }

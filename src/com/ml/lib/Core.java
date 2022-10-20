@@ -273,12 +273,14 @@ public class Core {
         return new Div().apply(t1, t2);
     }
 
+
     public static Tensor dot(Tensor t1, Tensor t2, boolean grad){
         return grad ? AutoGrad.dot(t1, t2) : new MatMul().apply(t1, t2);
     }
     public static Tensor dot(Tensor t1, Tensor t2){
         return dot(t1, t2, false);
     }
+
 
     public static Tensor neg(Tensor tensor){
         return mul(tensor, tensor(-1f));

@@ -181,6 +181,10 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     }
 
 
+    /**
+     * Do not change values manually!
+     * Clone the result if you need so.
+     * */
     @Override
     public int[] dims(){
         return dims;

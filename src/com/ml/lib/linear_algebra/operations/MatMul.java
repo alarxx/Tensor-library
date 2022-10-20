@@ -6,7 +6,6 @@ import com.ml.lib.tensor.Tensor;
 import static com.ml.lib.Core.*;
 
 public class MatMul extends Operation {
-
     public static void main(String[] args) {
         Tensor t1 = new Tensor(3, 2, 2).fill(1);
         Tensor t2 = new Tensor(2, 4).fill(2);
@@ -20,6 +19,16 @@ public class MatMul extends Operation {
 
         System.out.println("result: " + result);
     }
+
+    //---------SINGLETON------------------
+    private static Operation instance;
+    public static Operation getInstance(){
+        if(instance == null){
+            instance = new MatMul();
+        }
+        return instance;
+    }
+    //-------------------------------------
 
     @Override
     protected int[] ranksToCorrelate(Tensor src1, Tensor src2) {

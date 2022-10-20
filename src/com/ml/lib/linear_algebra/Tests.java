@@ -11,7 +11,51 @@ import java.util.Arrays;
 public class Tests {
 
     public static void main(String[] args) {
-        transposeTestMat1x2();
+        singletonTest1();
+    }
+
+    private static void singletonTest1(){
+//        Operation matmul = new MatMul();
+        Operation matmul = MatMul.getInstance();
+
+
+        Tensor mat1 = Core.tensor(new float[][]{
+                {1, 2, 3},
+                {4, 5, 6}
+        });
+
+        Tensor mat2 = Core.tensor(new float[][]{
+                        {1, 2},
+                        {3, 4},
+                        {5, 6}
+        });
+
+        Tensor result = matmul.apply(mat1, mat2);
+
+        System.out.println("mat1:"+mat1);
+        System.out.println("mat2:"+mat2);
+        System.out.println("result:"+result);
+
+    }
+
+    private static void matmulTest(){
+        Tensor mat1 = Core.tensor(new float[][]{
+                {1, 2, 3},
+                {4, 5, 6}
+        });
+
+        Tensor mat2 = Core.tensor(new float[][]{
+                {1, 2},
+                {3, 4},
+                {5, 6}
+        });
+
+        Tensor result = Core.dot(mat1, mat2);
+
+        System.out.println("mat1:"+mat1);
+        System.out.println("mat2:"+mat2);
+        System.out.println("result:"+result);
+
     }
 
     private static void tensorFactory(){
