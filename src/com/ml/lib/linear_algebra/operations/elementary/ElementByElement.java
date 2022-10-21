@@ -69,7 +69,12 @@ public abstract class ElementByElement extends Operation {
         else { // Это матрицы
             // Здесь нужно как-нибудь проверять и дополнять вектор до матрицы и тд????!!!!!!!!!!!!! Хотя в матеше так делать нельзя
             int     rows = t1.dims()[0],
-                    cols = t1.dims()[1];
+                    cols = t1.dims()[1],
+                    rows2 = t2.dims()[0],
+                    cols2 = t2.dims()[1];
+
+            if(rows != rows2 || cols != cols2)
+                throwError("Wrong dimensions");
 
             Tensor result = new Tensor(rows, cols);
 

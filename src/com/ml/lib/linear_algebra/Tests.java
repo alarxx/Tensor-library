@@ -31,6 +31,7 @@ public class Tests {
         });
 
         Tensor result = matmul.apply(mat1, mat2);
+//        Tensor result = Core.dot(mat1, mat2);
 
         System.out.println("mat1:"+mat1);
         System.out.println("mat2:"+mat2);

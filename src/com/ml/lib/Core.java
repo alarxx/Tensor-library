@@ -249,33 +249,33 @@ public class Core {
     * */
 
     public static Tensor sum(Tensor t1, Tensor t2, boolean grad){
-        return grad ? AutoGrad.sum(t1, t2) : new Sum().apply(t1, t2);
+        return grad ? AutoGrad.sum(t1, t2) : Sum.getInstance().apply(t1, t2);
     }
     public static Tensor sum(Tensor t1, Tensor t2){
         return sum(t1, t2, false);
     }
 
     public static Tensor sub(Tensor t1, Tensor t2, boolean grad){
-        return grad ? AutoGrad.sub(t1, t2) : new Sub().apply(t1, t2);
+        return grad ? AutoGrad.sub(t1, t2) : Sub.getInstance().apply(t1, t2);
     }
     public static Tensor sub(Tensor t1, Tensor t2){
         return sub(t1, t2, false);
     }
 
     public static Tensor mul(Tensor t1, Tensor t2, boolean grad){
-        return grad ? AutoGrad.mul(t1, t2) : new Mul().apply(t1, t2);
+        return grad ? AutoGrad.mul(t1, t2) : Mul.getInstance().apply(t1, t2);
     }
     public static Tensor mul(Tensor t1, Tensor t2){
         return mul(t1, t2, false);
     }
 
     public static Tensor div(Tensor t1, Tensor t2){
-        return new Div().apply(t1, t2);
+        return Div.getInstance().apply(t1, t2);
     }
 
 
     public static Tensor dot(Tensor t1, Tensor t2, boolean grad){
-        return grad ? AutoGrad.dot(t1, t2) : new MatMul().apply(t1, t2);
+        return grad ? AutoGrad.dot(t1, t2) : MatMul.getInstance().apply(t1, t2);
     }
     public static Tensor dot(Tensor t1, Tensor t2){
         return dot(t1, t2, false);
@@ -290,6 +290,6 @@ public class Core {
     * OPERATIONS
     * */
     public static Tensor tr(Tensor tensor){
-        return new Transposition().apply(tensor);
+        return Transposition.getInstance().apply(tensor);
     }
 }

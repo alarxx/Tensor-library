@@ -18,7 +18,7 @@ public class Main {
         });
 
         Tensor c = dot(a, b, true);
-        System.out.println(c);
+        System.out.println("c:"+c);
 
         c._backward_();
 

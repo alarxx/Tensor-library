@@ -5,6 +5,16 @@ import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.tensor.Tensor;
 
 public class Transposition extends Operation {
+    //---------SINGLETON------------------
+    private static Operation instance;
+    public static Operation getInstance(){
+        if(instance == null){
+            instance = new Transposition();
+        }
+        return instance;
+    }
+    //-------------------------------------
+
     @Override
     protected int[] ranksToCorrelate(Tensor src1, Tensor src2) {
         return new int[]{2};
