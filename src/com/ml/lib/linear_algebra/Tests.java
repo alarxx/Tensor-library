@@ -8,10 +8,25 @@ import com.ml.lib.tensor.Tensor;
 
 import java.util.Arrays;
 
+import static com.ml.lib.Core.tr;
+
 public class Tests {
 
     public static void main(String[] args) {
-        singletonTest1();
+        Tensor mat = Core.tensor(new float[][][]{
+                {
+                        {1, 2, 3},
+                        {4, 5, 6}
+                },
+                {
+                        {1, 2, 3},
+                        {4, 5, 6}
+                }
+        });
+
+        mat = tr(mat);
+
+        System.out.println(mat);
     }
 
     private static void singletonTest1(){

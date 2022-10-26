@@ -23,10 +23,11 @@ public class Transposition extends Operation {
     @Override
     protected int[] resultTensorsDims(Tensor src1, Tensor src2) {
         int[] dims = src1.dims().clone();
+        int l = dims.length;
 
-        int buf = dims[0];
-        dims[0] = dims[1];
-        dims[1] = buf;
+        int buf = dims[l-1];
+        dims[l-1] = dims[l-2];
+        dims[l-2] = buf;
 
         return dims;
     }
