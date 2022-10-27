@@ -292,4 +292,8 @@ public class Core {
     public static Tensor tr(Tensor tensor){
         return Transposition.getInstance().apply(tensor);
     }
+
+    public static Tensor conv(Tensor tensor, Tensor kernel){
+        return Conv.getInstance().apply(tensor, kernel);
+    }
 }
