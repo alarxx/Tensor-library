@@ -51,7 +51,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
     private static final float INIT_VALUE = 0f;
     private Tensor[] array;
-    private int[] dims;
+    private final int[] dims;
     private int length;
 
     // minimal, fundamental rank-0 Tensor - is a scalar
@@ -65,7 +65,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
     public Tensor(int ... dims){
         setAutoGrad(new AutoGrad(this));
-        setDims(dims);
+        this.dims = dims;
 
         if(dims.length == 0) { // scalar
             setLength(0);
@@ -147,17 +147,20 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
         }
     }
 
-    /** Так делать плохо? */
+    /**
+     * Так делать плохо? Метод должен менять только values of scalars по идее
+     * Нельзя просто взять и координально поменять структуру тензора.
+     * Если это так надо, то просто создайте новый тензор.
+     * */
     private void changeFields(Tensor tensor){
         if(!Core.dimsEqual(this, tensor)){
             Core.throwError("Dims are not equal");
         }
         this.array = tensor.array;
-        this.dims = tensor.dims;
-        this.length = tensor.length;
+//        this.length = tensor.length;
         this.scalar = tensor.scalar;
-        this.isScalar = tensor.isScalar;
-        this.subDims = tensor.subDims;
+//        this.isScalar = tensor.isScalar;
+//        this.subDims = tensor.subDims;
     }
 
     // Можно использовать как пример как пробежаться по всем элементам
@@ -188,9 +191,6 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     @Override
     public int[] dims(){
         return dims;
-    }
-    protected void setDims(int[] dims){
-        this.dims = dims;
     }
 
     @Override
