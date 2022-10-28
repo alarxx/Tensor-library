@@ -4,12 +4,12 @@ import com.ml.lib.Core;
 import com.ml.lib.tensor.Tensor;
 
 public class Transposed extends State {
-    public Transposed(Tensor parent){
+    public Transposed(TensorWState parent){
         super(parent);
     }
 
     @Override
-    public Tensor get() {
-        return Core.tr(parent);
+    public TensorWState get() {
+        return new TensorWState(Core.tr(parent.getTensor()));
     }
 }

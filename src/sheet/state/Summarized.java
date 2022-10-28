@@ -4,12 +4,14 @@ import com.ml.lib.Core;
 import com.ml.lib.tensor.Tensor;
 
 public class Summarized extends State {
-    public Summarized(Tensor parent, Tensor additional){
+    public Summarized(TensorWState parent, TensorWState additional){
         super(parent, additional);
     }
 
     @Override
-    public Tensor get() {
-        return Core.sum(parent, additional);
+    public TensorWState get() {
+        Tensor sum = Core.sum(parent.getTensor(), additional.getTensor());
+
+        return new TensorWState(sum);
     }
 }
