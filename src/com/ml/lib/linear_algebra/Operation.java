@@ -142,7 +142,7 @@ public abstract class Operation implements com.ml.lib.interfaces.Operation {
         for(int i=0; i < getResultDims().length; i++){
             number_counter *= resultDims[i];
             if(number == number_counter){
-                System.out.println(getResultDims().length - i);
+//                System.out.println(getResultDims().length - i);
                 return getResultDims().length - i - 1;
             }
         }
