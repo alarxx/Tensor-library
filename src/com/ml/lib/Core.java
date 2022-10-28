@@ -2,7 +2,7 @@ package com.ml.lib;
 
 import com.ml.lib.linear_algebra.operations.Conv;
 import com.ml.lib.linear_algebra.operations.MatMul;
-import com.ml.lib.linear_algebra.operations.Transposition;
+import com.ml.lib.linear_algebra.operations.self_operation.Transposition;
 import com.ml.lib.linear_algebra.operations.elementary.Div;
 import com.ml.lib.linear_algebra.operations.elementary.Mul;
 import com.ml.lib.linear_algebra.operations.elementary.Sub;

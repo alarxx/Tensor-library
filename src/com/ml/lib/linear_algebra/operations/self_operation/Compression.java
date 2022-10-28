@@ -1,4 +1,4 @@
-package com.ml.lib.linear_algebra.operations;
+package com.ml.lib.linear_algebra.operations.self_operation;
 
 import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.tensor.Tensor;

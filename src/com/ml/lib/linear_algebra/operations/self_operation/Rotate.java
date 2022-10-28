@@ -1,10 +1,24 @@
-package com.ml.lib.linear_algebra.operations;
-
+package com.ml.lib.linear_algebra.operations.self_operation;
 
 import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.tensor.Tensor;
 
-public class Transposition extends Operation {
+import static com.ml.lib.Core.tensor;
+
+public class Rotate extends Operation {
+    public static void main(String[] args) {
+        Tensor tensor = tensor(new float[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        });
+
+        Rotate rotate = new Rotate();
+        Tensor rotated = rotate.apply(tensor);
+
+        System.out.println(rotated);
+    }
+
     //---------SINGLETON------------------
     private static Operation instance;
     public static Operation getInstance(){
@@ -37,19 +51,18 @@ public class Transposition extends Operation {
         int     rows = matrix.getLength(),
                 cols = matrix.get(0).getLength();
 
-        Tensor transposed = new Tensor(cols, rows);
+        Tensor rotated = new Tensor(rows, cols);
 
+        // 90
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 Tensor t = matrix.get(r, c);
-                transposed.set(t, c, r);
+                rotated.set(t, c, rows - r - 1);
             }
         }
 
-        return transposed;
+        return rotated;
     }
 
+
 }
-
-
-

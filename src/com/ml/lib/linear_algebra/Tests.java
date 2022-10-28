@@ -2,7 +2,7 @@ package com.ml.lib.linear_algebra;
 
 import com.ml.lib.Core;
 import com.ml.lib.linear_algebra.operations.MatMul;
-import com.ml.lib.linear_algebra.operations.Transposition;
+import com.ml.lib.linear_algebra.operations.self_operation.Transposition;
 import com.ml.lib.linear_algebra.operations.elementary.Sum;
 import com.ml.lib.tensor.Tensor;
 
