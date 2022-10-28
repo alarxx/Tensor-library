@@ -51,8 +51,6 @@ public class Mirror extends Operation {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 Tensor t = matrix.get(r, cols - c - 1);
-                System.out.println(Arrays.toString(t.dims()));
-                System.out.println(Arrays.toString(mirror.get(r, c).dims()));
                 mirror.set(t, r, c);
             }
         }
