@@ -1,5 +1,6 @@
 package com.ml.lib;
 
+import com.ml.lib.linear_algebra.operations.Conv;
 import com.ml.lib.linear_algebra.operations.MatMul;
 import com.ml.lib.linear_algebra.operations.Transposition;
 import com.ml.lib.linear_algebra.operations.elementary.Div;
