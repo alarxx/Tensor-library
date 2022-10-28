@@ -8,9 +8,9 @@ import static com.ml.lib.Core.tensor;
 public class Rotate extends Operation {
     public static void main(String[] args) {
         Tensor tensor = tensor(new float[][]{
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}
+                {0, 1, 2, 3},
+                {0, 4, 5, 6},
+                {0, 7, 8, 9}
         });
 
         Rotate rotate = new Rotate();
@@ -51,7 +51,7 @@ public class Rotate extends Operation {
         int     rows = matrix.getLength(),
                 cols = matrix.get(0).getLength();
 
-        Tensor rotated = new Tensor(rows, cols);
+        Tensor rotated = new Tensor(cols, rows);
 
         // 90
         for (int r = 0; r < rows; r++) {

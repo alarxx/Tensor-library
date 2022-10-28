@@ -3,14 +3,16 @@ package com.ml.lib.linear_algebra.operations.self_operation;
 import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.tensor.Tensor;
 
+import java.util.Arrays;
+
 import static com.ml.lib.Core.tensor;
 
 public class Mirror extends Operation {
     public static void main(String[] args) {
         Tensor tensor = tensor(new float[][]{
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}
+                {0, 1, 2, 3},
+                {0, 4, 5, 6},
+                {0, 7, 8, 9}
         });
 
         Mirror mirror = new Mirror();
@@ -36,14 +38,7 @@ public class Mirror extends Operation {
 
     @Override
     protected int[] resultTensorsDims(Tensor src1, Tensor src2) {
-        int[] dims = src1.dims().clone();
-        int l = dims.length;
-
-        int buf = dims[l-1];
-        dims[l-1] = dims[l-2];
-        dims[l-2] = buf;
-
-        return dims;
+        return src1.dims().clone();
     }
 
     @Override
@@ -56,6 +51,8 @@ public class Mirror extends Operation {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 Tensor t = matrix.get(r, cols - c - 1);
+                System.out.println(Arrays.toString(t.dims()));
+                System.out.println(Arrays.toString(mirror.get(r, c).dims()));
                 mirror.set(t, r, c);
             }
         }
