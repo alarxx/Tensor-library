@@ -10,15 +10,17 @@ public class Main {
                 {7, 8, 9}
         }));
 
-//        tensorWS.add(new TensorWState(Core.tensorWS(new float[][]{
-//                {1, 1, 1},
-//                {1, 1, 1},
-//                {1, 1, 1}
-//        })));
-//        System.out.println(tensorWS.getState().getParent());
-//        System.out.println(tensorWS.get());
+        tensorWS.add(new TensorWState(Core.tensor(new float[][]{
+                {1, 1, 1},
+                {1, 1, 1},
+                {1, 1, 1}
+        })));
+        System.out.println(tensorWS.get());
 
         tensorWS.mirror();
+        System.out.println(tensorWS.get());
+
+        tensorWS.rotate();
         System.out.println(tensorWS.get());
     }
 }

@@ -3,7 +3,7 @@ package sheet.state;
 import com.ml.lib.tensor.Tensor;
 
 /**
- * Хотелось бы добавить такой вид записи:
+ * I would like to add this type of record:
  * Tensor tensor = ...;
  * tensor.rotate();
  * tensor.tr();
@@ -11,11 +11,18 @@ import com.ml.lib.tensor.Tensor;
  * tensor.mul(another2);
  * tensor.dot(another3);
  *
- * Но не позволяет метод set and get,
- * мы не можем просто взять и координально изменить Tensor.
+ * But does not allow tensor style,
+ * in particular  set and get methods,
+ * we can't just take and radically change Tensor.
  *
- * Поэтому можно создать обертку Tensor-а и добавить какой-то state,
- * который бы давал последнее изменение этого тензора.
+ * Therefore, you can create a Tensor wrapper and add some state,
+ * which would give the last change of this tensor.
+ * For example, during transposition, the dimension of matrices changes,
+ * and during matrix multiplication, the dimension of matrices also changes.
+ * How, then, can we assign these matrices to a tensor without changing it cardinally,
+ * in particular the dimensions? We can wrap Tensor.
+ *
+ * Why won't I add this to the project? This will add a lot of logic and lines of code. KISS.
  * */
 public class TensorWState {
     private Tensor tensor;
@@ -31,17 +38,20 @@ public class TensorWState {
         return this;
     }
     public TensorWState rotate() {
-        state = new Rotated(get());
+//        state = new Rotated(get());
+        state = new Rotated(this);
 
         return this;
     }
     public TensorWState mirror() {
-        state = new Mirrored(get());
+//        state = new Mirrored(get());
+        state = new Mirrored(this);
 
         return this;
     }
     public TensorWState add(TensorWState another){
-        state = new Summarized(get(), another);
+//        state = new Summarized(get(), another);
+        state = new Summarized(this, another);
 
         return this;
     }

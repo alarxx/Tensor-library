@@ -24,14 +24,14 @@ public abstract class State {
     public TensorWState getParent() {
         return parent;
     }
-    public void setParent(TensorWState parent) {
+    private void setParent(TensorWState parent) {
         this.parent = parent;
     }
 
     public TensorWState getAdditional() {
         return additional;
     }
-    public void setAdditional(TensorWState additional) {
+    private void setAdditional(TensorWState additional) {
         this.additional = additional;
     }
 }
