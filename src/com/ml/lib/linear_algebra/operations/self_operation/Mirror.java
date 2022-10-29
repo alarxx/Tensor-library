@@ -21,16 +21,6 @@ public class Mirror extends Operation {
         System.out.println(rotated);
     }
 
-    //---------SINGLETON------------------
-    private static Operation instance;
-    public static Operation getInstance(){
-        if(instance == null){
-            instance = new Transposition();
-        }
-        return instance;
-    }
-    //-------------------------------------
-
     @Override
     protected int[] ranksToCorrelate(Tensor src1, Tensor src2) {
         return new int[]{2};

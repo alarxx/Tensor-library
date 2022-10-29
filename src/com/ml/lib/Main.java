@@ -9,7 +9,7 @@ public class Main {
         Tensor a = tensor(new float[][]{
                 {1, 2, 3},
                 {4, 5, 6}
-        });
+        }).requires_grad(true);
 
         Tensor b = tensor(new float[][]{
                 {2, 3},
@@ -17,7 +17,7 @@ public class Main {
                 {6, 7}
         });
 
-        Tensor c = dot(a, b, true);
+        Tensor c = a.dot(b);
         System.out.println("c:"+c);
 
         c._backward_();

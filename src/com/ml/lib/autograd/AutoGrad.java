@@ -19,6 +19,10 @@ public class AutoGrad implements AutoGradInterface {
         return t1.getAutoGrad()._method_(new MatMul(), t2);
     }
 
+    public static Tensor conv(Tensor tensor, Tensor kernel){
+        return  tensor.getAutoGrad()._method_(new Conv(), kernel);
+    }
+
     public static Tensor neg(Tensor t1){
         return t1.getAutoGrad()._method_(new Neg());
     }
@@ -28,7 +32,7 @@ public class AutoGrad implements AutoGradInterface {
 
     private Tensor[] depends_on;
 
-    private Method method;
+    private OperationGrad operationGrad;
 
 
     //Если функция расчитывается второй раз, прошлый градиент нужно сбросить
@@ -40,8 +44,8 @@ public class AutoGrad implements AutoGradInterface {
     }
 
 
-    private Tensor initGrad(Method method, Tensor[] depends_on) {
-        this.method = method;
+    private Tensor initGrad(OperationGrad operationGrad, Tensor[] depends_on) {
+        this.operationGrad = operationGrad;
 
         this.depends_on = depends_on;
 
@@ -52,16 +56,19 @@ public class AutoGrad implements AutoGradInterface {
 
 
     // Например свертка
-    public Tensor _method_(Method method, Tensor other){
+    public Tensor _method_(OperationGrad operationGrad, Tensor other){
         setCleanGrad(true);
 
-        return method
-                ._forward_(tensor, other)
-                .getAutoGrad()
-                .initGrad(method, new Tensor[]{tensor, other});
+        Tensor result = operationGrad._forward_(tensor, other);
+
+        result.requires_grad(true);
+
+        result.getAutoGrad().initGrad(operationGrad, new Tensor[]{tensor, other});
+
+        return result;
     }
-    public Tensor _method_(Method method){
-        return this._method_(method, null);
+    public Tensor _method_(OperationGrad operationGrad){
+        return this._method_(operationGrad, null);
     }
 
     /**
@@ -75,8 +82,8 @@ public class AutoGrad implements AutoGradInterface {
 
         grad = sum(grad, backward_grad);
 
-        if(method != null)
-            method._backward_(grad, depends_on);
+        if(operationGrad != null)
+            operationGrad._backward_(grad, depends_on);
     }
 
     /** Первая производная всегда равна 1 */
@@ -86,6 +93,10 @@ public class AutoGrad implements AutoGradInterface {
         _backward_(new Tensor(tensor.dims()).fill(1));
     }
 
+    @Override
+    public Tensor getGrad(){
+        return grad;
+    }
 
     private void setCleanGrad(boolean b){
         // надо ли назад тоже отдавать приказ очистки?
@@ -106,10 +117,5 @@ public class AutoGrad implements AutoGradInterface {
             if (depends_on.length > 1)
                 depends_on[1].getAutoGrad().setCleanGrad(true);
         }
-    }
-
-    @Override
-    public Tensor getGrad(){
-        return grad;
     }
 }

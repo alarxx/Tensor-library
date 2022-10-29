@@ -7,12 +7,12 @@ import java.util.Arrays;
 
 import static com.ml.lib.Core.tensor;
 
+/**
+ * Not completed
+ * */
 public class Conv extends Operation {
     public static void main(String[] args) {
-       new Conv().main();
-    }
-    private void main(){
-        Tensor  tensor = tensor(new float[][]{
+        Tensor tensor = tensor(new float[][]{
                 {1, 2, 3, 4, 5},
                 {1, 2, 3, 4, 5},
                 {1, 2, 3, 4, 5},
@@ -26,29 +26,31 @@ public class Conv extends Operation {
                 {1, 1, 1}
         });
 
-        Tensor conv = getInstance().apply(tensor, kernel);
+        Tensor conv = new Conv(1, Type.NONE).apply(tensor, kernel);
 
         System.out.println("conv:"+conv);
-
-    }
-    private void testDims(){
-        Tensor  tensor = new Tensor(3, 7, 7),
-                kernel = new Tensor(3, 3);
-        int[] dims = resultTensorsDims(tensor, kernel);
-
-        System.out.println(Arrays.toString(dims));
     }
 
-    //---------SINGLETON------------------
-    private static Operation instance;
-    public static Operation getInstance(){
-        if(instance == null){
-            instance = new Conv();
-        }
-        return instance;
+    public enum Type {
+        NONE, AVG, RATE
     }
-    //-------------------------------------
 
+    private final int step;
+    private final Type type;
+
+    public Conv(int step, Type type){
+        this.step = step;
+        this.type = type;
+    }
+    public Conv(int step){
+        this(step, Type.NONE);
+    }
+    public Conv(Type type){
+        this(1, type);
+    }
+    public Conv(){
+        this(1, Type.NONE);
+    }
 
     @Override
     protected int[] ranksToCorrelate(Tensor tensor, Tensor kernel) {
@@ -76,10 +78,10 @@ public class Conv extends Operation {
         return dims;
     }
 
-    int step = 1;
 
     @Override
     protected Tensor operation(Tensor matrix, Tensor kernel) {
+//        if(type){}
         int[]   resDims = getResultDims();
         int     l = resDims.length;
 

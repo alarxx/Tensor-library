@@ -2,7 +2,7 @@ package com.ml.lib.autograd;
 
 import com.ml.lib.tensor.Tensor;
 
-public interface Method {
+public interface OperationGrad {
     /**
      * Не должны изменять аргументы метода
      * Должны вернуть какой-то новый тензор.

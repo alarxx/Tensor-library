@@ -8,6 +8,8 @@ import com.ml.lib.interfaces.TensorInterface;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import static com.ml.lib.Core.throwError;
+
 
 /*** Final variant, I hope
  *
@@ -40,14 +42,6 @@ import java.util.Iterator;
  * Добавлен Autograd
  * */
 public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tensor> {
-
-    /**
-     *  Autograd
-     *  Is it a bad place to add an autogradient?
-     * */
-
-    private AutoGrad autoGrad;
-
 
     private static final float INIT_VALUE = 0f;
     private Tensor[] array;
@@ -89,7 +83,6 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 //            }
         }
     }
-
 
     @Override
     public Tensor get(int ... indexes){
@@ -139,7 +132,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
             else{
 //                System.out.println(Arrays.toString(array[dim].dims()));
 //                System.out.println(Arrays.toString(item.dims()));
-                Core.throwError("Dimensions are not match");
+                throwError("Dimensions are not match");
             }
         }
         else {
@@ -154,7 +147,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
      * */
     private void changeFields(Tensor tensor){
         if(!Core.dimsEqual(this, tensor)){
-            Core.throwError("Dims are not equal");
+            throwError("Dims are not equal");
         }
         this.array = tensor.array;
 //        this.length = tensor.length;
@@ -243,7 +236,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     @Override
     public float getScalar(){
         if(!isScalar())
-            Core.throwError("Tensor is not a scalar");
+            throwError("Tensor is not a scalar");
 
         return scalar;
     }
@@ -251,7 +244,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     @Override
     public Tensor setScalar(float scalar) {
         if (!isScalar())
-            Core.throwError("Tensor is not a scalar");
+            throwError("Tensor is not a scalar");
 
         this.scalar = scalar;
 
@@ -301,6 +294,21 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
         }
     }
 
+    /* AUTO GRADIENT START */
+
+    /**
+     *  Autograd
+     * */
+    private AutoGrad autoGrad; // always declared, but may not contain a gradient
+
+    private boolean requires_grad = false;
+    public Tensor requires_grad(boolean requires_grad){
+        this.requires_grad = requires_grad;
+        return this;
+    }
+    public boolean isRequires_grad(){
+        return requires_grad;
+    }
 
     private void setAutoGrad(AutoGrad autoGrad){
         this.autoGrad = autoGrad;
@@ -311,6 +319,8 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
     @Override
     public void _backward_() {
+        if(!requires_grad)
+            throwError("Tensor do not requires gradient");
         autoGrad._backward_();
     }
 
@@ -318,4 +328,42 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     public Tensor getGrad() {
         return autoGrad.getGrad();
     }
+    /* AUTO GRADIENT END */
+
+
+    /* CORE OPERATIONS START */
+    public Tensor add(Tensor other){
+        return Core.sum(this, other, requires_grad);
+    }
+    public Tensor sub(Tensor other){
+        return Core.sum(this, other, requires_grad);
+    }
+    public Tensor mul(Tensor other){
+        return Core.sum(this, other, requires_grad);
+    }
+    public Tensor div(Tensor other){
+        return Core.sum(this, other, requires_grad);
+    }
+    public Tensor dot(Tensor other){
+        return Core.dot(this, other, requires_grad);
+    }
+
+    public Tensor conv(Tensor kernel){
+        return Core.conv(this, kernel, requires_grad);
+    }
+
+    public Tensor tr(){
+        return Core.tr(this);
+    }
+    public Tensor neg(){
+        return Core.neg(this, requires_grad);
+    }
+    public Tensor mirror(){
+        return Core.mirror(this);
+    }
+    public Tensor rotate(int angle){
+        return  Core.rotate(this, angle);
+    }
+    /* CORE OPERATIONS END */
+
 }

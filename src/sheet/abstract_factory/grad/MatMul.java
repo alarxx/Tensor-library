@@ -1,11 +1,7 @@
 package sheet.abstract_factory.grad;
 
-import com.ml.lib.autograd.Method;
 import com.ml.lib.interfaces.Operation;
 import com.ml.lib.tensor.Tensor;
-
-import static com.ml.lib.Core.dot;
-import static com.ml.lib.Core.tr;
 
 public class MatMul implements Operation {
     @Override

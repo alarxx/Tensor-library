@@ -2,6 +2,8 @@ package com.ml.lib;
 
 import com.ml.lib.linear_algebra.operations.Conv;
 import com.ml.lib.linear_algebra.operations.MatMul;
+import com.ml.lib.linear_algebra.operations.self_operation.Mirror;
+import com.ml.lib.linear_algebra.operations.self_operation.Rotate;
 import com.ml.lib.linear_algebra.operations.self_operation.Transposition;
 import com.ml.lib.linear_algebra.operations.elementary.Div;
 import com.ml.lib.linear_algebra.operations.elementary.Mul;
@@ -55,9 +57,12 @@ public class Core {
         return res;
     }
 
-
     public static Tensor tensor(float scalar){
         return new Tensor().setScalar(scalar);
+    }
+
+    public static Tensor tensor(float scalar, boolean requires_grad){
+        return tensor(scalar).requires_grad(requires_grad);
     }
     public static Tensor tensor(float[] vector){
         Tensor tensor = new Tensor(vector.length);
@@ -68,6 +73,10 @@ public class Core {
 
         return tensor;
     }
+    public static Tensor tensor(float[] vector, boolean requires_grad){
+        return tensor(vector).requires_grad(requires_grad);
+    }
+
     public static Tensor tensor(float[][] matrix){
         int     rows = matrix.length,
                 cols = matrix[0].length;
@@ -80,6 +89,10 @@ public class Core {
 
         return tensor;
     }
+    public static Tensor tensor(float[][] matrix, boolean requires_grad){
+        return tensor(matrix).requires_grad(requires_grad);
+    }
+
     public static Tensor tensor(float[][][] image){
         int     rows = image[0].length,
                 cols = image[0][0].length,
@@ -93,6 +106,10 @@ public class Core {
 
         return tensor;
     }
+    public static Tensor tensor(float[][][] image, boolean requires_grad){
+        return tensor(image).requires_grad(requires_grad);
+    }
+
     public static Tensor tensor(float[][][][] array4){
         int     rows = array4[0][0].length,
                 cols = array4[0][0][0].length,
@@ -106,6 +123,9 @@ public class Core {
         }
 
         return tensor;
+    }
+    public static Tensor tensor(float[][][][] array4, boolean requires_grad){
+        return tensor(array4).requires_grad(requires_grad);
     }
 
 
@@ -246,55 +266,66 @@ public class Core {
 
 
     /*
-    *  FUNCTIONS
+    *  Не ко всем операциям написал производные
+    *  OPERATIONS
     * */
 
-    public static Tensor sum(Tensor t1, Tensor t2, boolean grad){
-        return grad ? AutoGrad.sum(t1, t2) : Sum.getInstance().apply(t1, t2);
+    public static Tensor sum(Tensor t1, Tensor t2, boolean requires_grad){
+        return requires_grad ? AutoGrad.sum(t1, t2) : Sum.getInstance().apply(t1, t2);
     }
     public static Tensor sum(Tensor t1, Tensor t2){
         return sum(t1, t2, false);
     }
 
-    public static Tensor sub(Tensor t1, Tensor t2, boolean grad){
-        return grad ? AutoGrad.sub(t1, t2) : Sub.getInstance().apply(t1, t2);
+    public static Tensor sub(Tensor t1, Tensor t2, boolean requires_grad){
+        return requires_grad ? AutoGrad.sub(t1, t2) : Sub.getInstance().apply(t1, t2);
     }
     public static Tensor sub(Tensor t1, Tensor t2){
         return sub(t1, t2, false);
     }
 
-    public static Tensor mul(Tensor t1, Tensor t2, boolean grad){
-        return grad ? AutoGrad.mul(t1, t2) : Mul.getInstance().apply(t1, t2);
+    public static Tensor mul(Tensor t1, Tensor t2, boolean requires_grad){
+        return requires_grad ? AutoGrad.mul(t1, t2) : Mul.getInstance().apply(t1, t2);
     }
-    public static Tensor mul(Tensor t1, Tensor t2){
-        return mul(t1, t2, false);
+    public static Tensor mul(Tensor t1, Tensor t2) {
+        return  mul(t1, t2, false);
     }
 
-    public static Tensor div(Tensor t1, Tensor t2){
+    public static Tensor div(Tensor t1, Tensor t2, boolean requires_grad){
         return Div.getInstance().apply(t1, t2);
     }
+    public static Tensor div(Tensor t1, Tensor t2){
+        return div(t1, t2, false);
+    }
 
-
-    public static Tensor dot(Tensor t1, Tensor t2, boolean grad){
-        return grad ? AutoGrad.dot(t1, t2) : MatMul.getInstance().apply(t1, t2);
+    public static Tensor dot(Tensor t1, Tensor t2, boolean requires_grad){
+        return requires_grad ? AutoGrad.dot(t1, t2) : MatMul.getInstance().apply(t1, t2);
     }
     public static Tensor dot(Tensor t1, Tensor t2){
         return dot(t1, t2, false);
     }
 
-
-    public static Tensor neg(Tensor tensor){
-        return mul(tensor, tensor(-1f));
+    public static Tensor neg(Tensor tensor, boolean requires_grad){
+        return requires_grad ? AutoGrad.neg(tensor) : mul(tensor, tensor(-1f), false);
+    }
+    public static Tensor neg(Tensor t1, Tensor t2){
+        return neg(t1, false);
     }
 
-    /*
-    * OPERATIONS
-    * */
+    public static Tensor conv(Tensor tensor, Tensor kernel, boolean requires_grad){
+        return requires_grad ? AutoGrad.conv(tensor, kernel) : new Conv().apply(tensor, kernel);
+    }
+    public static Tensor conv(Tensor t1, Tensor t2){
+        return conv(t1, t2, false);
+    }
+
     public static Tensor tr(Tensor tensor){
         return Transposition.getInstance().apply(tensor);
     }
-
-    public static Tensor conv(Tensor tensor, Tensor kernel){
-        return Conv.getInstance().apply(tensor, kernel);
+    public static Tensor mirror(Tensor tensor){
+        return new Mirror().apply(tensor);
+    }
+    public static Tensor rotate(Tensor tensor, int angle){
+        return new Rotate(angle).apply(tensor);
     }
 }

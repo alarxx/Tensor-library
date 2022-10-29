@@ -10,7 +10,7 @@ public class Summarized extends State {
 
     @Override
     public TensorWState get() {
-        Tensor sum = Core.sum(parent.getTensor(), additional.getTensor());
+        Tensor sum = Core.sum(parent.getTensor(), additional.getTensor(), false);
 
         return new TensorWState(sum);
     }

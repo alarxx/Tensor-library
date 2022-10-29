@@ -5,6 +5,9 @@ import com.ml.lib.tensor.Tensor;
 
 import static com.ml.lib.Core.tensor;
 
+/**
+ * Not completed
+ * */
 public class Rotate extends Operation {
     public static void main(String[] args) {
         Tensor tensor = tensor(new float[][]{
@@ -13,21 +16,16 @@ public class Rotate extends Operation {
                 {0, 7, 8, 9}
         });
 
-        Rotate rotate = new Rotate();
+        Rotate rotate = new Rotate(90);
         Tensor rotated = rotate.apply(tensor);
 
         System.out.println(rotated);
     }
 
-    //---------SINGLETON------------------
-    private static Operation instance;
-    public static Operation getInstance(){
-        if(instance == null){
-            instance = new Transposition();
-        }
-        return instance;
+    private final int angle;
+    public Rotate(int angle){
+        this.angle = angle;
     }
-    //-------------------------------------
 
     @Override
     protected int[] ranksToCorrelate(Tensor src1, Tensor src2) {
@@ -53,11 +51,12 @@ public class Rotate extends Operation {
 
         Tensor rotated = new Tensor(cols, rows);
 
-        // 90
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                Tensor t = matrix.get(r, c);
-                rotated.set(t, c, rows - r - 1);
+        if(angle == 90) {
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
+                    Tensor t = matrix.get(r, c);
+                    rotated.set(t, c, rows - r - 1);
+                }
             }
         }
 

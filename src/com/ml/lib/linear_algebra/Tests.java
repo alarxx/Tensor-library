@@ -66,7 +66,7 @@ public class Tests {
                 {5, 6}
         });
 
-        Tensor result = Core.dot(mat1, mat2);
+        Tensor result = Core.dot(mat1, mat2, false);
 
         System.out.println("mat1:"+mat1);
         System.out.println("mat2:"+mat2);

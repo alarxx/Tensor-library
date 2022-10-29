@@ -11,7 +11,7 @@ public class Rotated extends State {
 
     @Override
     public TensorWState get() {
-        return new TensorWState(new Rotate().apply(parent.getTensor()));
+        return new TensorWState(new Rotate(90).apply(parent.getTensor()));
 
     }
 }
