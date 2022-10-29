@@ -40,3 +40,29 @@ System.out.println("c_der:"  + c.getGrad());
 System.out.println("a_der:"  + a.getGrad());
 System.out.println("b_der:"  + b.getGrad());
 ```
+
+#### Added Core methods in Tensor.
+Методы не меняют состояние Тензора, а возвращают новый результирующий Тензор.
+#### Example:
+```
+Tensor a = tensor(new float[][]{
+            {1, 2, 3},
+            {4, 5, 6}
+        })
+        .requires_grad(true);
+
+Tensor b = tensor(new float[][]{
+            {2, 3},
+            {4, 5},
+            {6, 7}
+        });
+
+Tensor c = a.dot(b);
+System.out.println("c:"+c);
+
+c._backward_();
+
+System.out.println("c_der:"  + c.getGrad());
+System.out.println("a_der:"  + a.getGrad());
+System.out.println("b_der:"  + b.getGrad());
+```
