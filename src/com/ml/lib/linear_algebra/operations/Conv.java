@@ -1,6 +1,8 @@
 package com.ml.lib.linear_algebra.operations;
 
+import com.ml.lib.core.Core;
 import com.ml.lib.linear_algebra.Operation;
+import com.ml.lib.linear_algebra.operations.self_operation.MatMax;
 import com.ml.lib.tensor.Tensor;
 
 import static com.ml.lib.core.Core.conv;
@@ -25,13 +27,13 @@ public class Conv extends Operation {
                 {1, 1, 1}
         });
 
-        Tensor conv = new Conv(1, Type.SUM).apply(tensor, kernel);
+        Tensor conv = new Conv(1, Type.RATE).apply(tensor, kernel);
 
         System.out.println("conv:"+conv);
     }
 
     public enum Type {
-        SUM, AVG, RATE
+        SUM, AVG, K_SUM_1, RATE
     }
 
     private final int step;
@@ -81,7 +83,7 @@ public class Conv extends Operation {
     protected Tensor[] preconversion(Tensor tensor, Tensor kernel){
         Tensor[] t_arr = super.preconversion(tensor, kernel);
 
-        if(type == Type.RATE){
+        if(type == Type.K_SUM_1){
             Tensor sum = conv(kernel, new Tensor(kernel.dims()).fill(1), 1, Type.SUM, false);
 //            System.out.println(Arrays.toString(sum.dims()));
             Tensor k1 = kernel.div(sum); // Если kernel был req_grad, то и k1 тоже будет.
@@ -93,8 +95,8 @@ public class Conv extends Operation {
 
     @Override
     protected Tensor operation(Tensor matrix, Tensor kernel) {
-        System.out.println("mat:" + matrix);
-        System.out.println("kernel:" + kernel);
+//        System.out.println("mat:" + matrix);
+//        System.out.println("kernel:" + kernel);
 
         int[]   resDims = getResultDims();
         int     l = resDims.length;
@@ -135,6 +137,27 @@ public class Conv extends Operation {
                 }
 
                 res.set(tensor(val), r, c);
+            }
+        }
+
+        if(type == Type.RATE) {
+            float   orig_max = Core.max(matrix).getScalar(),
+                    orig_min = Core.min(matrix).getScalar(),
+                    orig_abs = Math.abs(orig_max - orig_min);
+
+            float   res_max = Core.max(res).getScalar(),
+                    res_min = Core.min(res).getScalar(),
+                    res_abs = Math.abs(res_max - res_min);
+
+            float orig_addi = orig_abs - orig_max; // 29 - 20 = 9
+            float res_addi = res_abs - res_max; // 2 - 7 = -5
+
+            for(int r=0; r<res_rows; r++) {
+                for (int c = 0; c < res_cols; c++) {
+                    float before = res.get(r, c).getScalar();
+                    float after = ((before + res_addi) / res_abs) * orig_abs + orig_min;
+                    res.set(tensor(after), r, c);
+                }
             }
         }
 

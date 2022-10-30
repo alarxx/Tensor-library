@@ -2,9 +2,7 @@ package com.ml.lib.core;
 
 import com.ml.lib.linear_algebra.operations.Conv;
 import com.ml.lib.linear_algebra.operations.MatMul;
-import com.ml.lib.linear_algebra.operations.self_operation.Mirror;
-import com.ml.lib.linear_algebra.operations.self_operation.Rotate;
-import com.ml.lib.linear_algebra.operations.self_operation.Transposition;
+import com.ml.lib.linear_algebra.operations.self_operation.*;
 import com.ml.lib.linear_algebra.operations.elementary.Div;
 import com.ml.lib.linear_algebra.operations.elementary.Mul;
 import com.ml.lib.linear_algebra.operations.elementary.Sub;
@@ -285,5 +283,12 @@ public class Core {
     }
     public static Tensor rotate(Tensor tensor, int angle){
         return new Rotate(angle).apply(tensor);
+    }
+
+    public static Tensor max(Tensor tensor){
+        return new MatMax().apply(tensor);
+    }
+    public static Tensor min(Tensor tensor){
+        return new MatMin().apply(tensor);
     }
 }
