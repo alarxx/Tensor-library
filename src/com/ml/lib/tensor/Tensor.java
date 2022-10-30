@@ -1,14 +1,15 @@
 package com.ml.lib.tensor;
 
-import com.ml.lib.Core;
+import com.ml.lib.core.Core;
 import com.ml.lib.autograd.AutoGrad;
 import com.ml.lib.interfaces.AutoGradInterface;
 import com.ml.lib.interfaces.TensorInterface;
+import com.ml.lib.linear_algebra.operations.Conv;
 
 import java.util.Arrays;
 import java.util.Iterator;
 
-import static com.ml.lib.Core.throwError;
+import static com.ml.lib.core.Core.throwError;
 
 
 /*** Final variant, I hope
@@ -150,10 +151,10 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
             throwError("Dims are not equal");
         }
         this.array = tensor.array;
-//        this.length = tensor.length;
+        this.length = tensor.length;
         this.scalar = tensor.scalar;
-//        this.isScalar = tensor.isScalar;
-//        this.subDims = tensor.subDims;
+        this.isScalar = tensor.isScalar;
+        this.subDims = tensor.subDims;
     }
 
     // Можно использовать как пример как пробежаться по всем элементам
@@ -198,6 +199,10 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     public String toString(){
         StringBuilder sb = new StringBuilder();
 
+        if(name != null){
+            sb.append(name).append(": ");
+        }
+
         sb.append("tensor(\n");
         toString(sb);
 
@@ -206,7 +211,8 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     //Похож на fill по реализации
     private void toString(StringBuilder sb){
         if(isScalar()){
-            sb.append(String.format("%.1f", getScalar())).append(' ');
+//            sb.append(String.format("%.1f", getScalar())).append(' ');
+            sb.append(getScalar()).append(' ');
         }
         else {
             for (int i = 0; i < getLength(); i++) {
@@ -259,7 +265,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     @Override
     public Tensor clone() {
         if(isScalar()){
-            return Core.tensor(getScalar());
+            return tensor(getScalar());
         }
         else {
             Tensor res = new Tensor(dims());
@@ -300,6 +306,13 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
      *  Autograd
      * */
     private AutoGrad autoGrad; // always declared, but may not contain a gradient
+    private void setAutoGrad(AutoGrad autoGrad){
+        this.autoGrad = autoGrad;
+    }
+    public AutoGrad getAutoGrad(){
+        return autoGrad;
+    }
+
 
     private boolean requires_grad = false;
     public Tensor requires_grad(boolean requires_grad){
@@ -310,12 +323,6 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
         return requires_grad;
     }
 
-    private void setAutoGrad(AutoGrad autoGrad){
-        this.autoGrad = autoGrad;
-    }
-    public AutoGrad getAutoGrad(){
-        return autoGrad;
-    }
 
     @Override
     public void _backward_() {
@@ -324,6 +331,11 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
         autoGrad._backward_();
     }
 
+    /**
+     * Тензор который требует градиент, рожает Тензор, который тоже требует градиент.
+     *
+     * Операции не изменяют требования к граденту.
+     * */
     @Override
     public Tensor getGrad() {
         return autoGrad.getGrad();
@@ -331,25 +343,30 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     /* AUTO GRADIENT END */
 
 
+
     /* CORE OPERATIONS START */
     public Tensor add(Tensor other){
-        return Core.sum(this, other, requires_grad);
+        return Core.sum(this, other, requires_grad || other.isRequires_grad());
     }
     public Tensor sub(Tensor other){
-        return Core.sum(this, other, requires_grad);
+        return Core.sub(this, other, requires_grad || other.isRequires_grad());
     }
     public Tensor mul(Tensor other){
-        return Core.sum(this, other, requires_grad);
+        return Core.mul(this, other, requires_grad || other.isRequires_grad());
     }
     public Tensor div(Tensor other){
-        return Core.sum(this, other, requires_grad);
+        return Core.div(this, other, requires_grad || other.isRequires_grad());
     }
     public Tensor dot(Tensor other){
-        return Core.dot(this, other, requires_grad);
+        return Core.dot(this, other, requires_grad || other.isRequires_grad());
     }
 
+
+    public Tensor conv(Tensor kernel, int step, Conv.Type type){
+        return Core.conv(this, kernel, step, type, requires_grad || kernel.isRequires_grad());
+    }
     public Tensor conv(Tensor kernel){
-        return Core.conv(this, kernel, requires_grad);
+        return Core.conv(this, kernel, 1, Conv.Type.SUM, requires_grad || kernel.isRequires_grad());
     }
 
     public Tensor tr(){
@@ -365,5 +382,92 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
         return  Core.rotate(this, angle);
     }
     /* CORE OPERATIONS END */
+
+
+
+    /* Tensor creation START */
+    public static Tensor tensor(float scalar){
+        return new Tensor().setScalar(scalar);
+    }
+
+    public static Tensor tensor(float scalar, boolean requires_grad){
+        return tensor(scalar).requires_grad(requires_grad);
+    }
+    public static Tensor tensor(float[] vector){
+        Tensor tensor = new Tensor(vector.length);
+
+        for(int i=0; i<vector.length; i++){
+            tensor.get(i).setScalar(vector[i]);
+        }
+
+        return tensor;
+    }
+    public static Tensor tensor(float[] vector, boolean requires_grad){
+        return tensor(vector).requires_grad(requires_grad);
+    }
+
+    public static Tensor tensor(float[][] matrix){
+        int     rows = matrix.length,
+                cols = matrix[0].length;
+
+        Tensor tensor = new Tensor(rows, cols);
+
+        for(int i=0; i<rows; i++){
+            tensor.set(tensor(matrix[i]), i);
+        }
+
+        return tensor;
+    }
+    public static Tensor tensor(float[][] matrix, boolean requires_grad){
+        return tensor(matrix).requires_grad(requires_grad);
+    }
+
+    public static Tensor tensor(float[][][] image){
+        int     rows = image[0].length,
+                cols = image[0][0].length,
+                channels = image.length;
+
+        Tensor tensor = new Tensor(channels, rows, cols);
+
+        for(int i=0; i<channels; i++){
+            tensor.set(tensor(image[i]), i);
+        }
+
+        return tensor;
+    }
+    public static Tensor tensor(float[][][] image, boolean requires_grad){
+        return tensor(image).requires_grad(requires_grad);
+    }
+
+    public static Tensor tensor(float[][][][] array4){
+        int     rows = array4[0][0].length,
+                cols = array4[0][0][0].length,
+                channels = array4[0].length,
+                d = array4.length;
+
+        Tensor tensor = new Tensor(d, channels, rows, cols);
+
+        for(int i=0; i<d; i++){
+            tensor.set(tensor(array4[i]), i);
+        }
+
+        return tensor;
+    }
+    public static Tensor tensor(float[][][][] array4, boolean requires_grad){
+        return tensor(array4).requires_grad(requires_grad);
+    }
+    /* Tensor creation END */
+
+    public String name;
+    public Tensor setName(String name){
+        this.name = name;
+        return this;
+    }
+    public String getName(){
+        return name;
+    }
+    public boolean isName(String name){
+        return this.name.equals(name);
+    }
 
 }

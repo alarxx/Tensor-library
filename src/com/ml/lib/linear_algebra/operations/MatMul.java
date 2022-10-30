@@ -3,7 +3,8 @@ package com.ml.lib.linear_algebra.operations;
 import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.tensor.Tensor;
 
-import static com.ml.lib.Core.*;
+import static com.ml.lib.core.Core.*;
+import static com.ml.lib.tensor.Tensor.tensor;
 
 public class MatMul extends Operation {
     public static void main(String[] args) {

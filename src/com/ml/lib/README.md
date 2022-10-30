@@ -1,57 +1,87 @@
-# Core
+# Tensor
+
+## Tensor - array of Tensors, except rank-0 Tensor (scalar)
+```
+[Tensor, Tensor, Tensor, Tensor]  
+   |       |       |       |  
+   |       |     [...]   [...]  
+   |  [Tensor, Tensor, ...]  
+[Tensor, Tensor...]  
+```
+---
+### Generics
+Не получается писать дженерики.  
+Есть проблема с дженериками в функциях, например:  
+как понимать какого типа будет результирующая матрица;  
+и скорость с ними будет меньше... хотя я и не претендую на скорость.
+
+В этой реализации, как и в JS, все числа(скаляры) - float значения.
 
 ---
+### Scalars
+Tensor - scalar, только если dims = [],  
+но [1], [1, 1], [1, 1, 1]... не будут являться скалярами.
 
-#### Чтобы не углубляться в классовую реализацию,  
-#### можно пользоваться статичными методами из класса Core.  
+---
+### Nulls
+В первом варианте объявление Tensor-а - сложная операция,  
+при создании обходится каждый элемент.  
+Хотелось сделать так, чтобы если тензор под индексом не  
+затрагивается, то по умолчанию он null.  
+Для этого надо было было добавить проверку на null в get/set, fill, toString,  
+а методы getScalar/setScalar не нуждаются в такой проверке:  
+new Tensor().getScalar()/setScalar(),  
+либо в связке с get - tensor.get(0).getScalar()/setScalar()
 
-
-#### Tensor declaration:
+---
+### Example of usage:
 ```
-Tensor tensor = Core.tensor(3, 10, 10); 
-```
+int     rows = 2, 
+        cols = 3, 
+        channels = 3;
 
-#### Tensor element by element multiplication:
-```
-Tensor another = Core.tensor(1, 10, 10); 
-Tensor resultOfMult = Core.mul(tensor, another);
-```
+Tensor t = new Tensor(channels, rows, cols);
 
-#### AutoGrad example: 
-```
-Tensor a = Core.tensor(new float[][]{
-                {1, 2, 3},
-                {4, 5, 6}
-        });
+for(int d=0, v=0; d<channels; d++){
+    for(int r=0; r<rows; r++){
+        for(int c=0; c<cols; c++, v++){
+            t.set(tensor(v), d, r, c);
+        }
+    }
+}
 
-Tensor b = Core.tensor(new float[][]{
-        {2, 3},
-        {4, 5},
-        {6, 7}
-});
-
-boolean gradientNeeded = true;
-Tensor c = Core.dot(a, b, gradientNeeded);
-System.out.println(c);
-
-c._backward_();
-
-System.out.println("c_der:"  + c.getGrad());
-System.out.println("a_der:"  + a.getGrad());
-System.out.println("b_der:"  + b.getGrad());
+System.out.print(t);
 ```
 
-#### Added Core methods in Tensor.
-Методы не меняют состояние Тензора, а возвращают новый результирующий Тензор.
+### Added AutoGradient.
+Любые сложные функции или операции можно представить   
+в виде цепочки преобразований Тензоров, в виде графа,   
+хотелось бы бинарного дерева, но один тензор может участвовать в нескольких функциях,  
+в таком случае градиенты этих преобразований складываются и назначаются ему.  
+Каждой операцие нужно прописывать то, как будет распростанятся градиент назад.  
+В классе OperationGrad мы прописываем forward и backward.  
+Метод forward всегда использует пакет linear_algebra.
+
+
+### Added Core methods in Tensor
+( Which are just a wrapper around the methods of the core class )
+* Operations-methods of Tensor are based on the Core class.
+* Methods do not change the state of the Tensor, but return a new resulting Tensor.
+#### About gradient
+* A Tensor that requires a gradient results in a Tensor that also requires a gradient.
+* Operations do not change the parent Tensors requires_grad state.
+#### Recommendations
+* I recommend using only Tensor methods without affecting the Core class,
+  Because it's more intuitive and convenient.
 #### Example:
 ```
-Tensor a = tensor(new float[][]{
+Tensor a = Tensor.tensor(new float[][]{
             {1, 2, 3},
             {4, 5, 6}
         })
         .requires_grad(true);
 
-Tensor b = tensor(new float[][]{
+Tensor b = Tensor.tensor(new float[][]{
             {2, 3},
             {4, 5},
             {6, 7}

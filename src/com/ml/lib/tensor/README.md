@@ -52,3 +52,47 @@ for(int d=0, v=0; d<channels; d++){
 
 System.out.print(t);
 ```
+
+### Added AutoGradient.
+Любые сложные функции или операции можно представить   
+в виде цепочки преобразований Тензоров, в виде графа,   
+хотелось бы бинарного дерева, но один тензор может участвовать в нескольких функциях,  
+в таком случае градиенты этих преобразований складываются и назначаются ему.  
+Каждой операцие нужно прописывать то, как будет распростанятся градиент назад.  
+В классе OperationGrad мы прописываем forward и backward.  
+Метод forward всегда использует пакет linear_algebra. 
+
+
+### Added Core methods in Tensor 
+( Which are just a wrapper around the methods of the core class )
+* Operations-methods of Tensor are based on the Core class.
+* Methods do not change the state of the Tensor, but return a new resulting Tensor.
+#### About gradient
+* A Tensor that requires a gradient results in a Tensor that also requires a gradient.
+* Operations do not change the parent Tensors requires_grad state.
+#### Recommendations
+* I recommend using only Tensor methods without affecting the Core class,
+  Because it's more intuitive and convenient.
+#### Example:
+```
+Tensor a = Tensor.tensor(new float[][]{
+            {1, 2, 3},
+            {4, 5, 6}
+        })
+        .requires_grad(true);
+
+Tensor b = Tensor.tensor(new float[][]{
+            {2, 3},
+            {4, 5},
+            {6, 7}
+        });
+
+Tensor c = a.dot(b);
+System.out.println("c:"+c);
+
+c._backward_();
+
+System.out.println("c_der:"  + c.getGrad());
+System.out.println("a_der:"  + a.getGrad());
+System.out.println("b_der:"  + b.getGrad());
+```

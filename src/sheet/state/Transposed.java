@@ -1,7 +1,6 @@
 package sheet.state;
 
-import com.ml.lib.Core;
-import com.ml.lib.tensor.Tensor;
+import com.ml.lib.core.Core;
 
 public class Transposed extends State {
     public Transposed(TensorWState parent){

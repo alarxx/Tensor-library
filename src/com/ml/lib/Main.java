@@ -2,28 +2,35 @@ package com.ml.lib;
 
 import com.ml.lib.tensor.Tensor;
 
-import static com.ml.lib.Core.*;
+import java.time.Year;
+
+import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Main {
     public static void main(String[] args) {
-        Tensor a = tensor(new float[][]{
-                {1, 2, 3},
-                {4, 5, 6}
-        }).requires_grad(true);
+        Tensor s3 = tensor(3)
+                .requires_grad(true);
 
-        Tensor b = tensor(new float[][]{
-                {2, 3},
-                {4, 5},
-                {6, 7}
-        });
+        Tensor s7 = tensor(7)
+                .requires_grad(true);
 
-        Tensor c = a.dot(b);
-        System.out.println("c:"+c);
+        Tensor s5 = tensor(5)
+                .requires_grad(true);
 
-        c._backward_();
+        Tensor sc1 = s3.mul(s7);
+        Tensor sc2 = s7.mul(s5);
 
-        System.out.println("c_der:"  + c.getGrad());
-        System.out.println("a_der:"  + a.getGrad());
-        System.out.println("b_der:"  + b.getGrad());
+        Tensor Y = sc1.mul(tensor(1f));
+        Y._backward_();
+
+        Y = sc1.add(sc2);
+        Y._backward_();
+
+        System.out.println("Y: " + Y.getGrad()); // 1
+        System.out.println("sc1: " + sc1.getGrad()); // 1
+        System.out.println("sc2: " + sc2.getGrad()); // 1
+        System.out.println("s3: " + s3.getGrad()); // 7
+        System.out.println("s7: " + s7.getGrad()); // 8
+        System.out.println("s5: " + s5.getGrad()); // 7
     }
 }

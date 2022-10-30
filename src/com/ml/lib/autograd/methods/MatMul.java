@@ -3,8 +3,8 @@ package com.ml.lib.autograd.methods;
 import com.ml.lib.tensor.Tensor;
 import com.ml.lib.autograd.OperationGrad;
 
-import static com.ml.lib.Core.dot;
-import static com.ml.lib.Core.tr;
+import static com.ml.lib.core.Core.dot;
+import static com.ml.lib.core.Core.tr;
 
 public class MatMul implements OperationGrad {
     @Override

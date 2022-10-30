@@ -14,7 +14,9 @@ public class AutoGrad implements AutoGradInterface {
     public static Tensor mul(Tensor t1, Tensor t2){
         return t1.getAutoGrad()._method_(new Mul(), t2);
     }
-
+    public static Tensor div(Tensor t1, Tensor t2){
+        return null;
+    }
     public static Tensor dot(Tensor t1, Tensor t2){
         return t1.getAutoGrad()._method_(new MatMul(), t2);
     }
@@ -32,7 +34,7 @@ public class AutoGrad implements AutoGradInterface {
 
     private Tensor[] depends_on;
 
-    private OperationGrad operationGrad;
+    private OperationGrad operationGrad; // Creation Operation
 
 
     //Если функция расчитывается второй раз, прошлый градиент нужно сбросить
@@ -49,24 +51,31 @@ public class AutoGrad implements AutoGradInterface {
 
         this.depends_on = depends_on;
 
-        grad = new Tensor(tensor.dims()).fill(0);
+        grad = new Tensor(tensor.dims()).fill(0).requires_grad(false);
 
         return tensor;
     }
 
 
-    // Например свертка
+    // Например свертка, матричные умножения и тд
     public Tensor _method_(OperationGrad operationGrad, Tensor other){
+        // Должны очистить градиент от прошлого распространения градиента.
+        // Это происходит если была передача вперед, задействующая этот Тензор.
+        // При распространении назад градиент складывается
         setCleanGrad(true);
 
+        // Обычная операция
         Tensor result = operationGrad._forward_(tensor, other);
 
+        // Результирующий тензор должен требовать градиент теперь
         result.requires_grad(true);
 
+        // инициализируем результирующему тензору каким методом он был создан и родительские тензора, их количество в пределе [1, 2]
         result.getAutoGrad().initGrad(operationGrad, new Tensor[]{tensor, other});
 
         return result;
     }
+    // Например, транспонирование
     public Tensor _method_(OperationGrad operationGrad){
         return this._method_(operationGrad, null);
     }
@@ -76,11 +85,10 @@ public class AutoGrad implements AutoGradInterface {
      * Из-за ./method_examples, пришлось сделать метод public
      * */
     public void _backward_(Tensor backward_grad) {
-        if(getCleanGrad()) {
+        if(clean_grad)
             clean_grad();
-        }
 
-        grad = sum(grad, backward_grad);
+        grad = grad.add(backward_grad);
 
         if(operationGrad != null)
             operationGrad._backward_(grad, depends_on);
@@ -106,16 +114,16 @@ public class AutoGrad implements AutoGradInterface {
         return clean_grad;
     }
     private void clean_grad(){
-        if(grad == null){
+        if(grad == null)
             initGrad(null, null);
-        }
+
         grad.fill(0);
         setCleanGrad(false);
 
         if(depends_on != null) {
-            depends_on[0].getAutoGrad().setCleanGrad(true);
+            depends_on[0].getAutoGrad().clean_grad();
             if (depends_on.length > 1)
-                depends_on[1].getAutoGrad().setCleanGrad(true);
+                depends_on[1].getAutoGrad().clean_grad();
         }
     }
 }

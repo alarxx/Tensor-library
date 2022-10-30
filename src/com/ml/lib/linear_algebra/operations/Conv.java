@@ -3,9 +3,8 @@ package com.ml.lib.linear_algebra.operations;
 import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.tensor.Tensor;
 
-import java.util.Arrays;
-
-import static com.ml.lib.Core.tensor;
+import static com.ml.lib.core.Core.conv;
+import static com.ml.lib.tensor.Tensor.tensor;
 
 /**
  * Not completed
@@ -26,13 +25,13 @@ public class Conv extends Operation {
                 {1, 1, 1}
         });
 
-        Tensor conv = new Conv(1, Type.NONE).apply(tensor, kernel);
+        Tensor conv = new Conv(1, Type.SUM).apply(tensor, kernel);
 
         System.out.println("conv:"+conv);
     }
 
     public enum Type {
-        NONE, AVG, RATE
+        SUM, AVG, RATE
     }
 
     private final int step;
@@ -43,13 +42,13 @@ public class Conv extends Operation {
         this.type = type;
     }
     public Conv(int step){
-        this(step, Type.NONE);
+        this(step, Type.SUM);
     }
     public Conv(Type type){
         this(1, type);
     }
     public Conv(){
-        this(1, Type.NONE);
+        this(1, Type.SUM);
     }
 
     @Override
@@ -69,8 +68,8 @@ public class Conv extends Operation {
                 k_rows = kernel.dims()[kernel.dims().length - 2],
                 k_cols = kernel.dims()[kernel.dims().length - 1],
 
-                newRows = rows - k_rows + 1,
-                newCols = cols - k_cols + 1;
+                newRows = (rows - k_rows) / step + 1, //1 + ((mat - kernel) / step);
+                newCols = (cols - k_cols) / step + 1;
 
         dims[l-2] = newRows;// row
         dims[l-1] = newCols;// col
@@ -78,10 +77,25 @@ public class Conv extends Operation {
         return dims;
     }
 
+    @Override
+    protected Tensor[] preconversion(Tensor tensor, Tensor kernel){
+        Tensor[] t_arr = super.preconversion(tensor, kernel);
+
+        if(type == Type.RATE){
+            Tensor sum = conv(kernel, new Tensor(kernel.dims()).fill(1), 1, Type.SUM, false);
+//            System.out.println(Arrays.toString(sum.dims()));
+            Tensor k1 = kernel.div(sum); // Если kernel был req_grad, то и k1 тоже будет.
+            t_arr[1] = k1;
+        }
+
+        return t_arr;
+    }
 
     @Override
     protected Tensor operation(Tensor matrix, Tensor kernel) {
-//        if(type){}
+        System.out.println("mat:" + matrix);
+        System.out.println("kernel:" + kernel);
+
         int[]   resDims = getResultDims();
         int     l = resDims.length;
 
@@ -107,15 +121,20 @@ public class Conv extends Operation {
                         sum += kernel
                                 .get(i, j).getScalar()
                                 *
-                                matrix
-                                        .get(
+                                matrix.get(
                                             r + r * (step - 1) + i,
                                             c + c * (step - 1) + j
                                         ).getScalar();
                     }
                 }
 
-                res.set(tensor(sum/(n)), r, c);
+                float val = sum;
+
+                if(type == Type.AVG){
+                    val /= n;
+                }
+
+                res.set(tensor(val), r, c);
             }
         }
 

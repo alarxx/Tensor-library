@@ -3,7 +3,7 @@ package sheet.abstract_factory.grad;
 import com.ml.lib.autograd.OperationGrad;
 import com.ml.lib.tensor.Tensor;
 
-import static com.ml.lib.Core.sum;
+import static com.ml.lib.core.Core.sum;
 
 public class Sum implements OperationGrad {
     @Override

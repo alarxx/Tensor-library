@@ -2,9 +2,8 @@ package sheet.operation_simple_factory;
 
 import com.ml.lib.interfaces.Operation;
 import com.ml.lib.tensor.Tensor;
-import sheet.operation_simple_factory.OperationTypes;
 
-import static com.ml.lib.Core.tensor;
+import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Main {
     public static void main(String[] args) {

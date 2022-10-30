@@ -1,6 +1,6 @@
 package sheet.state;
 
-import com.ml.lib.Core;
+import com.ml.lib.core.Core;
 import com.ml.lib.tensor.Tensor;
 
 public class Summarized extends State {

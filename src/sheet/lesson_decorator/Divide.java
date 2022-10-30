@@ -2,7 +2,8 @@ package sheet.lesson_decorator;
 
 import com.ml.lib.tensor.Tensor;
 
-import static com.ml.lib.Core.tensor;
+import static com.ml.lib.tensor.Tensor.tensor;
+
 
 public class Divide extends OperationDecorator {
     private static final int RANK = 0;

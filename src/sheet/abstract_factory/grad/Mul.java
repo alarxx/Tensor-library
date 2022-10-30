@@ -3,7 +3,7 @@ package sheet.abstract_factory.grad;
 import com.ml.lib.autograd.OperationGrad;
 import com.ml.lib.tensor.Tensor;
 
-import static com.ml.lib.Core.mul;
+import static com.ml.lib.core.Core.mul;
 
 public class Mul implements OperationGrad {
     @Override

@@ -1,4 +1,4 @@
-package com.ml.lib;
+package com.ml.lib.core;
 
 import com.ml.lib.linear_algebra.operations.Conv;
 import com.ml.lib.linear_algebra.operations.MatMul;
@@ -17,11 +17,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.ml.lib.tensor.Tensor.tensor;
+
 public class Core {
     public static void throwError(String error){
         System.out.println(error);
         int a = 8 / 0;
     }
+
 
 
     public static boolean isVector(Tensor t){
@@ -57,76 +60,7 @@ public class Core {
         return res;
     }
 
-    public static Tensor tensor(float scalar){
-        return new Tensor().setScalar(scalar);
-    }
 
-    public static Tensor tensor(float scalar, boolean requires_grad){
-        return tensor(scalar).requires_grad(requires_grad);
-    }
-    public static Tensor tensor(float[] vector){
-        Tensor tensor = new Tensor(vector.length);
-
-        for(int i=0; i<vector.length; i++){
-            tensor.get(i).setScalar(vector[i]);
-        }
-
-        return tensor;
-    }
-    public static Tensor tensor(float[] vector, boolean requires_grad){
-        return tensor(vector).requires_grad(requires_grad);
-    }
-
-    public static Tensor tensor(float[][] matrix){
-        int     rows = matrix.length,
-                cols = matrix[0].length;
-
-        Tensor tensor = new Tensor(rows, cols);
-
-        for(int i=0; i<rows; i++){
-            tensor.set(tensor(matrix[i]), i);
-        }
-
-        return tensor;
-    }
-    public static Tensor tensor(float[][] matrix, boolean requires_grad){
-        return tensor(matrix).requires_grad(requires_grad);
-    }
-
-    public static Tensor tensor(float[][][] image){
-        int     rows = image[0].length,
-                cols = image[0][0].length,
-                channels = image.length;
-
-        Tensor tensor = new Tensor(channels, rows, cols);
-
-        for(int i=0; i<channels; i++){
-            tensor.set(tensor(image[i]), i);
-        }
-
-        return tensor;
-    }
-    public static Tensor tensor(float[][][] image, boolean requires_grad){
-        return tensor(image).requires_grad(requires_grad);
-    }
-
-    public static Tensor tensor(float[][][][] array4){
-        int     rows = array4[0][0].length,
-                cols = array4[0][0][0].length,
-                channels = array4[0].length,
-                d = array4.length;
-
-        Tensor tensor = new Tensor(d, channels, rows, cols);
-
-        for(int i=0; i<d; i++){
-            tensor.set(tensor(array4[i]), i);
-        }
-
-        return tensor;
-    }
-    public static Tensor tensor(float[][][][] array4, boolean requires_grad){
-        return tensor(array4).requires_grad(requires_grad);
-    }
 
 
     /** очень долгие методы, но рабочие */
@@ -294,6 +228,7 @@ public class Core {
     public static Tensor div(Tensor t1, Tensor t2, boolean requires_grad){
         return Div.getInstance().apply(t1, t2);
     }
+
     public static Tensor div(Tensor t1, Tensor t2){
         return div(t1, t2, false);
     }
@@ -312,12 +247,35 @@ public class Core {
         return neg(t1, false);
     }
 
+    /*CONVOLUTIONS START*/
+    /** Полная форма */
+    public static Tensor conv(Tensor tensor, Tensor kernel, int step, Conv.Type type, boolean requires_grad){
+        return requires_grad ? AutoGrad.conv(tensor, kernel) : new Conv(step, type).apply(tensor, kernel);
+    }
+
+    /** step = 1 */
+    public static Tensor conv(Tensor tensor, Tensor kernel, Conv.Type type, boolean requires_grad){
+        return conv(tensor, kernel, 1, type, requires_grad);
+    }
+
+    /** type = SUM */
+    public static Tensor conv(Tensor tensor, Tensor kernel, int step, boolean requires_grad){
+        return conv(tensor, kernel, step, Conv.Type.SUM, requires_grad);
+    }
+
+    /** step = 1,
+     * type = SUM */
     public static Tensor conv(Tensor tensor, Tensor kernel, boolean requires_grad){
-        return requires_grad ? AutoGrad.conv(tensor, kernel) : new Conv().apply(tensor, kernel);
+        return conv(tensor, kernel, 1, Conv.Type.SUM, requires_grad);
     }
+
+    /** step = 1,
+     * type = SUM,
+     * requires_grad = false*/
     public static Tensor conv(Tensor t1, Tensor t2){
-        return conv(t1, t2, false);
+        return conv(t1, t2, 1, Conv.Type.SUM, false);
     }
+    /*CONVOLUTIONS END*/
 
     public static Tensor tr(Tensor tensor){
         return Transposition.getInstance().apply(tensor);

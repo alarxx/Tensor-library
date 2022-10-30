@@ -1,6 +1,6 @@
 package com.ml.lib.autograd.methods;
 
-import com.ml.lib.Core;
+import com.ml.lib.core.Core;
 import com.ml.lib.autograd.OperationGrad;
 import com.ml.lib.tensor.Tensor;
 

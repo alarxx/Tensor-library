@@ -1,13 +1,12 @@
 package sheet.abstract_factory;
 
 
-import com.ml.lib.Core;
-import com.ml.lib.autograd.AutoGrad;
+import com.ml.lib.core.Core;
 import com.ml.lib.interfaces.Operation;
 import com.ml.lib.tensor.Tensor;
 import sheet.operation_simple_factory.OperationTypes;
 
-import static com.ml.lib.Core.tensor;
+import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,12 +14,12 @@ public class Main {
 
         Operation matmul = factory.createOperation(OperationTypes.matmul);
 
-        Tensor a = Core.tensor(new float[][]{
+        Tensor a = tensor(new float[][]{
                 {1, 2, 3},
                 {4, 5, 6}
         });
 
-        Tensor b = Core.tensor(new float[][]{
+        Tensor b = tensor(new float[][]{
                 {2, 3},
                 {4, 5},
                 {6, 7}

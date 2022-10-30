@@ -3,7 +3,7 @@ package com.ml.lib.autograd.methods;
 import com.ml.lib.tensor.Tensor;
 import com.ml.lib.autograd.OperationGrad;
 
-import static com.ml.lib.Core.sum;
+import static com.ml.lib.core.Core.sum;
 
 public class Sum implements OperationGrad {
     @Override

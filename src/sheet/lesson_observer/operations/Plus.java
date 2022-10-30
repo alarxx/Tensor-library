@@ -3,7 +3,7 @@ package sheet.lesson_observer.operations;
 import com.ml.lib.tensor.Tensor;
 import sheet.lesson_observer.intefaces.Operation;
 
-import static com.ml.lib.Core.tensor;
+import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Plus implements Operation {
     private float v;

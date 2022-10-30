@@ -3,8 +3,8 @@ package com.ml.lib.autograd.methods;
 import com.ml.lib.tensor.Tensor;
 import com.ml.lib.autograd.OperationGrad;
 
-import static com.ml.lib.Core.neg;
-import static com.ml.lib.Core.sub;
+import static com.ml.lib.core.Core.neg;
+import static com.ml.lib.core.Core.sub;
 
 public class Sub implements OperationGrad {
     @Override

@@ -3,10 +3,12 @@ package com.ml.lib.linear_algebra.operations.elementary;
 import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.tensor.Tensor;
 
-import static com.ml.lib.Core.*;
+import static com.ml.lib.core.Core.*;
+import static com.ml.lib.tensor.Tensor.tensor;
 
 /**
  *
+ * Комент устарел. Оставлю на всякий случай.
  * Пока думаю, что хорошо будет работать Mat-scalar, Mat-mat, 3d-3d, 3d-2d, 3d-scalar,
  * Но на счет 4д не уверен. там могут быть траблы уже, вся ответственность на пользователе.
  *
@@ -51,8 +53,15 @@ public abstract class ElementByElement extends Operation {
             int[]   dims1 = firstTensorOfRank(src1, 2).dims(),
                     dims2 = firstTensorOfRank(src2, 2).dims();
 
-            if(dims1[0] != dims2[0] || dims1[1] != dims2[1]){
-                throwError("Dimensions must be the same");
+            int     rows = dims1[0],
+                    cols = dims1[1],
+                    rows2 = dims2[0],
+                    cols2 = dims2[1];
+
+            if(rows2!=1 && cols2!=1) {
+                if (rows != rows2 || cols != cols2) {
+                    throwError("Dimensions must be the same");
+                }
             }
 
             return src1.dims();
@@ -73,17 +82,33 @@ public abstract class ElementByElement extends Operation {
                     rows2 = t2.dims()[0],
                     cols2 = t2.dims()[1];
 
-            if(rows != rows2 || cols != cols2)
+            if(rows2 == 1 && cols2 == 1){
+                float scalar_matrix = t2.get(0, 0).getScalar();
+                Tensor result = new Tensor(rows, cols);
+
+                for(int r=0; r<rows; r++){
+                    Tensor  resultRow = result.get(r),
+                            t1Row = t1.get(r);
+
+                    for(int c=0; c<cols; c++){
+                        float value = operation(t1Row.get(c).getScalar(), scalar_matrix);
+                        resultRow.get(c).setScalar(value);
+                    }
+                }
+                return result;
+            }
+
+            if (rows != rows2 || cols != cols2)
                 throwError("Wrong dimensions");
 
             Tensor result = new Tensor(rows, cols);
 
-            for(int r=0; r<rows; r++){
-                Tensor  resultRow = result.get(r),
+            for (int r = 0; r < rows; r++) {
+                Tensor resultRow = result.get(r),
                         t1Row = t1.get(r),
                         t2Row = t2.get(r);
 
-                for(int c=0; c<cols; c++){
+                for (int c = 0; c < cols; c++) {
                     float value = operation(t1Row.get(c).getScalar(), t2Row.get(c).getScalar());
                     resultRow.get(c).setScalar(value);
                 }

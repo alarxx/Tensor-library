@@ -1,6 +1,7 @@
 package com.ml.lib.linear_algebra;
 
-import com.ml.lib.Core;
+import com.ml.lib.core.Core;
+import com.ml.lib.linear_algebra.operations.Conv;
 import com.ml.lib.linear_algebra.operations.MatMul;
 import com.ml.lib.linear_algebra.operations.self_operation.Transposition;
 import com.ml.lib.linear_algebra.operations.elementary.Sum;
@@ -8,12 +9,68 @@ import com.ml.lib.tensor.Tensor;
 
 import java.util.Arrays;
 
-import static com.ml.lib.Core.tr;
+import static com.ml.lib.core.Core.*;
+import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Tests {
 
     public static void main(String[] args) {
-        Tensor mat = Core.tensor(new float[][][]{
+        convolutionTest();
+    }
+
+    private static void rateKernel(){
+        Tensor kernel = tensor(new float[][][]{
+                {
+                    {1, 2, 1},
+                    {2, 4, 2},
+                    {1, 2, 1}
+                }
+        });
+
+        Tensor sum = conv(kernel, new Tensor(kernel.dims()).fill(1), 1, Conv.Type.SUM, false);
+
+        Tensor k1 = kernel.div(sum); // Если kernel был req_grad, то и k1 тоже будет.
+
+        System.out.println(k1);
+    }
+
+    private static void convolutionTest(){
+        Tensor tensor = tensor(new float[][][]{
+                {
+                        {1, 2, 3, 4, 5},
+                        {1, 2, 3, 4, 5},
+                        {1, 2, 3, 4, 5},
+                        {1, 2, 3, 4, 5},
+                        {1, 2, 3, 4, 5},
+                },
+                {
+                        {1, 2, 3, 4, 5},
+                        {1, 2, 3, 4, 5},
+                        {1, 2, 3, 4, 5},
+                        {1, 2, 3, 4, 5},
+                        {1, 2, 3, 4, 5},
+                }
+        });
+
+        Tensor kernel = tensor(new float[][][]{
+                {
+                    {1, 1, 1},
+                    {1, 1, 1},
+                    {1, 1, 1}
+                },
+                {
+                    {1, 2, 1},
+                    {2, 4, 2},
+                    {1, 2, 1}
+                },
+        });
+
+        Tensor convolution = tensor.conv(kernel, 2, Conv.Type.AVG);
+        System.out.println(convolution);
+    }
+
+    private static void trTest(){
+        Tensor mat = tensor(new float[][][]{
                 {
                         {1, 2, 3},
                         {4, 5, 6}
@@ -28,18 +85,17 @@ public class Tests {
 
         System.out.println(mat);
     }
-
     private static void singletonTest1(){
 //        Operation matmul = new MatMul();
         Operation matmul = MatMul.getInstance();
 
 
-        Tensor mat1 = Core.tensor(new float[][]{
+        Tensor mat1 = tensor(new float[][]{
                 {1, 2, 3},
                 {4, 5, 6}
         });
 
-        Tensor mat2 = Core.tensor(new float[][]{
+        Tensor mat2 = tensor(new float[][]{
                         {1, 2},
                         {3, 4},
                         {5, 6}
@@ -55,12 +111,12 @@ public class Tests {
     }
 
     private static void matmulTest(){
-        Tensor mat1 = Core.tensor(new float[][]{
+        Tensor mat1 = tensor(new float[][]{
                 {1, 2, 3},
                 {4, 5, 6}
         });
 
-        Tensor mat2 = Core.tensor(new float[][]{
+        Tensor mat2 = tensor(new float[][]{
                 {1, 2},
                 {3, 4},
                 {5, 6}
@@ -98,7 +154,7 @@ public class Tests {
                 }
         };
 
-        Tensor imageTensor = Core.tensor(d4d);
+        Tensor imageTensor = tensor(d4d);
 
         System.out.println(Arrays.toString(imageTensor.dims()));
         System.out.println(imageTensor);
@@ -115,7 +171,7 @@ public class Tests {
         for(int d=0, v=0; d<depth; d++){
             for(int r=0; r<rows; r++){
                 for(int c=0; c<cols; c++, v++){
-                    tensor.set(Core.tensor(v), d, r, c);
+                    tensor.set(tensor(v), d, r, c);
                 }
             }
         }
@@ -126,7 +182,7 @@ public class Tests {
     }
 
 
-    public static void sumFunctionTest(){
+    public static void sumOperationTest(){
         float[]     vector = new float[]{1, 2};
 
         float[][]   mat1 = new float[][]{{1, 2}, {3, 4}},
@@ -137,11 +193,11 @@ public class Tests {
 
         float[][][] d3d = new float[][][]{ {{5, 6}, {7, 8}}, {{9, 10}, {11, 12}} };
 
-        Tensor  mat_t1 = Core.tensor(mat1),
-                mat_t2 = Core.tensor(mat2),
-                vector_t = Core.tensor(vector),
-                col_vec_t3 = Core.tensor(colVector),
-                d3d_t = Core.tensor(d3d);
+        Tensor  mat_t1 = tensor(mat1),
+                mat_t2 = tensor(mat2),
+                vector_t = tensor(vector),
+                col_vec_t3 = tensor(colVector),
+                d3d_t = tensor(d3d);
 
         System.out.println("mat1:" + mat_t1);
         System.out.println("mat2:" + mat_t2);
@@ -163,10 +219,10 @@ public class Tests {
         res = sum.apply(col_vec_t3, col_vec_t3);
         System.out.println("colVec+colVec:" + res + "\n");
 
-        res = sum.apply(mat_t1, Core.tensor(1.1f));
+        res = sum.apply(mat_t1, tensor(1.1f));
         System.out.println("mat1 + 1.1f:" + res + "\n");
 
-        res = sum.apply(Core.tensor(1.1f), mat_t1);
+        res = sum.apply(tensor(1.1f), mat_t1);
         System.out.println("1.1f + mat1:" + res + "\n");
 
 
@@ -183,14 +239,14 @@ public class Tests {
                 {1, 2, 3},
                 {4, 5, 6}
         };
-        Tensor matT1 = Core.tensor(mat1);
+        Tensor matT1 = tensor(mat1);
 
         float[][] mat2 = new float[][]{
                 {1, 2},
                 {3, 4},
                 {5, 6}
         };
-        Tensor matT2 = Core.tensor(mat2);
+        Tensor matT2 = tensor(mat2);
 
         Tensor result = matMul.apply(matT1, matT2);
 
@@ -212,7 +268,7 @@ public class Tests {
                         {10, 11, 12}
                 }
         };
-        Tensor matT1 = Core.tensor(mat1);
+        Tensor matT1 = tensor(mat1);
 
         float[][][] mat2 = new float[][][]{
                 {
@@ -227,7 +283,7 @@ public class Tests {
                 }
         };
 
-        Tensor matT2 = Core.tensor(mat2);
+        Tensor matT2 = tensor(mat2);
 
         Tensor result = matMul.apply(matT1, matT2);
 
@@ -240,11 +296,11 @@ public class Tests {
 
     public static void upTheRankTest(){
         float[][] matArr = new float[][]{{1, 2}, {3, 4}};
-        Tensor mat = Core.tensor(matArr);
+        Tensor mat = tensor(matArr);
 
         Tensor d3d = Core.upTheRank(mat, 3, true);
 
-        d3d.set(Core.tensor(11f), 0, 0, 0);
+        d3d.set(tensor(11f), 0, 0, 0);
 
         System.out.println(Arrays.toString(mat.dims()));
         System.out.println(mat);
@@ -255,7 +311,7 @@ public class Tests {
 
     private static void transposeTestMat2x2(){
         float[][] matArr = new float[][]{{1, 2}, {3, 4}};
-        Tensor mat = Core.tensor(matArr);
+        Tensor mat = tensor(matArr);
         System.out.println(mat);
 
         Tensor mat_tr = new Transposition().apply(mat);
@@ -264,7 +320,7 @@ public class Tests {
     }
     private static void transposeTestMat1x2(){
         float[][] matArr = new float[][]{{1}, {2}};
-        Tensor mat = Core.tensor(matArr);
+        Tensor mat = tensor(matArr);
         System.out.println(mat);
 
         Tensor mat_tr = new Transposition().apply(mat);
@@ -273,7 +329,7 @@ public class Tests {
     }
     private static void transposeTestVector(){
         float[] matArr = new float[]{1, 2};
-        Tensor mat = Core.tensor(matArr);
+        Tensor mat = tensor(matArr);
         System.out.println(mat);
 
         Tensor mat_tr = new Transposition().apply(mat);

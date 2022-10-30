@@ -3,9 +3,8 @@ package com.ml.lib.linear_algebra.operations.self_operation;
 import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.tensor.Tensor;
 
-import java.util.Arrays;
+import static com.ml.lib.tensor.Tensor.tensor;
 
-import static com.ml.lib.Core.tensor;
 
 public class Mirror extends Operation {
     public static void main(String[] args) {
