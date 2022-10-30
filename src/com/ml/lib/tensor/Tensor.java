@@ -147,7 +147,9 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
      * Если это так надо, то просто создайте новый тензор.
      * */
     private void changeFields(Tensor tensor){
-        if(!Core.dimsEqual(this, tensor)){
+        if (        !isScalar
+                &&  !tensor.isScalar
+                &&  !Core.dimsEqual(this, tensor)) {
             throwError("Dims are not equal");
         }
         this.array = tensor.array;
