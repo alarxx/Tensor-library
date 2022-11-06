@@ -9,7 +9,7 @@ import static com.ml.lib.tensor.Tensor.tensor;
 
 public class MatMul extends Operation {
     public static void main(String[] args) {
-        Tensor mats1 = tensor(new float[][][]{
+        Tensor mats1 = tensor(new double[][][]{
                 {
                         {1, 2, 3},
                         {4, 5, 6}
@@ -20,7 +20,7 @@ public class MatMul extends Operation {
                 },
         });
 
-        Tensor mats2 = tensor(new float[][][]{
+        Tensor mats2 = tensor(new double[][][]{
                 {
                         {1, 2},
                         {3, 4},
@@ -91,9 +91,9 @@ public class MatMul extends Operation {
         for(int r=0; r<row1; r++){
             for(int c=0; c<col2; c++){
 
-                float sum = 0;
+                double sum = 0;
                 for(int s=0; s<col1; s++){
-                    float v = mat1.get(r, s).getScalar() * mat2.get(s, c).getScalar();
+                    double v = mat1.get(r, s).getScalar() * mat2.get(s, c).getScalar();
                     sum += v;
                 }
 

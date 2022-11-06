@@ -14,7 +14,7 @@ public class Mul extends ElementByElement {
     }
     //-------------------------------------
     @Override
-    public float operation(float a, float b){
+    public double operation(double a, double b){
         return a * b;
     }
 

@@ -6,13 +6,13 @@ import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Main {
     public static void main(String[] args) {
-        TensorWState tensorWS = new TensorWState(tensor(new float[][]{
+        TensorWState tensorWS = new TensorWState(tensor(new double[][]{
                 {1, 2, 3},
                 {4, 5, 6},
                 {7, 8, 9}
         }));
 
-        tensorWS.add(new TensorWState(tensor(new float[][]{
+        tensorWS.add(new TensorWState(tensor(new double[][]{
                 {1, 1, 1},
                 {1, 1, 1},
                 {1, 1, 1}

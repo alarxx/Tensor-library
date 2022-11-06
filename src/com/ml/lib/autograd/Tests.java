@@ -11,12 +11,12 @@ public class Tests {
     }
 
     public static void shortened(){
-        Tensor a = tensor(new float[][]{
+        Tensor a = tensor(new double[][]{
                 {1, 2, 3},
                 {4, 5, 6}
         });
 
-        Tensor b = tensor(new float[][]{
+        Tensor b = tensor(new double[][]{
                 {2, 3},
                 {4, 5},
                 {6, 7}
@@ -33,12 +33,12 @@ public class Tests {
     }
 
     public static void full(){
-        Tensor a = tensor(new float[][]{
+        Tensor a = tensor(new double[][]{
                 {1, 2, 3},
                 {4, 5, 6}
         });
 
-        Tensor b = tensor(new float[][]{
+        Tensor b = tensor(new double[][]{
                 {2, 3},
                 {4, 5},
                 {6, 7}

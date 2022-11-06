@@ -19,7 +19,7 @@ public class Tests {
     }
 
     private static void rateKernel(){
-        Tensor kernel = tensor(new float[][][]{
+        Tensor kernel = tensor(new double[][][]{
                 {
                     {1, 2, 1},
                     {2, 4, 2},
@@ -35,7 +35,7 @@ public class Tests {
     }
 
     private static void convolutionTest(){
-        Tensor tensor = tensor(new float[][][]{
+        Tensor tensor = tensor(new double[][][]{
                 {
                         {1, 2, 3, 4, 5},
                         {1, 2, 3, 4, 5},
@@ -52,7 +52,7 @@ public class Tests {
                 }
         });
 
-        Tensor kernel = tensor(new float[][][]{
+        Tensor kernel = tensor(new double[][][]{
                 {
                     {1, 1, 1},
                     {1, 1, 1},
@@ -70,7 +70,7 @@ public class Tests {
     }
 
     private static void trTest(){
-        Tensor mat = tensor(new float[][][]{
+        Tensor mat = tensor(new double[][][]{
                 {
                         {1, 2, 3},
                         {4, 5, 6}
@@ -90,12 +90,12 @@ public class Tests {
         Operation matmul = MatMul.getInstance();
 
 
-        Tensor mat1 = tensor(new float[][]{
+        Tensor mat1 = tensor(new double[][]{
                 {1, 2, 3},
                 {4, 5, 6}
         });
 
-        Tensor mat2 = tensor(new float[][]{
+        Tensor mat2 = tensor(new double[][]{
                         {1, 2},
                         {3, 4},
                         {5, 6}
@@ -111,12 +111,12 @@ public class Tests {
     }
 
     private static void matmulTest(){
-        Tensor mat1 = tensor(new float[][]{
+        Tensor mat1 = tensor(new double[][]{
                 {1, 2, 3},
                 {4, 5, 6}
         });
 
-        Tensor mat2 = tensor(new float[][]{
+        Tensor mat2 = tensor(new double[][]{
                 {1, 2},
                 {3, 4},
                 {5, 6}
@@ -131,7 +131,7 @@ public class Tests {
     }
 
     private static void tensorFactory(){
-        float[][][][] d4d = new float[][][][]{
+        double[][][][] d4d = new double[][][][]{
                 {
                         {
                                 {1, 2},
@@ -183,15 +183,15 @@ public class Tests {
 
 
     public static void sumOperationTest(){
-        float[]     vector = new float[]{1, 2};
+        double[]     vector = new double[]{1, 2};
 
-        float[][]   mat1 = new float[][]{{1, 2}, {3, 4}},
+        double[][]   mat1 = new double[][]{{1, 2}, {3, 4}},
 
-                    mat2 = new float[][]{{5, 6}, {7, 8}},
+                    mat2 = new double[][]{{5, 6}, {7, 8}},
 
-                    colVector = new float[][]{{1}, {2}};
+                    colVector = new double[][]{{1}, {2}};
 
-        float[][][] d3d = new float[][][]{ {{5, 6}, {7, 8}}, {{9, 10}, {11, 12}} };
+        double[][][] d3d = new double[][][]{ {{5, 6}, {7, 8}}, {{9, 10}, {11, 12}} };
 
         Tensor  mat_t1 = tensor(mat1),
                 mat_t2 = tensor(mat2),
@@ -235,13 +235,13 @@ public class Tests {
     private static void matMulMatTest(){
         MatMul matMul = new MatMul();
 
-        float[][] mat1 = new float[][]{
+        double[][] mat1 = new double[][]{
                 {1, 2, 3},
                 {4, 5, 6}
         };
         Tensor matT1 = tensor(mat1);
 
-        float[][] mat2 = new float[][]{
+        double[][] mat2 = new double[][]{
                 {1, 2},
                 {3, 4},
                 {5, 6}
@@ -258,7 +258,7 @@ public class Tests {
 
         MatMul matMul = new MatMul();
 
-        float[][][] mat1 = new float[][][]{
+        double[][][] mat1 = new double[][][]{
                 {
                         {1, 2, 3},
                         {4, 5, 6}
@@ -270,7 +270,7 @@ public class Tests {
         };
         Tensor matT1 = tensor(mat1);
 
-        float[][][] mat2 = new float[][][]{
+        double[][][] mat2 = new double[][][]{
                 {
                         {1, 2},
                         {3, 4},
@@ -295,7 +295,7 @@ public class Tests {
 
 
     public static void upTheRankTest(){
-        float[][] matArr = new float[][]{{1, 2}, {3, 4}};
+        double[][] matArr = new double[][]{{1, 2}, {3, 4}};
         Tensor mat = tensor(matArr);
 
         Tensor d3d = Core.upTheRank(mat, 3, true);
@@ -310,7 +310,7 @@ public class Tests {
 
 
     private static void transposeTestMat2x2(){
-        float[][] matArr = new float[][]{{1, 2}, {3, 4}};
+        double[][] matArr = new double[][]{{1, 2}, {3, 4}};
         Tensor mat = tensor(matArr);
         System.out.println(mat);
 
@@ -319,7 +319,7 @@ public class Tests {
         System.out.println(mat_tr);
     }
     private static void transposeTestMat1x2(){
-        float[][] matArr = new float[][]{{1}, {2}};
+        double[][] matArr = new double[][]{{1}, {2}};
         Tensor mat = tensor(matArr);
         System.out.println(mat);
 
@@ -328,7 +328,7 @@ public class Tests {
         System.out.println(mat_tr);
     }
     private static void transposeTestVector(){
-        float[] matArr = new float[]{1, 2};
+        double[] matArr = new double[]{1, 2};
         Tensor mat = tensor(matArr);
         System.out.println(mat);
 

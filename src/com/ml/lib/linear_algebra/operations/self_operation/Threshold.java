@@ -8,19 +8,19 @@ import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Threshold extends Operation {
     public static void main(String[] args) {
-        Tensor tensor = tensor(new float[][]{
+        Tensor tensor = tensor(new double[][]{
                 {0.1f, 0.2f, 0.8f},
                 {0.05f, 0.3f, 0.5f},
                 {0.6f, 0.9f, 1f},
         });
-//        Tensor tensor = tensor(new float[]{0.1f, 0.2f, 0.8f});
+//        Tensor tensor = tensor(new double[]{0.1f, 0.2f, 0.8f});
 
         tensor = new Threshold(0.5f).apply(tensor);
         System.out.println(tensor);
     }
 
-    private float threshold;
-    public Threshold(float threshold){
+    private double threshold;
+    public Threshold(double threshold){
         this.threshold = threshold;
     }
     @Override

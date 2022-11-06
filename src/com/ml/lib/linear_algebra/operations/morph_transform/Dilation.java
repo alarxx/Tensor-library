@@ -55,7 +55,7 @@ public class Dilation extends Operation {
                 float res_val = 0;
                 m:for (int i = 0; i < k_rows; i++) {
                     for (int j = 0; j < k_cols; j++) {
-                        float value = matrix.get(r + i, c + j).getScalar();
+                        double value = matrix.get(r + i, c + j).getScalar();
                         if(value == 1){
                             res_val = 1;
                             break m;

@@ -27,7 +27,7 @@ import static com.ml.lib.core.Core.throwError;
  * как понимать какого типа будет результирующая матрица;
  * и скорость с ними будет меньше... хотя я и не претендую на скорость.
  *
- * В этой реализации, как и в JS, все числа(скаляры) - float значения.
+ * В этой реализации, как и в JS, все числа(скаляры) - float значения. (!Поменял на double!)
  *
  * Tensor - scalar, только если dims = [],
  * но [1], [1, 1], [1, 1, 1]... не будут являться скалярами.
@@ -44,13 +44,13 @@ import static com.ml.lib.core.Core.throwError;
  * */
 public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tensor> {
 
-    private static final float INIT_VALUE = 0f;
+    private static final double INIT_VALUE = 0f;
     private Tensor[] array;
     private final int[] dims;
     private int length;
 
     // minimal, fundamental rank-0 Tensor - is a scalar
-    private float scalar; //by default is zero
+    private double scalar; //by default is zero
     private boolean isScalar = false;
 
     // Нужен для создания вложенных тензоров
@@ -160,7 +160,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
     // Можно использовать как пример как пробежаться по всем элементам
     @Override
-    public Tensor fill(float value) {
+    public Tensor fill(double value) {
         if(isScalar()){
             setScalar(value);
         }
@@ -241,7 +241,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
 
     @Override
-    public float getScalar(){
+    public double getScalar(){
         if(!isScalar())
             throwError("Tensor is not a scalar");
 
@@ -249,7 +249,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     }
 
     @Override
-    public Tensor setScalar(float scalar) {
+    public Tensor setScalar(double scalar) {
         if (!isScalar())
             throwError("Tensor is not a scalar");
 
@@ -390,16 +390,16 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
         return Core.rotate(this, angle).requires_grad(requires_grad);
     }
 
-    public Tensor pow(float pow){
+    public Tensor pow(double pow){
         Tensor t = Core.pow(this, pow, requires_grad);
         t.requires_grad(requires_grad);
         return t;
     }
     public Tensor sqrt(){
-        return pow(0.5f);
+        return pow(0.5d);
     }
 
-    public Tensor rand(float min, float max){
+    public Tensor rand(double min, double max){
         Tensor t = Core.rand(this, min, max);
         t.requires_grad(requires_grad);
         return t;
@@ -412,14 +412,14 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
 
     /* Tensor creation START */
-    public static Tensor tensor(float scalar){
+    public static Tensor tensor(double scalar){
         return new Tensor().setScalar(scalar);
     }
 
-    public static Tensor tensor(float scalar, boolean requires_grad){
+    public static Tensor tensor(double scalar, boolean requires_grad){
         return tensor(scalar).requires_grad(requires_grad);
     }
-    public static Tensor tensor(float[] vector){
+    public static Tensor tensor(double[] vector){
         Tensor tensor = new Tensor(vector.length);
 
         for(int i=0; i<vector.length; i++){
@@ -428,11 +428,11 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
         return tensor;
     }
-    public static Tensor tensor(float[] vector, boolean requires_grad){
+    public static Tensor tensor(double[] vector, boolean requires_grad){
         return tensor(vector).requires_grad(requires_grad);
     }
 
-    public static Tensor tensor(float[][] matrix){
+    public static Tensor tensor(double[][] matrix){
         int     rows = matrix.length,
                 cols = matrix[0].length;
 
@@ -444,11 +444,11 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
         return tensor;
     }
-    public static Tensor tensor(float[][] matrix, boolean requires_grad){
+    public static Tensor tensor(double[][] matrix, boolean requires_grad){
         return tensor(matrix).requires_grad(requires_grad);
     }
 
-    public static Tensor tensor(float[][][] image){
+    public static Tensor tensor(double[][][] image){
         int     rows = image[0].length,
                 cols = image[0][0].length,
                 channels = image.length;
@@ -461,11 +461,11 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
         return tensor;
     }
-    public static Tensor tensor(float[][][] image, boolean requires_grad){
+    public static Tensor tensor(double[][][] image, boolean requires_grad){
         return tensor(image).requires_grad(requires_grad);
     }
 
-    public static Tensor tensor(float[][][][] array4){
+    public static Tensor tensor(double[][][][] array4){
         int     rows = array4[0][0].length,
                 cols = array4[0][0][0].length,
                 channels = array4[0].length,
@@ -479,7 +479,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
         return tensor;
     }
-    public static Tensor tensor(float[][][][] array4, boolean requires_grad){
+    public static Tensor tensor(double[][][][] array4, boolean requires_grad){
         return tensor(array4).requires_grad(requires_grad);
     }
     /* Tensor creation END */

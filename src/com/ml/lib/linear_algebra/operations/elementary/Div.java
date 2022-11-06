@@ -8,7 +8,7 @@ import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Div extends ElementByElement {
     public static void main(String[] args) {
-        Tensor tensor = tensor(new float[][][]{{
+        Tensor tensor = tensor(new double[][][]{{
                 {1, 2, 3, 4, 5},
                 {1, 2, 3, 4, 5},
                 {1, 2, 3, 4, 5},
@@ -16,8 +16,8 @@ public class Div extends ElementByElement {
                 {1, 2, 3, 4, 5},
         }});
 
-        Tensor d = tensor(new float[][]{
-                {2}
+        Tensor d = tensor(new double[][]{
+                {2d}
         });
 
         Tensor result = new Div().apply(tensor, d);
@@ -34,7 +34,7 @@ public class Div extends ElementByElement {
     //-------------------------------------
 
     @Override
-    public float operation(float a, float b){
+    public double operation(double a, double b){
         return a / b;
     }
 }

@@ -8,7 +8,7 @@ import static com.ml.lib.tensor.Tensor.tensor;
 public class Erosion extends Operation {
 
     public static void main(String[] args) {
-        Tensor tensor = tensor(new float[][]{{
+        Tensor tensor = tensor(new double[][]{{
 
         }});
     }
@@ -68,7 +68,7 @@ public class Erosion extends Operation {
                 float res_val = 1;
                 m:for (int i = 0; i < k_rows; i++) {
                     for (int j = 0; j < k_cols; j++) {
-                        float value = matrix.get(r + i, c + j).getScalar();
+                        double value = matrix.get(r + i, c + j).getScalar();
                         if(value == 0){
                             res_val = 0;
                             break m;

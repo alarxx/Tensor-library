@@ -8,14 +8,14 @@ public class Main {
     public static void main(String[] args) {
         Tensor lr = tensor(0.001f);
 
-        Tensor I = tensor(new float[][]{
+        Tensor I = tensor(new double[][]{
                 {2},
         }).requires_grad(true);
 
-        Tensor W = tensor(new float[][]{
+        Tensor W = tensor(new double[][]{
                 {0.5f},
         });
-        Tensor B = tensor(new float[][]{
+        Tensor B = tensor(new double[][]{
                 {0.5f}
         });
 

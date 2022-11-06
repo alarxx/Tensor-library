@@ -14,7 +14,7 @@ public class Plus implements Operation {
 
     @Override
     public Tensor operation(Tensor t) {
-        float value = t.getScalar() + v;
+        double value = t.getScalar() + v;
 //        return new Tensor().setScalar(value);
         return tensor(value);
     }

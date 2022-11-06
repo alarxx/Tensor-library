@@ -27,7 +27,7 @@ import static com.ml.lib.tensor.Tensor.tensor;
 public abstract class ElementByElement extends Operation {
 
     /** Операции суммирования, вычитания, умножения, деления */
-    public abstract float operation(float a, float b);
+    public abstract double operation(double a, double b);
 
     @Override
     protected int[] ranksToCorrelate(Tensor src1, Tensor src2) {
@@ -57,7 +57,7 @@ public abstract class ElementByElement extends Operation {
     @Override
     public Tensor operation(Tensor t1, Tensor t2) {
         if (getRanks()[0] == 0 && getRanks()[1] == 0) { // Это скаляры
-            float value = operation(t1.getScalar(), t2.getScalar());
+            double value = operation(t1.getScalar(), t2.getScalar());
             return tensor(value);
         }
         else { // Это матрицы
@@ -115,7 +115,7 @@ public abstract class ElementByElement extends Operation {
                     t2Row = mat2.get(r);
 
             for (int c = 0; c < cols; c++) {
-                float value = operation(t1Row.get(c).getScalar(), t2Row.get(c).getScalar());
+                double value = operation(t1Row.get(c).getScalar(), t2Row.get(c).getScalar());
                 resultRow.get(c).setScalar(value);
             }
         }
@@ -126,7 +126,7 @@ public abstract class ElementByElement extends Operation {
         int     rows = mat1.dims()[0],
                 cols = mat1.dims()[1];
 
-        float scalar_matrix = mat2.get(0, 0).getScalar();
+        double scalar_matrix = mat2.get(0, 0).getScalar();
         Tensor result = new Tensor(rows, cols);
 
         for (int r = 0; r < rows; r++) {
@@ -134,7 +134,7 @@ public abstract class ElementByElement extends Operation {
                     t1Row = mat1.get(r);
 
             for (int c = 0; c < cols; c++) {
-                float value = operation(t1Row.get(c).getScalar(), scalar_matrix);
+                double value = operation(t1Row.get(c).getScalar(), scalar_matrix);
                 resultRow.get(c).setScalar(value);
             }
         }
@@ -159,7 +159,7 @@ public abstract class ElementByElement extends Operation {
                     t2Row = colvec.get(r);
 
             for (int c = 0; c < cols; c++) {
-                float value = operation(t1Row.get(c).getScalar(), t2Row.get(0).getScalar());
+                double value = operation(t1Row.get(c).getScalar(), t2Row.get(0).getScalar());
                 resultRow.get(c).setScalar(value);
             }
         }
@@ -186,7 +186,7 @@ public abstract class ElementByElement extends Operation {
                     t1Row = mat1.get(r);
 
             for (int c = 0; c < cols; c++) {
-                float value = operation(t1Row.get(c).getScalar(), rowvec.get(c).getScalar()); // rowvec.get(c % cols2).getScalar()) это бы расстягивало вектор
+                double value = operation(t1Row.get(c).getScalar(), rowvec.get(c).getScalar()); // rowvec.get(c % cols2).getScalar()) это бы расстягивало вектор
                 resultRow.get(c).setScalar(value);
             }
         }

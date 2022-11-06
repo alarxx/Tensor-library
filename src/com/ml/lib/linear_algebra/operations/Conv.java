@@ -12,7 +12,7 @@ import static com.ml.lib.tensor.Tensor.tensor;
  * */
 public class Conv extends Operation {
     public static void main(String[] args) {
-        Tensor tensor = tensor(new float[][]{
+        Tensor tensor = tensor(new double[][]{
                 {1, 2, 0, 2, 1},
                 {1, 2, 0, 2, 1},
                 {1, 2, 0, 2, 1},
@@ -21,7 +21,7 @@ public class Conv extends Operation {
         });
         tensor = tensor.div(tensor(2));
 
-        Tensor kernel = tensor(new float[][]{
+        Tensor kernel = tensor(new double[][]{
                 {-1, 1},
                 {-1, 1}
         });
@@ -81,12 +81,12 @@ public class Conv extends Operation {
     protected Tensor operation(Tensor matrix, Tensor kernel) {
         // Мы уверены, что matrix values для изображения in [0, 1]
         // Но если бы не были, то сделали так
-//        float max = new MaxOfRank(2).apply(matrix).getScalar();
+//        double max = new MaxOfRank(2).apply(matrix).getScalar();
 //        matrix = matrix.div(tensor(max));
 
-        float[] numOfMinusAndAbs = type == Type.AVG ? numOfMinusAndAbs(kernel) : new float[]{1, 1};
-        float m = numOfMinusAndAbs[0];
-        float a = numOfMinusAndAbs[1];
+        double[] numOfMinusAndAbs = type == Type.AVG ? numOfMinusAndAbs(kernel) : new double[]{1, 1};
+        double m = numOfMinusAndAbs[0];
+        double a = numOfMinusAndAbs[1];
 
         int[] resDims = getResultDims();
         int l = resDims.length;
@@ -102,12 +102,12 @@ public class Conv extends Operation {
                 k_rows = kernel.dims()[0],
                 k_cols = kernel.dims()[1];
 
-        float n = k_rows * k_cols;
+        double n = k_rows * k_cols;
 
         for (int r = 0; r < res_rows; r++) {
             for (int c = 0; c < res_cols; c++) {
 
-                float sum = 0;
+                double sum = 0;
                 for (int i = 0; i < k_rows; i++) {
                     for (int j = 0; j < k_cols; j++) {
                         sum += kernel
@@ -133,21 +133,21 @@ public class Conv extends Operation {
     }
 
 
-    private float[] numOfMinusAndAbs(Tensor matrix){
+    private double[] numOfMinusAndAbs(Tensor matrix){
         int     rows = matrix.dims()[0],
                 cols = matrix.dims()[1];
 
-        float minus = 0,
+        double minus = 0,
                 all = 0;
         for(int r=0; r<rows; r++){
             for(int c=0; c<cols; c++){
-                float value = matrix.get(r, c).getScalar();
+                double value = matrix.get(r, c).getScalar();
                 if(value < 0)
                     minus += Math.abs(value);
                 all += Math.abs(value);
             }
         }
 
-        return new float[]{minus, all};
+        return new double[]{minus, all};
     }
 }

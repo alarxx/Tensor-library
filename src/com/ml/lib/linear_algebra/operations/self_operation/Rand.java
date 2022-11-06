@@ -15,11 +15,11 @@ public class Rand extends Operation {
         System.out.println(tensor);
     }
 
-    private float min, max;
+    private final double min, max;
     public Rand(){
         this(0, 1);
     }
-    public Rand(float min, float max){
+    public Rand(double min, double max){
         this.min = min;
         this.max = max;
     }
@@ -45,7 +45,7 @@ public class Rand extends Operation {
     @Override
     public Tensor operation(Tensor tensor, Tensor nll) {
         if (getRanks()[0] == 0) { // Это скаляр
-            return tensor((float) Math.random() * (max - min) + min);
+            return tensor(Math.random() * (max - min) + min);
         }
         else { // Это матрицы
             int     rows = tensor.getLength(),
@@ -55,7 +55,7 @@ public class Rand extends Operation {
 
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < cols; c++) {
-                    result.get(r, c).setScalar((float) Math.random() * (max - min) + min);
+                    result.get(r, c).setScalar(Math.random() * (max - min) + min);
                 }
             }
             return result;

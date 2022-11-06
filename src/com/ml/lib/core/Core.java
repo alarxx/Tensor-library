@@ -299,10 +299,10 @@ public class Core {
         return new MaxOfRank(rank).apply(tensor);
     }
 
-    public static Tensor pow(Tensor tensor, float pow, boolean requires_grad){
+    public static Tensor pow(Tensor tensor, double pow, boolean requires_grad){
         return requires_grad ? AutoGrad.pow(tensor, pow) : new Pow(pow).apply(tensor);
     }
-    public static Tensor pow(Tensor tensor, float pow){
+    public static Tensor pow(Tensor tensor, double pow){
         return pow(tensor, pow, false);
     }
 
@@ -313,7 +313,7 @@ public class Core {
         return new Dilation().apply(tensor, kernel);
     }
 
-    public static Tensor rand(Tensor tensor, float min, float max){
+    public static Tensor rand(Tensor tensor, double min, double max){
         return new Rand(min, max).apply(tensor);
     }
     public static Tensor rand(Tensor tensor){

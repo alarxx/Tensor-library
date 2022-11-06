@@ -15,7 +15,7 @@
 как понимать какого типа будет результирующая матрица;  
 и скорость с ними будет меньше... хотя я и не претендую на скорость.
 
-В этой реализации, как и в JS, все числа(скаляры) - float значения.
+В этой реализации, как и в JS, все числа(скаляры) - float значения (поменял на double!).
 
 ---
 ### Scalars
@@ -75,13 +75,13 @@ System.out.print(t);
   Because it's more intuitive and convenient.
 #### Example:
 ```
-Tensor a = Tensor.tensor(new float[][]{
+Tensor a = Tensor.tensor(new double[][]{
             {1, 2, 3},
             {4, 5, 6}
         })
         .requires_grad(true);
 
-Tensor b = Tensor.tensor(new float[][]{
+Tensor b = Tensor.tensor(new double[][]{
             {2, 3},
             {4, 5},
             {6, 7}

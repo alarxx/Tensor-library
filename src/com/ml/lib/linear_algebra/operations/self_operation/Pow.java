@@ -7,15 +7,15 @@ import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Pow extends Operation {
     public static void main(String[] args) {
-        Tensor tensor = tensor(new float[][]{
+        Tensor tensor = tensor(new double[][]{
                 {1, 2, 3},{4, 5, 6},{7, 8, 9}
         });
         Tensor s = new Pow(1/2f).apply(tensor);
         System.out.println(s);
     }
-    private float pow;
+    private double pow;
 
-    public Pow(float pow){
+    public Pow(double pow){
         this.pow = pow;
     }
 
@@ -31,6 +31,6 @@ public class Pow extends Operation {
 
     @Override
     protected Tensor operation(Tensor scalar, Tensor nll) {
-        return tensor((float) Math.pow(scalar.getScalar(), pow));
+        return tensor(Math.pow(scalar.getScalar(), pow));
     }
 }

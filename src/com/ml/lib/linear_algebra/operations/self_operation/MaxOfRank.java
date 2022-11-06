@@ -9,7 +9,7 @@ import static com.ml.lib.tensor.Tensor.tensor;
 
 public class MaxOfRank extends Operation {
     public static void main(String[] args) {
-        Tensor tensor = tensor(new float[][][]{
+        Tensor tensor = tensor(new double[][][]{
                 {
                         {1, 2, 3},
                         {4, 5, 6}
@@ -52,11 +52,11 @@ public class MaxOfRank extends Operation {
     @Override
     protected Tensor operation(Tensor tensor, Tensor nll) {
         Tensor result = new Tensor(subDims);
-        result.get(0, 0).setScalar(max(tensor, Float.MIN_VALUE));
+        result.get(0, 0).setScalar(max(tensor, Double.MIN_VALUE));
         return result;
     }
 
-    private float max(Tensor tensor, float maxVal){
+    private double max(Tensor tensor, double maxVal){
         if(tensor.isScalar()){
             return Math.max(tensor.getScalar(), maxVal);
         }

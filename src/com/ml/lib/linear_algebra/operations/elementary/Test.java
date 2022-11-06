@@ -6,7 +6,7 @@ import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Test {
     public static void main(String[] args) {
-        Tensor mat = tensor(new float[][][]{{
+        Tensor mat = tensor(new double[][][]{{
                 {1, 2, 3, 11},
                 {4, 5, 6, 12},
                 {7, 8, 9, 13},
@@ -14,7 +14,7 @@ public class Test {
         }
         });
 
-        Tensor colvec = tensor(new float[][]{
+        Tensor colvec = tensor(new double[][]{
                 {1},
                 {2},
                 {3},

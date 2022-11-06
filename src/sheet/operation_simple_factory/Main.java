@@ -11,8 +11,8 @@ public class Main {
 
         Operation mul = factory.createOperation(OperationTypes.mul);
 
-        Tensor t1 = tensor(new float[]{1, 2, 3});
-        Tensor t2 = tensor(new float[]{1, 2, 3});
+        Tensor t1 = tensor(new double[]{1, 2, 3});
+        Tensor t2 = tensor(new double[]{1, 2, 3});
 
         Tensor result = mul.apply(t1, t2);
 

@@ -14,12 +14,12 @@ public class Main {
 
         Operation matmul = factory.createOperation(OperationTypes.matmul);
 
-        Tensor a = tensor(new float[][]{
+        Tensor a = tensor(new double[][]{
                 {1, 2, 3},
                 {4, 5, 6}
         });
 
-        Tensor b = tensor(new float[][]{
+        Tensor b = tensor(new double[][]{
                 {2, 3},
                 {4, 5},
                 {6, 7}

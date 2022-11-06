@@ -10,7 +10,7 @@ import static com.ml.lib.tensor.Tensor.tensor;
  * */
 public class Rotate extends Operation {
     public static void main(String[] args) {
-        Tensor tensor = tensor(new float[][]{
+        Tensor tensor = tensor(new double[][]{
                 {0, 1, 2, 3},
                 {0, 4, 5, 6},
                 {0, 7, 8, 9}

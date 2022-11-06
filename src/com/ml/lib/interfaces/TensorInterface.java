@@ -10,14 +10,14 @@ public interface TensorInterface {
 
     Tensor get(int ... indexes);
 
-    Tensor fill(float item);
+    Tensor fill(double item);
 
     int getLength();
 
     boolean isScalar();
 
-    float getScalar();
-    Tensor setScalar(float scalar);
+    double getScalar();
+    Tensor setScalar(double scalar);
 
     int rank();
 

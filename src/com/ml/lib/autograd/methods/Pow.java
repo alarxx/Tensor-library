@@ -19,8 +19,8 @@ public class Pow implements OperationGrad {
         Y._backward_();
         System.out.println(A.getGrad());
     }
-    private float pow;
-    public Pow(float pow){
+    private double pow;
+    public Pow(double pow){
         this.pow = pow;
     }
 
