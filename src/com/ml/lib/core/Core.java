@@ -2,6 +2,8 @@ package com.ml.lib.core;
 
 import com.ml.lib.linear_algebra.operations.Conv;
 import com.ml.lib.linear_algebra.operations.MatMul;
+import com.ml.lib.linear_algebra.operations.morph_transform.Dilation;
+import com.ml.lib.linear_algebra.operations.morph_transform.Erosion;
 import com.ml.lib.linear_algebra.operations.self_operation.*;
 import com.ml.lib.linear_algebra.operations.elementary.Div;
 import com.ml.lib.linear_algebra.operations.elementary.Mul;
@@ -298,5 +300,12 @@ public class Core {
 
     public static Tensor pow(Tensor tensor, float pow){
         return new Pow(pow).apply(tensor);
+    }
+
+    public static Tensor erode(Tensor tensor, Tensor kernel){
+        return new Erosion().apply(tensor, kernel);
+    }
+    public static Tensor dilate(Tensor tensor, Tensor kernel){
+        return new Dilation().apply(tensor, kernel);
     }
 }
