@@ -8,7 +8,6 @@ import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Tests {
     public static void main(String[] args) {
-        full();
     }
 
     public static void shortened(){

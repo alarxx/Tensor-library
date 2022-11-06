@@ -3,6 +3,8 @@ package com.ml.lib.linear_algebra.operations.elementary;
 import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.tensor.Tensor;
 
+import java.util.Arrays;
+
 import static com.ml.lib.core.Core.*;
 import static com.ml.lib.tensor.Tensor.tensor;
 
@@ -44,7 +46,11 @@ public abstract class ElementByElement extends Operation {
         int numOfElements1 = numberOfElements(src1.dims()),
                 numOfElements2 = numberOfElements(src2.dims());
 
-        return numOfElements1 > numOfElements2 ? src1.dims().clone() : src2.dims().clone();
+        // отдаем предпочтение размерности первого
+        if(numOfElements1 == numOfElements2)
+            return src1.rank() < src2.rank() ? src2.dims().clone() : src1.dims().clone();
+        else
+            return numOfElements1 < numOfElements2 ? src2.dims().clone() : src1.dims().clone();
     }
 
 

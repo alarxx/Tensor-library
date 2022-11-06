@@ -11,10 +11,13 @@ import static com.ml.lib.tensor.Tensor.tensor;
  * */
 public class Pow implements OperationGrad {
     public static void main(String[] args) {
-        Tensor tensor = tensor(new float[]{2, 3});
-        Tensor Pow = tensor.getAutoGrad()._method_(new Pow(2));
-        Pow._backward_();
-        System.out.println(Pow.getGrad());
+        Tensor A = tensor(3f);
+        Tensor B = tensor(6f);
+
+        Tensor C = A.getAutoGrad()._method_(new Pow(2));
+        Tensor Y = C.getAutoGrad()._method_(new Mul(), B);
+        Y._backward_();
+        System.out.println(A.getGrad());
     }
     private float pow;
     public Pow(float pow){

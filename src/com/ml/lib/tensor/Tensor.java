@@ -378,30 +378,34 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
 
 
     public Tensor tr(){
-        return Core.tr(this);
+        return Core.tr(this).requires_grad(requires_grad);
     }
     public Tensor neg(){
-        return Core.neg(this, requires_grad);
+        return Core.neg(this, requires_grad).requires_grad(requires_grad);
     }
     public Tensor mirror(){
-        return Core.mirror(this);
+        return Core.mirror(this).requires_grad(requires_grad);
     }
     public Tensor rotate(int angle){
-        return  Core.rotate(this, angle);
+        return Core.rotate(this, angle).requires_grad(requires_grad);
     }
 
     public Tensor pow(float pow){
-        return Core.pow(this, pow);
+        Tensor t = Core.pow(this, pow, requires_grad);
+        t.requires_grad(requires_grad);
+        return t;
     }
     public Tensor sqrt(){
-        return Core.pow(this, 0.5f);
+        return pow(0.5f);
     }
 
     public Tensor rand(float min, float max){
-        return Core.rand(this, min, max);
+        Tensor t = Core.rand(this, min, max);
+        t.requires_grad(requires_grad);
+        return t;
     }
     public Tensor rand(){
-        return Core.rand(this);
+        return rand(0, 1);
     }
     /* CORE OPERATIONS END */
 

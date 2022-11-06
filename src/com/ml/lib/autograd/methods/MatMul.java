@@ -3,6 +3,8 @@ package com.ml.lib.autograd.methods;
 import com.ml.lib.tensor.Tensor;
 import com.ml.lib.autograd.OperationGrad;
 
+import java.util.Arrays;
+
 import static com.ml.lib.core.Core.dot;
 import static com.ml.lib.core.Core.tr;
 

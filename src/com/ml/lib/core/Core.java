@@ -97,6 +97,7 @@ public class Core {
     }
 
     public static Tensor firstTensorOfRank(Tensor tensor, int rank){
+//        System.out.println(tensor.rank() + " " + rank);
         if(tensor.rank() == rank){
             return  tensor;
         }
@@ -298,8 +299,11 @@ public class Core {
         return new MaxOfRank(rank).apply(tensor);
     }
 
+    public static Tensor pow(Tensor tensor, float pow, boolean requires_grad){
+        return requires_grad ? AutoGrad.pow(tensor, pow) : new Pow(pow).apply(tensor);
+    }
     public static Tensor pow(Tensor tensor, float pow){
-        return new Pow(pow).apply(tensor);
+        return pow(tensor, pow, false);
     }
 
     public static Tensor erode(Tensor tensor, Tensor kernel){

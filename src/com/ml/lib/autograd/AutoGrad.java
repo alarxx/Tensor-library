@@ -4,6 +4,8 @@ import com.ml.lib.autograd.methods.*;
 import com.ml.lib.tensor.Tensor;
 import com.ml.lib.interfaces.AutoGradInterface;
 
+import java.util.Arrays;
+
 public class AutoGrad implements AutoGradInterface {
     public static Tensor sum(Tensor t1, Tensor t2){
         return t1.getAutoGrad()._method_(new Sum(), t2);
@@ -88,20 +90,22 @@ public class AutoGrad implements AutoGradInterface {
      * Из-за ./method_examples, пришлось сделать метод public
      * */
     public void _backward_(Tensor backward_grad) {
-        if(clean_grad)
+        if (clean_grad)
             clean_grad();
 
         grad = grad.add(backward_grad);
 
-        if(operationGrad != null)
+        if (operationGrad != null) {
             operationGrad._backward_(grad, depends_on);
+        }
     }
 
     /** Первая производная всегда равна 1 */
     @Override
     public void _backward_(){
         setCleanGrad(true);
-        _backward_(new Tensor(tensor.dims()).fill(1));
+        Tensor g = new Tensor(tensor.dims()).fill(1);
+        _backward_(g);
     }
 
     @Override
@@ -125,7 +129,7 @@ public class AutoGrad implements AutoGradInterface {
 
         if(depends_on != null) {
             depends_on[0].getAutoGrad().clean_grad();
-            if (depends_on.length > 1)
+            if (depends_on[1] != null)
                 depends_on[1].getAutoGrad().clean_grad();
         }
     }
