@@ -229,7 +229,7 @@ public class Core {
         return requires_grad ? AutoGrad.mul(t1, t2) : Mul.getInstance().apply(t1, t2);
     }
     public static Tensor mul(Tensor t1, Tensor t2) {
-        return  mul(t1, t2, false);
+        return mul(t1, t2, false);
     }
 
     public static Tensor div(Tensor t1, Tensor t2, boolean requires_grad){
@@ -250,7 +250,7 @@ public class Core {
     public static Tensor neg(Tensor tensor, boolean requires_grad){
         return requires_grad ? AutoGrad.neg(tensor) : mul(tensor, tensor(-1f), false);
     }
-    public static Tensor neg(Tensor t1, Tensor t2){
+    public static Tensor neg(Tensor t1){
         return neg(t1, false);
     }
 

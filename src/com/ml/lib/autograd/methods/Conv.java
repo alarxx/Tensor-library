@@ -10,7 +10,7 @@ import com.ml.lib.tensor.Tensor;
 public class Conv implements OperationGrad {
     @Override
     public Tensor _forward_(Tensor tensor, Tensor kernel) {
-        return Core.conv(tensor, kernel, false);
+        return Core.conv(tensor, kernel);
     }
 
     @Override

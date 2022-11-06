@@ -20,11 +20,9 @@ public class Test {
                 {3},
                 {4},
         });
-        Tensor rowvec = tensor(new float[][]{
-                {1, 2, 3, 4}
-        });
+//        Tensor rowvec = tensor(new float[][]{{1, 2, 3, 4}});
 
-        Tensor result = new Sum().apply(mat, rowvec);
+        Tensor result = new Sum().apply(mat, colvec);
         System.out.println(result);
     }
 }

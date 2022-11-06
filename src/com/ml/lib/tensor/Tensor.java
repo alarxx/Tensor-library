@@ -366,9 +366,16 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     public Tensor conv(Tensor kernel, int step, Conv.Type type){
         return Core.conv(this, kernel, step, type, requires_grad || kernel.isRequires_grad());
     }
+    public Tensor conv(Tensor kernel, Conv.Type type){
+        return Core.conv(this, kernel, 1, type, requires_grad || kernel.isRequires_grad());
+    }
+    public Tensor conv(Tensor kernel, int step){
+        return Core.conv(this, kernel, step, Conv.Type.SUM, requires_grad || kernel.isRequires_grad());
+    }
     public Tensor conv(Tensor kernel){
         return Core.conv(this, kernel, 1, Conv.Type.SUM, requires_grad || kernel.isRequires_grad());
     }
+
 
     public Tensor tr(){
         return Core.tr(this);

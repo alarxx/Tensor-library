@@ -43,12 +43,8 @@ public abstract class ElementByElement extends Operation {
     protected int[] resultTensorsDims(Tensor src1, Tensor src2) {
         int numOfElements1 = numberOfElements(src1.dims()),
                 numOfElements2 = numberOfElements(src2.dims());
-        if(getRanks()[0] == 0 && getRanks()[1] == 0){
-            return numOfElements1 > numOfElements2 ? src1.dims().clone() : src2.dims().clone();
-        }
-        else {
-            return numOfElements1 > numOfElements2 ? src1.dims().clone() : src2.dims().clone();
-        }
+
+        return numOfElements1 > numOfElements2 ? src1.dims().clone() : src2.dims().clone();
     }
 
 
