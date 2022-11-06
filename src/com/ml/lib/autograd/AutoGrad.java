@@ -4,8 +4,6 @@ import com.ml.lib.autograd.methods.*;
 import com.ml.lib.tensor.Tensor;
 import com.ml.lib.interfaces.AutoGradInterface;
 
-import java.util.Arrays;
-
 public class AutoGrad implements AutoGradInterface {
     public static Tensor sum(Tensor t1, Tensor t2){
         return t1.getAutoGrad()._method_(new Sum(), t2);
@@ -39,7 +37,7 @@ public class AutoGrad implements AutoGradInterface {
 
     private Tensor[] depends_on;
 
-    private OperationGrad operationGrad; // Creation Operation
+    private OperationGrad creation_op; // Creation Operation
 
 
     //Если функция расчитывается второй раз, прошлый градиент нужно сбросить
@@ -52,7 +50,7 @@ public class AutoGrad implements AutoGradInterface {
 
 
     private Tensor initGrad(OperationGrad operationGrad, Tensor[] depends_on) {
-        this.operationGrad = operationGrad;
+        this.creation_op = operationGrad;
 
         this.depends_on = depends_on;
 
@@ -95,8 +93,8 @@ public class AutoGrad implements AutoGradInterface {
 
         grad = grad.add(backward_grad);
 
-        if (operationGrad != null) {
-            operationGrad._backward_(grad, depends_on);
+        if (creation_op != null) {
+            creation_op._backward_(grad, depends_on);
         }
     }
 
