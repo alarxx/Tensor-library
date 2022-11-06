@@ -6,17 +6,17 @@ import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Main {
     public static void main(String[] args) {
-        Tensor lr = tensor(0.001f);
+        Tensor lr = tensor(0.1d);
 
         Tensor I = tensor(new double[][]{
                 {2},
         }).requires_grad(true);
 
         Tensor W = tensor(new double[][]{
-                {0.5f},
+                {0.5},
         });
         Tensor B = tensor(new double[][]{
-                {0.5f}
+                {0.5}
         });
 
         Tensor T = function(I);
@@ -42,7 +42,7 @@ public class Main {
             B = B.sub(dB);
         }
 
-        I.get(0, 0).setScalar(2f);
+        I.get(0, 0).setScalar(2);
         System.out.println(W.dot(I).add(B));
         System.out.println(function(I));
 
@@ -50,11 +50,11 @@ public class Main {
         System.out.println("B:"+B);
     }
 
-    // Tensor tensor = tensor(3f);
-    // System.out.println(function(tensor));
+
+    // f(I) = 3*I + 5
     public static Tensor function(Tensor X){
         return X
-                .mul(tensor(3f))
-                .add(tensor(5f));
+                .mul(tensor(3))
+                .add(tensor(5));
     }
 }
