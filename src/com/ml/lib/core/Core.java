@@ -308,4 +308,11 @@ public class Core {
     public static Tensor dilate(Tensor tensor, Tensor kernel){
         return new Dilation().apply(tensor, kernel);
     }
+
+    public static Tensor rand(Tensor tensor, float min, float max){
+        return new Rand(min, max).apply(tensor);
+    }
+    public static Tensor rand(Tensor tensor){
+        return new Rand().apply(tensor);
+    }
 }

@@ -396,6 +396,13 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     public Tensor sqrt(){
         return Core.pow(this, 0.5f);
     }
+
+    public Tensor rand(float min, float max){
+        return Core.rand(this, min, max);
+    }
+    public Tensor rand(){
+        return Core.rand(this);
+    }
     /* CORE OPERATIONS END */
 
 

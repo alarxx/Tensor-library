@@ -28,6 +28,9 @@ public class AutoGrad implements AutoGradInterface {
     public static Tensor neg(Tensor t1){
         return t1.getAutoGrad()._method_(new Neg());
     }
+    public static Tensor pow(Tensor tensor, float pow){
+        return tensor.getAutoGrad()._method_(new Pow(pow));
+    }
 
     private Tensor tensor;
     private Tensor grad;
