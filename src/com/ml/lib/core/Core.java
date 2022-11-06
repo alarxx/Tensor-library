@@ -292,7 +292,11 @@ public class Core {
         return new Rotate(angle).apply(tensor);
     }
 
-    public static Tensor maxmin(Tensor tensor, int rank){
+    public static Tensor max(Tensor tensor, int rank){
         return new MaxOfRank(rank).apply(tensor);
+    }
+
+    public static Tensor pow(Tensor tensor, float pow){
+        return new Pow(pow).apply(tensor);
     }
 }

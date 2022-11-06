@@ -112,8 +112,9 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     // Альтернативный вариант, но длинный и непонятный, в другом нужно понять только метод get
     @Override
     public Tensor set(Tensor item, int... indexes) {
-        if(indexes.length == 0)
+        if(indexes.length == 0) {
             changeFields(item);
+        }
         else setT(0, item, indexes); // Метод может сработать, а может и нет
 
         return this;
@@ -147,9 +148,7 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
      * Если это так надо, то просто создайте новый тензор.
      * */
     private void changeFields(Tensor tensor){
-        if (        !isScalar
-                &&  !tensor.isScalar
-                &&  !Core.dimsEqual(this, tensor)) {
+        if (!Core.dimsEqual(this, tensor)) {
             throwError("Dims are not equal");
         }
         this.array = tensor.array;
@@ -382,6 +381,13 @@ public class Tensor implements TensorInterface, AutoGradInterface, Iterable<Tens
     }
     public Tensor rotate(int angle){
         return  Core.rotate(this, angle);
+    }
+
+    public Tensor pow(float pow){
+        return Core.pow(this, pow);
+    }
+    public Tensor sqrt(){
+        return Core.pow(this, 0.5f);
     }
     /* CORE OPERATIONS END */
 

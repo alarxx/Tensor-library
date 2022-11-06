@@ -2,7 +2,6 @@ package com.ml.lib.linear_algebra;
 
 import com.ml.lib.core.Core;
 import com.ml.lib.tensor.Tensor;
-import org.w3c.dom.ls.LSOutput;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -122,7 +121,8 @@ public abstract class Operation implements com.ml.lib.interfaces.Operation {
                     lt1.get(i % lt1.size()),
                     null
             );
-
+//            System.out.println("operation:" + Arrays.toString(output.dims()));
+//            System.out.println("res:" + Arrays.toString(res_lt.get(i).dims()));
             res_lt.get(i).set(output);
         }
 

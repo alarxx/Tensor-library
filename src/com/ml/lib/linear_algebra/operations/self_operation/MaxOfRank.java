@@ -20,12 +20,13 @@ public class MaxOfRank extends Operation {
                 },
         });
 
-        Tensor max = new MaxOfRank(1).apply(tensor);
+        Tensor max = new MaxOfRank(2).apply(tensor);
         System.out.println(Arrays.toString(max.dims()));
         System.out.println(max);
     }
 
     private int rank;
+    private int[] subDims;
     public MaxOfRank(int rank){
         this.rank = rank;
     }
@@ -37,16 +38,22 @@ public class MaxOfRank extends Operation {
 
     @Override
     protected int[] resultTensorsDims(Tensor src1, Tensor nll) {
+        this.subDims = new int[rank];
+
         int[] dims = src1.dims().clone();
         for(int i=0; i<rank; i++){
             dims[dims.length - i - 1] = 1;
+            subDims[i] = 1;
         }
+//        System.out.println(Arrays.toString(subDims));
         return dims;
     }
 
     @Override
     protected Tensor operation(Tensor tensor, Tensor nll) {
-        return tensor(max(tensor, Float.MIN_VALUE));
+        Tensor result = new Tensor(subDims);
+        result.get(0, 0).setScalar(max(tensor, Float.MIN_VALUE));
+        return result;
     }
 
     private float max(Tensor tensor, float maxVal){
