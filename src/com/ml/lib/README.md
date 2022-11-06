@@ -1,6 +1,7 @@
 # Tensor Library
 
 ## Table of Contents
+- [Tensor](#tensor)
 - [Features](#features)
 - [Usage Tips](#usage-tips)
 
