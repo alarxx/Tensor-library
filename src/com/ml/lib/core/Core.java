@@ -50,9 +50,16 @@ public class Core {
         return res;
     }
 
-    public static int numberOfElements(int ... dims){
+    public static int numberOfElements(int [] dims){
         int res = 1;
         for(int i=0; i< dims.length; i++){
+            res *= dims[i];
+        }
+        return res;
+    }
+    public static int numberOfElements(int [] dims, int rank){
+        int res = 1;
+        for(int i=0; i< dims.length - rank; i++){
             res *= dims[i];
         }
         return res;
@@ -69,7 +76,7 @@ public class Core {
 
         Tensor resultTensor = new Tensor(dims);
 
-        List<Tensor> list = allTensorOfRank(tensor, 0);
+        List<Tensor> list = allTensorsOfRank(tensor, 0);
 
         castToDims(resultTensor, list);
 
@@ -96,34 +103,34 @@ public class Core {
         }
     }
 
-    public static List<Tensor> allTensorOfRank(Tensor tensor, int rank){
+    public static List<Tensor> allTensorsOfRank(Tensor tensor, int rank){
         List<Tensor> list = new ArrayList<>();
 
-        allTensorOfRank(list, tensor, rank);
+        allTensorsOfRank(list, tensor, rank);
 
         return list;
     }
-    private static void allTensorOfRank(List<Tensor> list, Tensor tensor, int rank){
+    private static void allTensorsOfRank(List<Tensor> list, Tensor tensor, int rank){
         if(tensor.rank() == rank){
             list.add(tensor);
         }
         else {
             for (Tensor t: tensor) {
-                allTensorOfRank(list, t, rank);
+                allTensorsOfRank(list, t, rank);
             }
         }
     }
 
 
-    public static List<int[]> allKeysOfTensorOfRank(Tensor tensor, int rank){
+    public static List<int[]> allKeysOfTensorsOfRank(Tensor tensor, int rank){
         List<Integer> indexes = new ArrayList<>();
         List<int[]> keys = new ArrayList<>();
 
-        allKeysOfTensorOfRank(keys, indexes, tensor, rank);
+        allKeysOfTensorsOfRank(keys, indexes, tensor, rank);
 
         return keys;
     }
-    private static void allKeysOfTensorOfRank(List<int[]> keys, List<Integer> indexes, Tensor tensor, int rank){
+    private static void allKeysOfTensorsOfRank(List<int[]> keys, List<Integer> indexes, Tensor tensor, int rank){
         if(tensor.rank() == rank){
             keys.add(list2arr(indexes));
         }
@@ -133,7 +140,7 @@ public class Core {
             for (int i = 0; i < tensor.getLength(); i++) {
                 Tensor t = tensor.get(i);
                 newIndexes.add(i);
-                allKeysOfTensorOfRank(keys, newIndexes, t, rank);
+                allKeysOfTensorsOfRank(keys, newIndexes, t, rank);
                 newIndexes.remove(newIndexes.size()-1);
             }
         }
@@ -285,10 +292,7 @@ public class Core {
         return new Rotate(angle).apply(tensor);
     }
 
-    public static Tensor max(Tensor tensor){
-        return new MatMax().apply(tensor);
-    }
-    public static Tensor min(Tensor tensor){
-        return new MatMin().apply(tensor);
+    public static Tensor maxmin(Tensor tensor, int rank){
+        return new MaxOfRank(rank).apply(tensor);
     }
 }

@@ -1,5 +1,6 @@
 package com.ml.lib.linear_algebra.operations;
 
+import com.ml.lib.core.Core;
 import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.tensor.Tensor;
 
@@ -8,17 +9,30 @@ import static com.ml.lib.tensor.Tensor.tensor;
 
 public class MatMul extends Operation {
     public static void main(String[] args) {
-        Tensor t1 = new Tensor(3, 2, 2).fill(1);
-        Tensor t2 = new Tensor(2, 4).fill(2);
+        Tensor mats1 = tensor(new float[][][]{
+                {
+                        {1, 2, 3},
+                        {4, 5, 6}
+                },
+                {
+                        {7, 8, 9},
+                        {10, 11, 12}
+                },
+        });
 
-        System.out.println("t1:" + t1);
-        System.out.println("t2:" + t2);
+        Tensor mats2 = tensor(new float[][][]{
+                {
+                        {1, 2},
+                        {3, 4},
+                        {5, 6}
+                },
+        });
 
-        MatMul matMul = new MatMul();
+        Tensor result = new MatMul().apply(mats1, mats2);
 
-        Tensor result = matMul.apply(t1, t2);
-
-        System.out.println("result: " + result);
+        System.out.println("mat1:"+mats1);
+        System.out.println("mat2:"+mats2);
+        System.out.println("result:"+result);
     }
 
     //---------SINGLETON------------------
@@ -33,7 +47,7 @@ public class MatMul extends Operation {
 
     @Override
     protected int[] ranksToCorrelate(Tensor src1, Tensor src2) {
-        return new int[]{2, 2};
+        return new int[]{2, 2, 2};
     }
 
     @Override
@@ -43,7 +57,8 @@ public class MatMul extends Operation {
 
         int[] resDims;
 
-        if(src1.rank() > src2.rank()){
+        // Берем самое большое количество матриц
+        if(numberOfElements(src1.dims(), 2) > numberOfElements(src2.dims(), 2)){
             resDims = src1.dims().clone();
         } else {
             resDims = src2.dims().clone();

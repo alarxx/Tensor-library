@@ -15,7 +15,7 @@ import static com.ml.lib.tensor.Tensor.tensor;
 public class Tests {
 
     public static void main(String[] args) {
-        convolutionTest();
+        matmulTest();
     }
 
     private static void rateKernel(){

@@ -2,6 +2,9 @@ package com.ml.lib.linear_algebra.operations.elementary;
 
 import com.ml.lib.linear_algebra.Operation;
 import com.ml.lib.linear_algebra.operations.MatMul;
+import com.ml.lib.tensor.Tensor;
+
+import static com.ml.lib.tensor.Tensor.tensor;
 
 public class Sum extends ElementByElement {
     //---------SINGLETON------------------

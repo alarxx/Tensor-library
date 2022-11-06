@@ -7,7 +7,7 @@ import sheet.lesson_observer.operations.Plus;
 
 import java.util.Scanner;
 
-import static com.ml.lib.core.Core.allTensorOfRank;
+import static com.ml.lib.core.Core.allTensorsOfRank;
 import static com.ml.lib.tensor.Tensor.tensor;
 
 /**
@@ -31,7 +31,7 @@ public class Main {
 
         ForEach forEach = new ForEach();
 
-        for(Tensor t: allTensorOfRank(tensor, 0)){
+        for(Tensor t: allTensorsOfRank(tensor, 0)){
             forEach.addObserver(new Piece(t));
         }
 

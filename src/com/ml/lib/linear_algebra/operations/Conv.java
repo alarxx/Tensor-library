@@ -2,7 +2,6 @@ package com.ml.lib.linear_algebra.operations;
 
 import com.ml.lib.core.Core;
 import com.ml.lib.linear_algebra.Operation;
-import com.ml.lib.linear_algebra.operations.self_operation.MatMax;
 import com.ml.lib.tensor.Tensor;
 
 import static com.ml.lib.core.Core.conv;
@@ -14,30 +13,29 @@ import static com.ml.lib.tensor.Tensor.tensor;
 public class Conv extends Operation {
     public static void main(String[] args) {
         Tensor tensor = tensor(new float[][]{
-                {1, 2, 3, 4, 5},
-                {1, 2, 3, 4, 5},
-                {1, 2, 3, 4, 5},
-                {1, 2, 3, 4, 5},
-                {1, 2, 3, 4, 5},
+                {1, 2, 0, 2, 1},
+                {1, 2, 0, 2, 1},
+                {1, 2, 0, 2, 1},
+                {1, 2, 0, 2, 1},
+                {1, 2, 0, 2, 1},
         });
+        tensor = tensor.div(tensor(2));
 
         Tensor kernel = tensor(new float[][]{
-                {1, 1, 1},
-                {1, 1, 1},
-                {1, 1, 1}
+                {-1, 1},
+                {-1, 1}
         });
 
-        Tensor conv = new Conv(1, Type.RATE).apply(tensor, kernel);
-
+        Tensor conv = new Conv(1, Type.AVG).apply(tensor, kernel);
         System.out.println("conv:"+conv);
     }
 
     public enum Type {
-        SUM, AVG, K_SUM_1, RATE
+        SUM, AVG
     }
 
-    private final int step;
-    private final Type type;
+    protected final int step;
+    protected final Type type;
 
     public Conv(int step, Type type){
         this.step = step;
@@ -55,7 +53,7 @@ public class Conv extends Operation {
 
     @Override
     protected int[] ranksToCorrelate(Tensor tensor, Tensor kernel) {
-        return new int[]{2, 2};
+        return new int[]{2, 2, 2};
     }
 
     @Override
@@ -80,29 +78,21 @@ public class Conv extends Operation {
     }
 
     @Override
-    protected Tensor[] preconversion(Tensor tensor, Tensor kernel){
-        Tensor[] t_arr = super.preconversion(tensor, kernel);
-
-        if(type == Type.K_SUM_1){
-            Tensor sum = conv(kernel, new Tensor(kernel.dims()).fill(1), 1, Type.SUM, false);
-//            System.out.println(Arrays.toString(sum.dims()));
-            Tensor k1 = kernel.div(sum); // Если kernel был req_grad, то и k1 тоже будет.
-            t_arr[1] = k1;
-        }
-
-        return t_arr;
-    }
-
-    @Override
     protected Tensor operation(Tensor matrix, Tensor kernel) {
-//        System.out.println("mat:" + matrix);
-//        System.out.println("kernel:" + kernel);
+        // Мы уверены, что matrix values для изображения in [0, 1]
+        // Но если бы не были, то сделали так
+//        float max = new MaxOfRank(2).apply(matrix).getScalar();
+//        matrix = matrix.div(tensor(max));
 
-        int[]   resDims = getResultDims();
-        int     l = resDims.length;
+        float[] numOfMinusAndAbs = type == Type.AVG ? numOfMinusAndAbs(kernel) : new float[]{1, 1};
+        float m = numOfMinusAndAbs[0];
+        float a = numOfMinusAndAbs[1];
 
-        int     res_rows = resDims[l-2],
-                res_cols = resDims[l-1];
+        int[] resDims = getResultDims();
+        int l = resDims.length;
+
+        int     res_rows = resDims[l - 2],
+                res_cols = resDims[l - 1];
 
         Tensor res = new Tensor(res_rows, res_cols);
 
@@ -114,53 +104,50 @@ public class Conv extends Operation {
 
         float n = k_rows * k_cols;
 
-        for(int r=0; r<res_rows; r++){
-            for(int c=0; c<res_cols; c++){
+        for (int r = 0; r < res_rows; r++) {
+            for (int c = 0; c < res_cols; c++) {
 
                 float sum = 0;
-                for(int i=0; i<k_rows; i++) {
+                for (int i = 0; i < k_rows; i++) {
                     for (int j = 0; j < k_cols; j++) {
                         sum += kernel
                                 .get(i, j).getScalar()
                                 *
                                 matrix.get(
-                                            r + r * (step - 1) + i,
-                                            c + c * (step - 1) + j
-                                        ).getScalar();
+                                        r + r * (step - 1) + i,
+                                        c + c * (step - 1) + j
+                                ).getScalar();
                     }
                 }
 
-                float val = sum;
-
-                if(type == Type.AVG){
-                    val /= n;
+                if (type == Type.AVG) {
+                    sum += m;
+                    sum /= a;
                 }
 
-                res.set(tensor(val), r, c);
-            }
-        }
-
-        if(type == Type.RATE) {
-            float   orig_max = Core.max(matrix).getScalar(),
-                    orig_min = Core.min(matrix).getScalar(),
-                    orig_abs = Math.abs(orig_max - orig_min);
-
-            float   res_max = Core.max(res).getScalar(),
-                    res_min = Core.min(res).getScalar(),
-                    res_abs = Math.abs(res_max - res_min);
-
-            float orig_addi = orig_abs - orig_max; // 29 - 20 = 9
-            float res_addi = res_abs - res_max; // 2 - 7 = -5
-
-            for(int r=0; r<res_rows; r++) {
-                for (int c = 0; c < res_cols; c++) {
-                    float before = res.get(r, c).getScalar();
-                    float after = ((before + res_addi) / res_abs) * orig_abs + orig_min;
-                    res.set(tensor(after), r, c);
-                }
+                res.set(tensor(sum), r, c);
             }
         }
 
         return res;
+    }
+
+
+    private float[] numOfMinusAndAbs(Tensor matrix){
+        int     rows = matrix.dims()[0],
+                cols = matrix.dims()[1];
+
+        float minus = 0,
+                all = 0;
+        for(int r=0; r<rows; r++){
+            for(int c=0; c<cols; c++){
+                float value = matrix.get(r, c).getScalar();
+                if(value < 0)
+                    minus += Math.abs(value);
+                all += Math.abs(value);
+            }
+        }
+
+        return new float[]{minus, all};
     }
 }

@@ -16,12 +16,12 @@ public class Transposition extends Operation {
     //-------------------------------------
 
     @Override
-    protected int[] ranksToCorrelate(Tensor src1, Tensor src2) {
-        return new int[]{2};
+    protected int[] ranksToCorrelate(Tensor src1, Tensor nll) {
+        return new int[]{2, -1, 2};
     }
 
     @Override
-    protected int[] resultTensorsDims(Tensor src1, Tensor src2) {
+    protected int[] resultTensorsDims(Tensor src1, Tensor nll) {
         int[] dims = src1.dims().clone();
         int l = dims.length;
 
