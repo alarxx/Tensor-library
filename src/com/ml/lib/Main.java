@@ -8,53 +8,50 @@ public class Main {
     public static void main(String[] args) {
         Tensor lr = tensor(0.1d);
 
-        Tensor I = tensor(new double[][]{
-                {2},
-        }).requires_grad(true);
+        Tensor I = tensor(new double[][]{{2}}).requires_grad(true);
 
-        Tensor W = tensor(new double[][]{
-                {0.5},
-        });
-        Tensor B = tensor(new double[][]{
-                {0.5}
-        });
+        Tensor K = tensor(new double[][]{{-5}});
+        Tensor B = tensor(new double[][]{{0.5}});
 
         Tensor T;
 
-        System.out.println("first_try: " + W.dot(I).add(B));
+        System.out.println("first_try: " + K.dot(I).add(B));
         System.out.println("Target: " + function(I));
 
-        // Learning
-        for(int i=0; i<2000; i++){
+        // Fit, LearningS
+        for(int i=0; i<10000; i++){
             I = I.rand();
             T = function(I);
 
-            Tensor Y = W.dot(I).add(B);
+            Tensor Y = K.dot(I).add(B);
 
-            Tensor L = T.sub(Y).pow(2);
+            Tensor Loss = T.sub(Y).pow(2);
 
-            L._backward_();
+            Loss._backward_();
 
-            Tensor dW = lr.mul(W.getGrad());
-            W = W.sub(dW);
+            Tensor dK = lr.mul(K.getGrad());
+            K = K.sub(dK);
 
             Tensor dB = lr.mul(B.getGrad());
             B = B.sub(dB);
         }
 
         I.get(0, 0).setScalar(2);
-        System.out.println("last_try: " + W.dot(I).add(B));
+        System.out.println("last_try: " + K.dot(I).add(B));
         System.out.println("Target: " + function(I));
 
-        System.out.println("W:"+W);
+        System.out.println("K:"+K);
         System.out.println("B:"+B);
     }
 
 
-    // f(I) = 3*I + 5
+    // f(x) = kx + b
     public static Tensor function(Tensor X){
+        float   k = 3,
+                b = 5;
+
         return X
-                .mul(tensor(3))
-                .add(tensor(5));
+                .mul(tensor(k))
+                .add(tensor(b));
     }
 }

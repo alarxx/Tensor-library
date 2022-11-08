@@ -17,9 +17,10 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
 ---
 
 ## Features
-* Tensor
+* Tensors
 * Operations: transposition, matrix multiplication, convolution etc.
 * Convenient creation of your own operations
+* Dynamic computation graphs
 * AutoGrad
 
 ## Usage Tips
