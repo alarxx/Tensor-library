@@ -1,4 +1,4 @@
-# ML_library
+# Tensor-library
 Analogue to Math and ML libraries like numpy or pytorch  
 From scratch in plain java  
 #### Disadvantage  
