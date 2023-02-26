@@ -11,3 +11,15 @@ they are at the same time, reinvent
 the wheel, steel mining methods 
 and traffic rules"  
 ###### But maybe someday...
+
+## Features
+* Tensors
+* Operations: transposition, matrix multiplication, convolution etc.
+* Convenient creation of your own operations
+* Dynamic computation graphs
+* AutoGrad
+
+## Usage Tips
+* Build Machine and Deep Learning models  
+* Build Computer Vision algorithms
+* Physical calculations
