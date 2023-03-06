@@ -26,4 +26,4 @@ and traffic rules"
 ###### But maybe someday...
 
 ## Licence 
-(MIT License)[https://github.com/Alar-q/Tensor-library/blob/main/LICENSE]
+[MIT License](https://github.com/Alar-q/Tensor-library/blob/main/LICENSE)
