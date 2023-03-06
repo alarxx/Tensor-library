@@ -30,4 +30,4 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
 
 ## Usage Examples
 [Linear Regression using Gradient Descent](https://github.com/Alar-q/Tensor-library/blob/main/src/com/ml/lib/nn/Main.java)
-
+[Processing images loaded as a tensor](https://github.com/Alar-q/ML_library_JavaFX)
