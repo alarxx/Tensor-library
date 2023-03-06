@@ -28,3 +28,6 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
 * Build Computer Vision algorithms
 * Physical calculations
 
+## Usage Examples
+[Linear Regression](https://github.com/Alar-q/Tensor-library/blob/main/src/com/ml/lib/nn/Main.java)
+
