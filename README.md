@@ -24,3 +24,6 @@ they are at the same time, reinvent
 the wheel, steel mining methods 
 and traffic rules"  
 ###### But maybe someday...
+
+## Licence 
+(MIT License)[https://github.com/Alar-q/Tensor-library/blob/main/LICENSE]
