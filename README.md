@@ -11,7 +11,7 @@ From scratch in plain java
 
 ## Usage Tips
 * Build Machine and Deep Learning models  
-* Build Computer Vision algorithms
+* [Build Computer Vision algorithms](github.com/Alar-q/ML_library_JavaFX)
 * Physical calculations
 
 #### Disadvantage  
