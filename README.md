@@ -3,7 +3,7 @@ Analogue to Math and ML libraries like numpy or pytorch
 From scratch in plain java  
 
 ## Features
-* Tensors
+* [Tensors](https://github.com/Alar-q/Tensor-Java)
 * Operations: transposition, matrix multiplication, convolution etc.
 * Convenient creation of your own operations
 * Dynamic computation graphs
