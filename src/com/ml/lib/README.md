@@ -21,7 +21,7 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
 * Operations: transposition, matrix multiplication, convolution etc.
 * Convenient creation of your own operations
 * Dynamic computation graphs
-* AutoGrad
+* [AutoGrad](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/autograd)
 
 ## Usage Tips
 * Build Machine and Deep Learning models  
