@@ -17,8 +17,8 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
 ---
 
 ## Features
-* [Tensors](https://github.com/Alar-q/Tensor-Java)
-* Operations: transposition, matrix multiplication, convolution etc.
+* [Tensors](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/tensor)
+* [Operations](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/core): transposition, matrix multiplication, convolution etc.
 * Convenient creation of your own operations
 * Dynamic computation graphs
 * [AutoGrad](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/autograd)
