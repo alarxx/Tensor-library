@@ -27,5 +27,13 @@ the wheel, steel mining methods
 and traffic rules"  
 ###### But maybe someday...
 
+## References:
+- Weidman, S. (2019). Deep learning from scratch: Building with Python from first principles (First edition). O’Reilly Media, Inc.
+- Patterson, J., & Gibson, A. (2017). Deep learning: A practitioner’s approach (First edition). O’Reilly.
+- Евгений Разинков. (2021). Лекции по Deep Learning. https://www.youtube.com/playlist?list=PL6-BrcpR2C5QrLMaIOstSxZp4RfhveDSP
+- Raschka, S., Liu, Y., Mirjalili, V., & Dzhulgakov, D. (2022). Machine learning with PyTorch and Scikit-Learn: Develop machine learning and deep learning models with Python. Packt.
+- Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep learning. The MIT press.
+- Rashid, T. (2016). Make Your own neural network. CreateSpace Independent Publishing Platform.
+
 ## Licence 
 [MIT License](https://github.com/Alar-q/Tensor-library/blob/main/LICENSE)
