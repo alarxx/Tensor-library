@@ -17,7 +17,7 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
 ---
 
 ## Features
-* Tensors
+* [Tensors](https://github.com/Alar-q/Tensor-Java)
 * Operations: transposition, matrix multiplication, convolution etc.
 * Convenient creation of your own operations
 * Dynamic computation graphs
@@ -25,7 +25,7 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
 
 ## Usage Tips
 * Build Machine and Deep Learning models  
-* Build Computer Vision algorithms
+* [Build Computer Vision algorithms](https://github.com/Alar-q/ML_library_JavaFX)
 * Physical calculations
 
 ## Usage Examples
