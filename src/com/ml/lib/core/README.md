@@ -2,7 +2,7 @@
 
 ---
 
-#### Чтобы не углубляться в классовую реализацию,  
+#### Чтобы не углубляться в классовую реализацию из [Linear Algebra](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/linear_algebra),  
 #### можно пользоваться статичными методами из класса Core.  
 
 
