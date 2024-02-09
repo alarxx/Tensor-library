@@ -2,6 +2,8 @@
 Analogue to Math and ML libraries like numpy or pytorch  
 From scratch in plain java  
 
+**[Dig deeper into the library](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib)**
+
 ## Features
 * [Tensors](https://github.com/Alar-q/Tensor-Java)
 * Operations: transposition, matrix multiplication, convolution etc.
