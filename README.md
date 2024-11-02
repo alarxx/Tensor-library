@@ -4,24 +4,35 @@ From scratch in plain java
 
 **[Dig deeper into the library](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib)**
 
+## Tensor 
+Tensor - array of Tensors, except rank-0 Tensor (scalar)
+```
+[Tensor, Tensor, Tensor, Tensor]  
+   |       |       |       |  
+   |       |     [...]   [...]  
+   |  [Tensor, Tensor, ...]  
+[Tensor, Tensor...]  
+```
+---
+
 ## Features
-* [Tensors](https://github.com/Alar-q/Tensor-Java)
-* Operations: transposition, matrix multiplication, convolution etc.
+* [Tensors](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/tensor)
+* [Operations](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/core): transposition, matrix multiplication, convolution etc.
 * Convenient creation of your own operations
 * Dynamic computation graphs
-* AutoGrad
+* [AutoGrad](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/autograd)
 
 ## Usage Tips
 * Build Machine and Deep Learning models  
 * [Build Computer Vision algorithms](https://github.com/Alar-q/ML_library_JavaFX)
 * Physical calculations
 
-![image](https://github.com/user-attachments/assets/b917f94d-022c-436f-a7f9-251ce0bfd2c6)  
-![image](https://github.com/user-attachments/assets/225c35e3-ace0-4b2c-bc21-e461450093cd)  
-![image](https://github.com/user-attachments/assets/612784ba-c812-4246-adf6-18814c564230)  
-![image](https://github.com/user-attachments/assets/473d0569-8d2c-4a2d-9598-4d7ffc0ba8f7)  
+## Usage Examples
+* [Linear Regression using Gradient Descent](https://github.com/Alar-q/Tensor-library/blob/main/src/com/ml/lib/nn/Main.java)  
+* [Processing images loaded as a tensor](https://github.com/Alar-q/ML_library_JavaFX)
 
-[Example of simple linear regression](https://github.com/alarxx/Tensor-library/blob/main/src/com/ml/lib/nn/Main.java)  
+![image](https://github.com/user-attachments/assets/225c35e3-ace0-4b2c-bc21-e461450093cd)  
+![image](https://github.com/user-attachments/assets/473d0569-8d2c-4a2d-9598-4d7ffc0ba8f7)  
 
 #### Limitations   
 Element-by-element execution of operations, without GPU acceleration of calculations.  
