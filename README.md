@@ -16,7 +16,14 @@ From scratch in plain java
 * [Build Computer Vision algorithms](https://github.com/Alar-q/ML_library_JavaFX)
 * Physical calculations
 
-#### Disadvantage  
+![image](https://github.com/user-attachments/assets/b917f94d-022c-436f-a7f9-251ce0bfd2c6)  
+![image](https://github.com/user-attachments/assets/225c35e3-ace0-4b2c-bc21-e461450093cd)  
+![image](https://github.com/user-attachments/assets/612784ba-c812-4246-adf6-18814c564230)  
+![image](https://github.com/user-attachments/assets/473d0569-8d2c-4a2d-9598-4d7ffc0ba8f7)  
+
+[Example of simple linear regression](https://github.com/alarxx/Tensor-library/blob/main/src/com/ml/lib/nn/Main.java)  
+
+#### Limitations   
 Element-by-element execution of operations, without GPU acceleration of calculations.  
 I would like to add this feature, but learning OpenCL will take a lot of time. 
 #### Explanation why I won't continue
