@@ -13,6 +13,9 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
    |  [Tensor, Tensor, ...]  
 [Tensor, Tensor...]  
 ```
+
+![image](https://github.com/user-attachments/assets/225c35e3-ace0-4b2c-bc21-e461450093cd)  
+
 ---
 
 ## Features
@@ -31,7 +34,6 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
 * [Linear Regression using Gradient Descent](https://github.com/Alar-q/Tensor-library/blob/main/src/com/ml/lib/nn/Main.java)  
 * [Processing images loaded as a tensor](https://github.com/Alar-q/ML_library_JavaFX)
 
-![image](https://github.com/user-attachments/assets/225c35e3-ace0-4b2c-bc21-e461450093cd)  
 ![image](https://github.com/user-attachments/assets/473d0569-8d2c-4a2d-9598-4d7ffc0ba8f7)  
 
 ## Limitations   
