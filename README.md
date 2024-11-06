@@ -55,5 +55,9 @@ and traffic rules"
 - Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep learning. The MIT press.
 - Rashid, T. (2016). Make Your own neural network. CreateSpace Independent Publishing Platform.
 
+## Authors
+
+* **Alar Akilbekov** - [alarxx](https://github.com/alarxx) - [@alarxx](https://t.me/alarxx)
+
 ## Licence 
 [MIT License](https://github.com/Alar-q/Tensor-library/blob/main/LICENSE)
