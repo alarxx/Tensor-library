@@ -1,0 +1,51 @@
+# exclude any entries of build in any nested dir
+**/[Bb][Uu][Ii][Ll][Dd]/**
+# build - either file or dir
+# build/ - only dir, any nested dir e.g. a/build
+# c/build - specifically this dir, not b/c/build
+
+# cpack
+*.zip
+*.tar.gz
+*.rpm
+*.deb
+*.exe
+*.run
+**/[Dd][Ee][Bb][Uu][Gg]/**
+**/[Rr][Ee][Ll][Ee][Aa][Ss][Ee]/**
+_CPack_Packages/
+
+# Standard Git C++ gitignore
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app

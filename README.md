@@ -1,10 +1,7 @@
-# Tensor-library
-Analogue to Math and ML libraries like numpy or pytorch  
-From scratch in plain java  
-
-**[Dig deeper into the library](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib)**
+# Tensor-library (C++)
 
 ## Tensor 
+
 Tensor - array of Tensors, except rank-0 Tensor (scalar)
 ```
 [Tensor, Tensor, Tensor, Tensor]  
@@ -14,38 +11,54 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
 [Tensor, Tensor...]  
 ```
 
-![image](https://github.com/user-attachments/assets/225c35e3-ace0-4b2c-bc21-e461450093cd)  
-
 ---
 
 ## Features
-* [Tensors](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/tensor)
-* [Operations](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/core): transposition, matrix multiplication, convolution etc.
-* Convenient creation of your own operations
-* Dynamic computation graphs
-* [AutoGrad](https://github.com/Alar-q/Tensor-library/tree/main/src/com/ml/lib/autograd)
 
-## Usage Tips
-* Build Machine and Deep Learning models  
-* [Build Computer Vision algorithms](https://github.com/Alar-q/ML_library_JavaFX)
-* Physical calculations
+- Tensors
 
-## Usage Examples
-* [Linear Regression using Gradient Descent](https://github.com/Alar-q/Tensor-library/blob/main/src/com/ml/lib/nn/Main.java)  
-* [Processing images loaded as a tensor](https://github.com/Alar-q/ML_library_JavaFX)
 
-![image](https://github.com/user-attachments/assets/473d0569-8d2c-4a2d-9598-4d7ffc0ba8f7)  
+## Licence
 
-## Limitations   
-Element-by-element execution of operations, without GPU acceleration of calculations.  
-I would like to add this feature, but learning OpenCL will take a lot of time. 
-#### Explanation why I won't continue
-"The problem with programmers   
-is that when they make a car,  
-they are at the same time, reinvent  
-the wheel, steel mining methods 
-and traffic rules"  
-###### But maybe someday...
+Tensor-library is licensed under the terms of [MPL-2.0](https://mozilla.org/MPL/2.0/), which is simple and straightforward to use, allowing this project to be combined and distributed with any proprietary software, even with static linking. If you modify, only the originally covered files must remain under the same MPL-2.0.
+
+License notice:
+```
+SPDX-License-Identifier: MPL-2.0
+--------------------------------
+This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+If a copy of the MPL was not distributed with this file,
+You can obtain one at https://mozilla.org/MPL/2.0/.
+
+This file is part of the Tensor-library:
+https://github.com/alarxx/Tensor-library
+
+Description: <Description>
+
+Provided “as is”, without warranty of any kind.
+
+Copyright © 2025 Alar Akilbekov. All rights reserved.
+
+Third party copyrights are property of their respective owners.
+```
+
+---
+
+Если вы собираетесь модифицировать MPL покрытые файлы (IANAL):
+- Ваш fork проект = MPL Covered files + Not Covered files (1.7).
+- MPL-2.0 is file-based weak copyleft действующий только на Covered файлы, то есть добавленные вами файлы и исполняемые файлы, полученные из объединенения с вашими, могут быть под любой лицензией (3.3).
+- (но под copyleft могут подпадать и новые файлы в которых copy-paste-нули код из Covered) (1.7).
+- Покрытыми лицензией (Covered) считаются файлы с license notice (e.g. .cpp, .hpp) и любые исполняемые виды этих файлов (e.g. .exe, .a, .so) (1.4).
+- You may not remove license notices (3.4), как и в MIT, Apache, BSD (кроме 0BSD) etc.
+- При распространении любой Covered файл должен быть доступен, но разрешено личное использование или только внутри организации (3.2).
+- Если указан Exhibit B, то производную запрещается лицензировать с GPL.
+- Contributor дает лицензию на любое использование конкретной интеллектуальной собственности (patent), которую он реализует в проекте (но не trademarks).
+
+Эти разъяснения условий не меняют и не вносят новые юридические требования к MPL.
+
+## Contact
+
+Alar Akilbekov - alar.akilbekov@gmail.com
 
 ## References:
 - Weidman, S. (2019). Deep learning from scratch: Building with Python from first principles (First edition). O’Reilly Media, Inc.
@@ -54,10 +67,3 @@ and traffic rules"
 - Raschka, S., Liu, Y., Mirjalili, V., & Dzhulgakov, D. (2022). Machine learning with PyTorch and Scikit-Learn: Develop machine learning and deep learning models with Python. Packt.
 - Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep learning. The MIT press.
 - Rashid, T. (2016). Make Your own neural network. CreateSpace Independent Publishing Platform.
-
-## Authors
-
-* **Alar Akilbekov** - [alarxx](https://github.com/alarxx) - [@alarxx](https://t.me/alarxx)
-
-## Licence 
-[MIT License](https://github.com/Alar-q/Tensor-library/blob/main/LICENSE)
