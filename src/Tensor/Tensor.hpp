@@ -17,6 +17,9 @@
 #ifndef _TENSOR_H_
 #define _TENSOR_H_
 
+#define DEBUG_TENSOR true
+#define DEBUG_LOG_TENSOR true
+
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -59,6 +62,8 @@ private:
     explicit Tensor(int rank, int dims[], int cursor = 0);
 
     inline void __init(int rank, int dims[], int cursor);
+
+    std::string __toString() const;
 
 protected:
     T _value;
@@ -144,16 +149,20 @@ public:
 
     // ------
 
-    inline T value() const { return _value; }
+    inline T value() const {
+        #if DEBUG_TENSOR
+            if(!isScalar()){
+                throw std::runtime_error("Error: Geting a value of a non-scalar tensor!");
+            }
+        #endif
+        return _value;
+    }
 
     inline bool isScalar() const { return _rank == 0 && _size == -1 && _coeffs == nullptr; }
 
     inline int size() const { return _size; }
 
-    void print() const {
-        std::cout << "tensor<" << typeid(type).name() << ">:" << std::endl;
-        std::cout << *this;
-    }
+    std::string toString() const;
 
     /*
     Java style accessing through methods:

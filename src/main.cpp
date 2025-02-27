@@ -86,46 +86,63 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//
+//     Tensor t1 = {1, 2};
+//     Tensor t2 = {3, 4};
+//
+//     std::cout << "\nAppending tensors example:" << std::endl;
+//
+//     // Tensor tensor = {t1, t2}; // copy
+//     // Tensor tensor = {Tensor({1, 2}), Tensor({3, 4})}; // rvalue - move
+//     Tensor tensor = { std::move(t1), std::move(t2) }; // move, лучше всегда делать так
+//
+//     t1.print();
+//     std::cout << std::endl;
+//     t2.print();
+//     std::cout << std::endl;
+//     tensor.print();
+//     /*
+//     Output:
+//         tensor<i>:
+//         0i
+//         tensor<i>:
+//         0i
+//         tensor<i>:
+//         1i 2i
+//         3i 4i
+//     */
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
-    Tensor t1 = {1, 2};
-    Tensor t2 = {3, 4};
+    Tensor tensor = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
 
-    std::cout << "\nAppending tensors example:" << std::endl;
-
-    // Tensor tensor = {t1, t2}; // copy
-    // Tensor tensor = {Tensor({1, 2}), Tensor({3, 4})}; // rvalue - move
-    Tensor tensor = { std::move(t1), std::move(t2) }; // move, лучше всегда делать так
-
-    t1.print();
-    std::cout << std::endl;
-    t2.print();
-    std::cout << std::endl;
-    tensor.print();
-    /*
-    Output:
-        tensor<i>:
-        0i
-        tensor<i>:
-        0i
-        tensor<i>:
-        1i 2i
-        3i 4i
-    */
+    std::cout << tensor;
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
 
-
 /*
 - [x] Нужно добавить copy конструктор и assignment operator ?
 
-- [ ] Потому что я хочу красивый синтаксис Appending-а тензоров
+- [x] Потому что я хочу красивый синтаксис Appending-а тензоров
 Да и в будущем это понадобится, потому что copy метод может делать 2 раза копию без RVO
 - [ ] А appending функцию по идее без копирования можно сделать через TArgs... и move, но он без RVO снова будет делать копию? Я не знаю, по идее...
 
 - [ ] Нужно как-то добавить casting между Tensor<double> и Tensor<int> например.
 
-- [ ] toString
+- [x] toString
+
+- [ ] += operator
+- [ ] + operator
+
 */

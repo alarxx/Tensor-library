@@ -17,31 +17,27 @@
 
 
 // --- Logging ---
-#define DEBUG_LOG_TENSOR true
+template <typename T>
+concept __is_stream_supported = requires (T t){
+    // SFINAE constrains
+    std::declval<std::ostream&>() << t;
+};
 
-namespace {
-    template <typename T>
-    concept is_stream_supported = requires (T t){
-        // SFINAE constrains
-        std::declval<std::ostream&>() << t;
-    };
+template <typename T>
+requires __is_stream_supported<T>
+void log(T t){
+    #if DEBUG_LOG_TENSOR
+        std::cout << t << std::endl;
+    #endif
+}
 
-    template <typename T>
-    requires is_stream_supported<T>
-    void log(T t){
-        #if DEBUG_LOG_TENSOR
-            std::cout << t << std::endl;
-        #endif
-    }
-
-    template <typename T, typename ... TArgs>
-    requires is_stream_supported<T>
-    void log(T t, TArgs ... args){
-        #if DEBUG_LOG_TENSOR
-            std::cout << t;
-            log(args...);
-        #endif
-    }
+template <typename T, typename ... TArgs>
+requires __is_stream_supported<T>
+void log(T t, TArgs ... args){
+    #if DEBUG_LOG_TENSOR
+        std::cout << t;
+        log(args...);
+    #endif
 }
 // ------
 
@@ -338,26 +334,43 @@ Tensor<T> & Tensor<T>::operator = (const T & scalar){
 
 // ------
 
+template <Arithmetic T>
+std::string Tensor<T>::__toString() const {
+    std::string res = "";
+    if(!isScalar()){
+        for(int i = 0; i < _size; i++){
+            res += _coeffs[i].__toString();
+        }
+        res += "\n";
+    }
+    else {
+        res += std::to_string(_value) + std::string(typeid(_value).name()) + " ";
+    }
+    return res;
+}
+
+template <Arithmetic T>
+std::string Tensor<T>::toString() const {
+    std::string res = "";
+    if(!isScalar()){
+        res += "tensor<" + std::string(typeid(_value).name()) + ">:\n";
+        for(int i = 0; i < _size; i++){
+            res += _coeffs[i].__toString();
+        }
+    }
+    else {
+        res += std::to_string(_value) + std::string(typeid(_value).name()) + " ";
+    }
+    return res;
+}
+
 
 // --- Operator Overloadings ---
 
 // Stream insertion operation
 template <Arithmetic T>
 std::ostream& operator << (std::ostream& os, const Tensor<T>& tensor){
-    if(!tensor.isScalar()){
-        // os << "tensor<" << typeid(decltype(tensor)::type).name() << ">:\n";
-        for(int i = 0; i < tensor.size(); i++){
-            os << tensor[i];
-        }
-        os << "\n";
-        /*
-            После вывода всегда дополнительная пустая строка,
-            из-за рекурсии я не знаю как сделать так, чтобы этого не происходило.
-        */
-    }
-    else {
-        os << tensor.value() << typeid(tensor.value()).name() << " ";
-    }
+    os << tensor.toString();
     return os;
 }
 
