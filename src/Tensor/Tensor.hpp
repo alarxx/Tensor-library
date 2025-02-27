@@ -159,8 +159,12 @@ public:
     }
 
     inline bool isScalar() const { return _rank == 0 && _size == -1 && _coeffs == nullptr; }
+    inline bool isVector() const { return _rank == 1 && _size != -1 && _coeffs != nullptr; }
+    inline bool isMatrix() const { return _rank == 2 && _size != -1 && _coeffs != nullptr; }
+    // Может ли вектор иметь size = 0
 
     inline int size() const { return _size; }
+    inline int rank() const { return _rank; }
 
     std::string toString() const;
 

@@ -76,6 +76,12 @@ template <Arithmetic T>
 
     _rank = rank;
     _size = dims[cursor];
+    if(_rank < 0){
+        throw std::runtime_error("Error: rank is invalid!");
+    }
+    else if(_size <= 0){
+        throw std::runtime_error("Error: size is invalid!");
+    }
 
     // --- recursively initialization of nested tensors ---
     _coeffs = new Tensor<T>[_size];
@@ -218,16 +224,14 @@ Tensor<T>::Tensor(const Tensor<T> & other) : Tensor() {
 // O(N)
 template <Arithmetic T>
 Tensor<T> & Tensor<T>::operator = (const Tensor<T> & other){
-    log("Copy Assignment Operator", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", other._size, ")");
+    log("Copy Assignment Operator", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, "->", _rank, ", size=", other._size, "->", _size, ")");
 
     if(this != &other){
 
         if (_rank != other._rank){
-            log("Copy from rank=", other._rank, " to rank=", _rank);
             throw std::runtime_error("Error: rank doesn't match for copy assignment");
         }
         if(_size != other._size){
-            log("Copy from size=", other._size, " to size=", _size);
             throw std::runtime_error("Error: size doesn't match for copy assignment");
         }
 
@@ -282,16 +286,14 @@ Tensor<T>::Tensor(Tensor<T> && other){
 // O(1)
 template <Arithmetic T>
 Tensor<T> & Tensor<T>::operator = (Tensor<T> && other){
-    log("Move Assignment Operator", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", other._size, ")");
+    log("Move Assignment Operator", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, "->", _rank, ", size=", other._size, "->", _size, ")");
 
     if(this != &other){
 
         if (_rank != other._rank){
-            log("Move from rank=", other._rank, " to rank=", _rank);
             throw std::runtime_error("Error: rank doesn't match for move assignment");
         }
         if(_size != other._size){
-            log("Move from size=", other._size, " to size=", _size);
             throw std::runtime_error("Error: size doesn't match for move assignment");
         }
 
