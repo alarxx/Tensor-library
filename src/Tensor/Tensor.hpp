@@ -68,6 +68,8 @@ protected:
     // int * _shape; // Я думаю это излишне и лучше вычислять shape recursively in runtime
 
 public:
+    using type = T;
+
     /*
     Я хочу чтобы объект Tensor создавался так:
 
@@ -113,7 +115,10 @@ public:
 
     explicit Tensor() : _value(0), _rank(0), _size(-1), _coeffs(nullptr) {}
 
-    // Tensor(std::initializer_list<T> list){}
+    // --- initializer_list
+    Tensor(std::initializer_list<T> list);
+    Tensor(std::initializer_list<std::initializer_list<T>> list);
+    // ------
 
     // --- Rule of 5 ---
 
@@ -141,6 +146,8 @@ public:
     inline T value() const { return _value; }
 
     inline bool isScalar(){ return _rank == 0 && _size == -1 && _coeffs == nullptr; }
+
+    inline int size(){ return _size; }
 
     /*
     Java style accessing through methods:

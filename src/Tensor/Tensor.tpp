@@ -100,8 +100,39 @@ inline void Tensor<T>::__init(int rank, int dims[], int cursor){
 }
 
 
-// template <Arithmetic T>
-// Tensor<T>::Tensor(std::initializer_list<T> list){}
+// --- initializer_list ---
+template <Arithmetic T>
+Tensor<T>::Tensor(std::initializer_list<T> list){
+    // 1D: {1, 2, 3}
+    _rank = 1;
+    _size = list.size();
+    _coeffs = new Tensor<T>[_size];
+
+    int i = 0;
+    for(auto e: list){
+        // we can't access initializer_list by index, only by range-based for loop or by iterator
+        _coeffs[i++] = e;
+    }
+}
+
+template <Arithmetic T>
+Tensor<T>::Tensor(std::initializer_list<std::initializer_list<T>> list){
+    // 2D:
+    // {{1, 2, 3},
+    //  {4, 5, 6},
+    //  {7, 8, 9}}
+    _rank = 2;
+    _size = list.size();
+    _coeffs = new Tensor<T>[_size];
+
+    int i = 0;
+    for(auto e: list){
+        _coeffs[i]._rank = 1;
+        _coeffs[i]._size = e.size();
+        _coeffs[i++] = Tensor(e); // Move Assignment =
+    }
+}
+// ------
 
 
 // --- Rule of 5 ---
