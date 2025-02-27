@@ -151,7 +151,23 @@ Tensor<T>::~Tensor(){
 
 // Copy Constructor = delete
 // Copy Assignment Operator = delete
-// Move Constructor = delete
+
+// Move Constructor
+template <Arithmetic T>
+Tensor<T>::Tensor(Tensor<T> && other){
+    log("Move Constructor", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", other._size, ")");
+    // this = other
+    _value = other._value;
+    _rank = other._rank;
+    _size = other._size;
+    _coeffs = other._coeffs;
+    // other = null (looks like scalar)
+    other._value = 0;
+    other._rank = 0;
+    other._size = -1;
+    other._coeffs = nullptr;
+}
+
 
 // Move Assignment Operator
 template <Arithmetic T>

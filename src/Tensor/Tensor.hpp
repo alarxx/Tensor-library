@@ -133,7 +133,7 @@ public:
     Tensor<T> & operator = (const Tensor<T> & other) = delete;
 
     // Move Constructor
-    Tensor(Tensor<T> && other) = delete;
+    Tensor(Tensor<T> && other);
 
     // Move Assignment Operator
     Tensor<T> & operator = (Tensor<T> && other); // tensor[index] = Tensor();
