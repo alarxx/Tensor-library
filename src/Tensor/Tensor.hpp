@@ -118,7 +118,7 @@ public:
     // --- initializer_list
     Tensor(const std::initializer_list<T> list);
     Tensor(const std::initializer_list<std::initializer_list<T>> list);
-    Tensor(const std::initializer_list<Tensor<T>> list);
+    Tensor(const std::initializer_list<Tensor<T>> list); // appending {tensors}
     // ------
 
     // --- Rule of 5 ---

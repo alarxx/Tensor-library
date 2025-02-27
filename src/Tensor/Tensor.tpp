@@ -62,7 +62,7 @@ Tensor<T>::Tensor(std::integral auto ... args) { // C++20, abbreviated function 
 
 
 template <Arithmetic T>
-Tensor<T>::Tensor(int rank, int dims[], int cursor) {
+/*private*/ Tensor<T>::Tensor(int rank, int dims[], int cursor) {
     if(rank < 0){
         throw std::runtime_error("Error: Null tensor, rank is invalid!");
     }
@@ -71,7 +71,7 @@ Tensor<T>::Tensor(int rank, int dims[], int cursor) {
 
 
 template <Arithmetic T>
-inline void Tensor<T>::__init(int rank, int dims[], int cursor){
+/*private*/ inline void Tensor<T>::__init(int rank, int dims[], int cursor){
     // 0D: (0, {})
     // 1D: (1, {4})
     // 2D: (2, {4, 4})
@@ -101,6 +101,8 @@ inline void Tensor<T>::__init(int rank, int dims[], int cursor){
 
 
 // --- initializer_list ---
+
+// Tensor vector = {1, 2, 3};
 template <Arithmetic T>
 Tensor<T>::Tensor(const std::initializer_list<T> list){
     // 1D: {1, 2, 3}
@@ -111,10 +113,11 @@ Tensor<T>::Tensor(const std::initializer_list<T> list){
     int i = 0;
     for(auto e: list){
         // we can't access initializer_list by index, only by range-based for loop or by iterator
-        _coeffs[i++] = e;
+        _coeffs[i++] = e; // copy scalar assignment =
     }
 }
 
+// Tensor matrix = {{1, 2}, {3, 4}};
 template <Arithmetic T>
 Tensor<T>::Tensor(const std::initializer_list<std::initializer_list<T>> list){
     // 2D:
@@ -130,6 +133,48 @@ Tensor<T>::Tensor(const std::initializer_list<std::initializer_list<T>> list){
         _coeffs[i]._rank = 1;
         _coeffs[i]._size = e.size();
         _coeffs[i++] = Tensor(e); // Move Assignment =
+    }
+}
+
+// Appending {tensors}
+template <Arithmetic T>
+Tensor<T>::Tensor(const std::initializer_list<Tensor<T>> list){
+    /*
+
+    N vs. 2N
+    Используя initializer_list в любом случае создается создается копия.
+    Передавая в initializer_list создаются новые const объекты, которые после удаляются (3 set of instances).
+    Можно передать через копирование и через move semantics.
+    В случае копирования у нас получается 2 раза создаются копии.
+    В любом случае создается копия.
+    И мне не нравится это решение, если в любом случае создавать копию,
+    то мы могли бы делать копию передавая по call-by-value с той же сложностью, которую сейчас мы получаем с std::move,
+    если бы сам лист не создавал копию const объектов из-за чего потом нельзя делать move и снова приходится делать копию.
+
+    Copy constructor:
+        Tensor tensor = {t1, t2}; // copy two times
+
+    Move by std::move(tensor), лучше всегда делать так, иначе копия будет создаваться 2 раза:
+        Tensor tensor = { std::move(t1), std::move(t2) }; // move, copy one time
+
+    Move by rvalue:
+        Tensor tensor = {Tensor({1, 2}), Tensor({3, 4})}; // rvalue - move
+
+     */
+
+    _rank = (*list.begin())._rank + 1;
+    log("Appending tensors, rank: ", _rank);
+
+    _size = list.size();
+    _coeffs = new Tensor<T>[_size];
+
+    int i = 0;
+    // for(typename std::initialsizer_list<Tensor>::iterator it = list.begin(); it != list.end(); it++, i++) {
+    for(auto & t: list) {
+        _coeffs[i]._rank = t._rank;
+        _coeffs[i]._size = t._size;
+        // _coeffs[i] = std::move(*it); // even move makes copy assignment due to list elements are const
+        _coeffs[i++] = t; // copy assignment
     }
 }
 
@@ -151,6 +196,7 @@ Tensor<T>::~Tensor(){
 
 
 // Copy Constructor
+// O(N)
 template <Arithmetic T>
 Tensor<T>::Tensor(const Tensor<T> & other) : Tensor() {
     log("Copy Constructor", (other.isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", other._size, ")");
@@ -173,6 +219,7 @@ Tensor<T>::Tensor(const Tensor<T> & other) : Tensor() {
 }
 
 // Copy Assignment Operator
+// O(N)
 template <Arithmetic T>
 Tensor<T> & Tensor<T>::operator = (const Tensor<T> & other){
     log("Copy Assignment Operator", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", other._size, ")");
@@ -218,6 +265,7 @@ Tensor<T> & Tensor<T>::operator = (const Tensor<T> & other){
 }
 
 // Move Constructor
+// O(1)
 template <Arithmetic T>
 Tensor<T>::Tensor(Tensor<T> && other){
     log("Move Constructor", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", other._size, ")");
@@ -235,6 +283,7 @@ Tensor<T>::Tensor(Tensor<T> && other){
 
 
 // Move Assignment Operator
+// O(1)
 template <Arithmetic T>
 Tensor<T> & Tensor<T>::operator = (Tensor<T> && other){
     log("Move Assignment Operator", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", other._size, ")");
@@ -276,6 +325,7 @@ Tensor<T> & Tensor<T>::operator = (Tensor<T> && other){
 
 
 // Copy Scalar Assignment Operator
+// O(1)
 template <Arithmetic T>
 Tensor<T> & Tensor<T>::operator = (const T & scalar){
     if(!isScalar()){
@@ -300,6 +350,10 @@ std::ostream& operator << (std::ostream& os, const Tensor<T>& tensor){
             os << tensor[i];
         }
         os << "\n";
+        /*
+            После вывода всегда дополнительная пустая строка,
+            из-за рекурсии я не знаю как сделать так, чтобы этого не происходило.
+        */
     }
     else {
         os << tensor.value() << typeid(tensor.value()).name() << " ";

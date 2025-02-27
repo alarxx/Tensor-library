@@ -58,30 +58,74 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//
+//
+//     Tensor tensor = {1, 2, 3};
+//
+//     std::cout << "\nCopy constructor example:" << std::endl;
+//     // Tensor<double> copy_a = {1., 1., 1.}; // Error on copy assignment
+//     Tensor copy_c = tensor;
+//
+//     copy_c[0] = 40;
+//
+//     copy_c.print();
+//     tensor.print();
+//
+//     std::cout << "\nCopy assignment example:" << std::endl;
+//     // Tensor<double> copy_a = {1., 1., 1.}; // Error on copy assignment
+//     Tensor copy_a = {1, 1, 1};
+//     copy_a = tensor;
+//
+//     copy_a[0] = 42;
+//
+//     copy_a.print();
+//     tensor.print();
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
+    Tensor t1 = {1, 2};
+    Tensor t2 = {3, 4};
 
-    Tensor tensor = {1, 2, 3};
+    std::cout << "\nAppending tensors example:" << std::endl;
 
-    std::cout << "\nCopy constructor example:" << std::endl;
-    // Tensor<double> copy_a = {1., 1., 1.}; // Error on copy assignment
-    Tensor copy_c = tensor;
+    // Tensor tensor = {t1, t2}; // copy
+    // Tensor tensor = {Tensor({1, 2}), Tensor({3, 4})}; // rvalue - move
+    Tensor tensor = { std::move(t1), std::move(t2) }; // move, лучше всегда делать так
 
-    copy_c[0] = 40;
-
-    copy_c.print();
+    t1.print();
+    std::cout << std::endl;
+    t2.print();
+    std::cout << std::endl;
     tensor.print();
-
-    std::cout << "\nCopy assignment example:" << std::endl;
-    // Tensor<double> copy_a = {1., 1., 1.}; // Error on copy assignment
-    Tensor copy_a = {1, 1, 1};
-    copy_a = tensor;
-
-    copy_a[0] = 42;
-
-    copy_a.print();
-    tensor.print();
+    /*
+    Output:
+        tensor<i>:
+        0i
+        tensor<i>:
+        0i
+        tensor<i>:
+        1i 2i
+        3i 4i
+    */
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
+
+
+/*
+- [x] Нужно добавить copy конструктор и assignment operator ?
+
+- [ ] Потому что я хочу красивый синтаксис Appending-а тензоров
+Да и в будущем это понадобится, потому что copy метод может делать 2 раза копию без RVO
+- [ ] А appending функцию по идее без копирования можно сделать через TArgs... и move, но он без RVO снова будет делать копию? Я не знаю, по идее...
+
+- [ ] Нужно как-то добавить casting между Tensor<double> и Tensor<int> например.
+
+- [ ] toString
+*/
