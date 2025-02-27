@@ -128,10 +128,10 @@ public:
     virtual ~Tensor(); // don't know yet will there be inheritance from Tensor, probably it's okay to make destructor virtual
 
     // Copy Constructor
-    Tensor(const Tensor<T> & other) = delete;
+    Tensor(const Tensor<T> & other);
 
     // Copy Assignment Operator
-    Tensor<T> & operator = (const Tensor<T> & other) = delete;
+    Tensor<T> & operator = (const Tensor<T> & other);
 
     // Move Constructor
     Tensor(Tensor<T> && other);
@@ -146,9 +146,14 @@ public:
 
     inline T value() const { return _value; }
 
-    inline bool isScalar(){ return _rank == 0 && _size == -1 && _coeffs == nullptr; }
+    inline bool isScalar() const { return _rank == 0 && _size == -1 && _coeffs == nullptr; }
 
-    inline int size(){ return _size; }
+    inline int size() const { return _size; }
+
+    void print() const {
+        std::cout << "tensor<" << typeid(type).name() << ">:" << std::endl;
+        std::cout << *this;
+    }
 
     /*
     Java style accessing through methods:
@@ -167,12 +172,22 @@ public:
     inline Tensor& operator [] (const int index) const { return _coeffs[index]; }
 
     // Typecast overloading
-    operator T () const { return _value; }
+    // operator T () const {
+    //     if(!isScalar()){
+    //         throw std::runtime_error("Error: Can't typecast non-scalar tensor!");
+    //     }
+    //     return _value;
+    // }
+
+    // Stream insertion operation
+    template <Arithmetic U>
+    friend std::ostream& operator<<(std::ostream& os, const Tensor<U>& tensor);
 
     // +=
     // +
 
     // ------
+
 };
 
 /*

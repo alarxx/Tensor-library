@@ -145,12 +145,77 @@ Tensor<T>::~Tensor(){
         log("\tdelete[] coeffs");
         // рекурсивно удаляются nested tensors
         delete[] _coeffs;
+        _coeffs = nullptr;
     }
 }
 
 
-// Copy Constructor = delete
-// Copy Assignment Operator = delete
+// Copy Constructor
+template <Arithmetic T>
+Tensor<T>::Tensor(const Tensor<T> & other) : Tensor() {
+    log("Copy Constructor", (other.isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", other._size, ")");
+
+    _rank = other._rank;
+    _size = other._size;
+    // Мы можем назначать и scalar tensor, не только используя .value() method to assign scalar
+    _value = other._value;
+
+    if(_rank > 0){
+        _coeffs = new Tensor<T>[_size];
+
+        for(int i = 0; i < _size; i++){
+            // Чтобы он не выглядел как scalar, мы назначаем _rank и _size
+            _coeffs[i]._rank = other._coeffs[i]._rank;
+            _coeffs[i]._size = other._coeffs[i]._size;
+            _coeffs[i] = other._coeffs[i]; // Copy Assignment =
+        }
+    }
+}
+
+// Copy Assignment Operator
+template <Arithmetic T>
+Tensor<T> & Tensor<T>::operator = (const Tensor<T> & other){
+    log("Copy Assignment Operator", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", other._size, ")");
+
+    if(this != &other){
+
+        if (_rank != other._rank){
+            log("Copy from rank=", other._rank, " to rank=", _rank);
+            throw std::runtime_error("Error: rank doesn't match for copy assignment");
+        }
+        if(_size != other._size){
+            log("Copy from size=", other._size, " to size=", _size);
+            throw std::runtime_error("Error: size doesn't match for copy assignment");
+        }
+
+        if(_coeffs != nullptr){
+            log("\tdelete[] coeffs");
+            delete[] _coeffs;
+            _coeffs = nullptr;
+        }
+
+        // _rank и _size уже одинаковые
+        // _rank = other._rank;
+        // _size = other._size;
+        // Мы можем назначать и scalar tensor, не только используя .value() method to assign scalar
+        _value = other._value;
+
+        if(_rank > 0){ // if _rank == 0 tensor is scalar
+            _coeffs = new Tensor<T>[_size];
+
+            for(int i = 0; i < _size; i++){
+                // Чтобы он не выглядел как scalar, мы назначаем _rank и _size
+                _coeffs[i]._rank = other._coeffs[i]._rank;
+                _coeffs[i]._size = other._coeffs[i]._size;
+                _coeffs[i] = other._coeffs[i]; // Copy Assignment =
+            }
+        }
+
+        // no need to delete other
+    }
+
+    return *this;
+}
 
 // Move Constructor
 template <Arithmetic T>
@@ -187,8 +252,8 @@ Tensor<T> & Tensor<T>::operator = (Tensor<T> && other){
 
         if(_coeffs != nullptr){
             log("\tdelete[] coeffs");
-
             delete[] _coeffs;
+            _coeffs = nullptr;
         }
 
         // _rank и _size уже одинаковые
@@ -216,11 +281,31 @@ Tensor<T> & Tensor<T>::operator = (const T & scalar){
     if(!isScalar()){
         throw std::runtime_error("Error: Can't assign scalar to a non-scalar tensor!");
     }
-    log("rank-", _rank, " Move Scalar Assignment Operator");
+    log("rank-", _rank, " Copy Scalar Assignment Operator: ", scalar, typeid(T).name());
     _value = scalar;
     return *this;
 }
 
+// ------
+
+
+// --- Operator Overloadings ---
+
+// Stream insertion operation
+template <Arithmetic T>
+std::ostream& operator << (std::ostream& os, const Tensor<T>& tensor){
+    if(!tensor.isScalar()){
+        // os << "tensor<" << typeid(decltype(tensor)::type).name() << ">:\n";
+        for(int i = 0; i < tensor.size(); i++){
+            os << tensor[i];
+        }
+        os << "\n";
+    }
+    else {
+        os << tensor.value() << typeid(tensor.value()).name() << " ";
+    }
+    return os;
+}
 
 // ------
 
