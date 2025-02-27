@@ -29,7 +29,8 @@ help:
 # := - simple fixed assignment
 # = - recursive, вычисляется каждый раз
 CC = g++
-CFLAGS = -Wall -pedantic -std=c++20
+CFLAGS = -Wall -std=c++20
+# -pedantic
 PROJECT_BINARY_DIR = out/build
 TARGET = app
 # ------
@@ -41,7 +42,7 @@ TARGET = app
 # 3. recursive search using bash: (current approach)
 # flags: -type f|d -name "" -or -and -exec -delete etc.
 # выдает относительные пути в виде './dir/entry'
-SRCS := $(shell find ./ -type f -name "*.cpp" -or -name "*.cxx" -or -name "*.c")
+SRCS := $(shell find ./src -type f -name "*.cpp" -or -name "*.cxx" -or -name "*.c")
 HEADERS := $(shell find ./ -type f -name "*.h" -or -type f -name "*.hpp")
 # delete './':
 SRCS := $(patsubst ./%, %, $(SRCS))
