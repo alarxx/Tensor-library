@@ -102,7 +102,7 @@ inline void Tensor<T>::__init(int rank, int dims[], int cursor){
 
 // --- initializer_list ---
 template <Arithmetic T>
-Tensor<T>::Tensor(std::initializer_list<T> list){
+Tensor<T>::Tensor(const std::initializer_list<T> list){
     // 1D: {1, 2, 3}
     _rank = 1;
     _size = list.size();
@@ -116,7 +116,7 @@ Tensor<T>::Tensor(std::initializer_list<T> list){
 }
 
 template <Arithmetic T>
-Tensor<T>::Tensor(std::initializer_list<std::initializer_list<T>> list){
+Tensor<T>::Tensor(const std::initializer_list<std::initializer_list<T>> list){
     // 2D:
     // {{1, 2, 3},
     //  {4, 5, 6},
@@ -126,12 +126,13 @@ Tensor<T>::Tensor(std::initializer_list<std::initializer_list<T>> list){
     _coeffs = new Tensor<T>[_size];
 
     int i = 0;
-    for(auto e: list){
+    for(auto & e: list){
         _coeffs[i]._rank = 1;
         _coeffs[i]._size = e.size();
         _coeffs[i++] = Tensor(e); // Move Assignment =
     }
 }
+
 // ------
 
 
@@ -148,13 +149,14 @@ Tensor<T>::~Tensor(){
 }
 
 
-// Copy Constructor
-// Copy Assignment Operator
-// Move Constructor
+// Copy Constructor = delete
+// Copy Assignment Operator = delete
+// Move Constructor = delete
+
 // Move Assignment Operator
 template <Arithmetic T>
 Tensor<T> & Tensor<T>::operator = (Tensor<T> && other){
-    log("Move Assignment Operator", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", _size, ")");
+    log("Move Assignment Operator", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, ", size=", other._size, ")");
 
     if(this != &other){
 

@@ -116,8 +116,8 @@ public:
     explicit Tensor() : _value(0), _rank(0), _size(-1), _coeffs(nullptr) {}
 
     // --- initializer_list
-    Tensor(std::initializer_list<T> list);
-    Tensor(std::initializer_list<std::initializer_list<T>> list);
+    Tensor(const std::initializer_list<T> list);
+    Tensor(const std::initializer_list<std::initializer_list<T>> list);
     // ------
 
     // --- Rule of 5 ---
@@ -136,10 +136,10 @@ public:
     Tensor(Tensor<T> && other) = delete;
 
     // Move Assignment Operator
-    Tensor<T> & operator = (Tensor<T> && other);
+    Tensor<T> & operator = (Tensor<T> && other); // tensor[index] = Tensor();
 
     // Copy Assignment Operator (Scalar)
-    Tensor<T> & operator = (const T & scalar);
+    Tensor<T> & operator = (const T & scalar); // tensor[index] = number;
 
     // ------
 
