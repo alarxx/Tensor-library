@@ -183,9 +183,9 @@ Tensor<T>::Tensor(const std::initializer_list<Tensor<T>> list){
 // ------
 
 // Tensor sc = scalar(42.0);
-template <Arithmetic T>
-Tensor<T> scalar(T value){
-    Tensor<T> tensor;
+template <Arithmetic U>
+/*friend*/ Tensor<U> scalar(U value){
+    Tensor<U> tensor;
     tensor = value;
     // RVO
     return tensor;
@@ -380,8 +380,8 @@ std::string Tensor<T>::toString() const {
 // --- Operator Overloadings ---
 
 // Stream insertion operation
-template <Arithmetic T>
-std::ostream& operator << (std::ostream& os, const Tensor<T>& tensor){
+template <Arithmetic U>
+/*friend*/ std::ostream& operator << (std::ostream& os, const Tensor<U>& tensor){
     os << tensor.toString();
     return os;
 }
@@ -410,7 +410,7 @@ Tensor<T>& Tensor<T>::operator *= (const Tensor<T>& other){
 
 // Binary Multiplication Operator
 template <Arithmetic U>
-Tensor<U> operator * (const Tensor<U>& t1, const Tensor<U>& t2){
+/*friend*/ Tensor<U> operator * (const Tensor<U>& t1, const Tensor<U>& t2){
     Tensor<U> temp = t1; // t1 copy in Stack memory allocation
     temp *= t2; // умножаем t2 прямо на temp
     // Return Value Optimization (RVO):
