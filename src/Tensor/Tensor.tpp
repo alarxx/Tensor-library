@@ -101,6 +101,25 @@ template <Arithmetic T>
     // ------
 }
 
+template <Arithmetic T>
+template <typename ... TArgs>
+requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<T>> && ... && true)
+Tensor<T>::Tensor(const Tensor<T>& first, const TArgs& ... args) {
+    log("Concat constructor (&)");
+    Tensor<T> tensors[] = {first, args...}; // creates copy (Ok)
+    // Tensor<T> tmp = {first, args...}; // Concat {tensors} creates copy (Bad)
+
+    _size = sizeof(tensors) / sizeof(tensors[0]);
+    _rank = tensors[0]._rank + 1;
+
+    _coeffs = new Tensor<T>[_size];
+
+    for(int i = 0; i < _size; i++) {
+        _coeffs[i]._rank = tensors[i]._rank;
+        _coeffs[i]._size = tensors[i]._size;
+        _coeffs[i] = std::move(tensors[i]); // move assignment
+    }
+}
 
 // --- initializer_list ---
 

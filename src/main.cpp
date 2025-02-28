@@ -173,23 +173,42 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//
+//     Tensor t1 = {1, 2};
+//     Tensor t2 = {3, 4};
+//
+//     std::cout << "\nConcat example:" << std::endl;
+//
+//     Tensor cat = concat(t1, t2); // reference
+//     cat[0][0] = 42;
+//     // Tensor cat = concat(std::move(t1), std::move(t2)); // move by rvalue
+//     // Tensor cat = concat(scalar(1), scalar(2)); // rvalue
+//     // Tensor cat = concat(scalar(1), scalar(2.)); // error: no matching function for call to ‘concat(Tensor<int>, Tensor<double>)’
+//     // Tensor cat = concat(1, 2); // error: no matching function for call to ‘concat(int, int)’
+//     std::cout << t1 << std::endl;
+//     std::cout << t2 << std::endl;
+//     std::cout << cat << std::endl;
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
-    Tensor t1 = {1, 2};
-    Tensor t2 = {3, 4};
+    Tensor t1 = {1, 2, 3};
+    Tensor t2 = {3, 4, 5};
 
-    std::cout << "\nConcat example:" << std::endl;
+    Tensor tensor(t1, t2); // concat copy constructor, 1 copy
+    // Tensor tensor = {t1, t2}; // concat {tensors}, 2 copies
+    // Tensor tensor({t1, t2}); // concat {tensors}, 2 copies
 
-    Tensor cat = concat(t1, t2); // reference
-    cat[0][0] = 42;
-    // Tensor cat = concat(std::move(t1), std::move(t2)); // move by rvalue
-    // Tensor cat = concat(scalar(1), scalar(2)); // rvalue
-    // Tensor cat = concat(scalar(1), scalar(2.)); // error: no matching function for call to ‘concat(Tensor<int>, Tensor<double>)’
-    // Tensor cat = concat(1, 2); // error: no matching function for call to ‘concat(int, int)’
-    std::cout << t1 << std::endl;
-    std::cout << t2 << std::endl;
-    std::cout << cat << std::endl;
+
+    // To implement:
+    // - [ ] concat move constructor !!!
+    // Tensor tensor(std::move(t1), std::move(t2)); // concat move constructor, 0 copies
+
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
@@ -199,7 +218,9 @@ int main(){
 
 - [x] Потому что я хочу красивый синтаксис Appending-а тензоров
 Да и в будущем это понадобится, потому что copy метод может делать 2 раза копию без RVO
-- [ ] А appending функцию по идее без копирования можно сделать через TArgs... и move, но он без RVO снова будет делать копию? Я не знаю, по идее...
+- [x] А appending функцию по идее без копирования можно сделать через TArgs... и move, но он без RVO снова будет делать копию? Я не знаю, по идее...
+
+- [ ] concat functions (copy, move, by array)
 
 - [ ] Нужно как-то добавить casting между Tensor<double> и Tensor<int> например.
 

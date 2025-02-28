@@ -145,28 +145,40 @@ public:
 
     explicit Tensor() : _value(0), _rank(0), _size(-1), _coeffs(nullptr) {}
 
-    // --- initializer_list
-    Tensor(const std::initializer_list<T> list);
-    Tensor(const std::initializer_list<std::initializer_list<T>> list);
-    Tensor(const std::initializer_list<Tensor<T>> list); // concat {tensors}
-
     /*
         Как создать tensor из множества тензоров.
 
         SFINAE для проверки соответствия типов тензоров.
 
-        std::cout << "v: " << std::is_same_v<Tensor<int>, Tensor<int>> << std::endl; // false
-        std::cout << "&: " << std::is_same_v<Tensor<int>&, Tensor<int>> << std::endl; // false
-        std::cout << "&&: " << std::is_same_v<Tensor<int>&&, Tensor<int>> << std::endl; // false
-        std::cout << "v: " << std::is_same_v<std::remove_reference_t<Tensor<int>>, Tensor<int>> << std::endl; // true
-        std::cout << "&: " << std::is_same_v<std::remove_reference_t<Tensor<int>&>, Tensor<int>> << std::endl; // true
         std::cout << "&&: " << std::is_same_v<std::remove_reference_t<Tensor<int>&&>, Tensor<int>> << std::endl; // true
-     */
+
+        Tensor tensor = {1, 2, 3};
+        Tensor<int> * tptr = &tensor;
+        Tensor<int> & tref = *tptr;
+        std::cout << std::is_same_v<decltype(tref), Tensor<typename decltype(tensor)::type>> << std::endl; // without remove_reference_t
+        std::cout << std::is_same_v<std::remove_reference_t<decltype(tref)>, Tensor<typename decltype(tensor)::type>> << std::endl;
+    */
+    // Copy concat constructor
+    template <typename ... TArgs>
+    requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<T>> && ... && true) // requires all args to be tensors of the same type
+    explicit Tensor(const Tensor<T>& first, const TArgs& ... args);
+    // Move concat constructor
+    template <typename ... TArgs>
+    requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<T>> && ... && true) // requires all args to be tensors of the same type
+    explicit Tensor(const Tensor<T>&& first, const TArgs&& ... args);
+
+    // --- initializer_list
+    Tensor(const std::initializer_list<T> list);
+    Tensor(const std::initializer_list<std::initializer_list<T>> list);
+    Tensor(const std::initializer_list<Tensor<T>> list); // concat {tensors}
+
+    // Copy concat
     template <Arithmetic U, typename ... TArgs>
     // requires (std::is_same_v<TArgs, Tensor<U>> && ... && true) // For some reason it allows Tensor& and Tensor&& in comparison to Tensor.
     requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<U>> && ... && true)
     friend Tensor<U> concat(const Tensor<U>& first, const TArgs& ... tensors);
 
+    // Move concat
     // template <Arithmetic U, typename ... TArgs>
     // requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<U>> && ... && true)
     // friend Tensor<U> concat(const Tensor<U>&& first, const TArgs&& ... tensors);
@@ -174,7 +186,6 @@ public:
     template <Arithmetic U>
     friend Tensor<U> concat(const int size, const Tensor<U> tensors[]);
     // ------
-
 
     /*
         Нужен был простой способ создать скаляр.
