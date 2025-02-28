@@ -117,16 +117,45 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//
+//     Tensor tensor = {
+//         {1, 2, 3},
+//         {4, 5, 6},
+//         {7, 8, 9}
+//     };
+//     Tensor copy = tensor;
+//
+//     std::cout << tensor;
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
-    Tensor tensor = {
+    // Tensor t1 = {1, 2, 3};
+    // Tensor t2 = {4, 5, 6};
+    Tensor t1 = {
         {1, 2, 3},
-        {4, 5, 6},
-        {7, 8, 9}
+        {4, 5, 6}
     };
+    Tensor t2 = {
+        {6, 5, 4},
+        {3, 2, 1}
+    };
+    std::cout << t1 << std::endl;
+    std::cout << t2 << std::endl;
 
-    std::cout << tensor;
+    std::cout << "\nUnary multiplication example:" << std::endl;
+    t1 *= t2;
+    std::cout << std::endl;
+    std::cout << t1 << std::endl;
+    std::cout << t2 << std::endl;
+
+    // Tensor tensor = v1 + v2;
+    // std::cout << tensor;
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
@@ -143,6 +172,9 @@ int main(){
 - [x] toString
 
 - [ ] += operator
+    - [ ] traversing till vector or matrix
 - [ ] + operator
+- [ ] no need in namespace
+- [ ] iterator
 
 */

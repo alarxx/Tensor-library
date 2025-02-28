@@ -339,14 +339,16 @@ Tensor<T> & Tensor<T>::operator = (const T & scalar){
 template <Arithmetic T>
 std::string Tensor<T>::__toString() const {
     std::string res = "";
-    if(!isScalar()){
+    if(_rank == 1){
         for(int i = 0; i < _size; i++){
-            res += _coeffs[i].__toString();
+            res += std::to_string(_coeffs[i]._value) + std::string(typeid(_coeffs[i]._value).name()) + " ";
         }
         res += "\n";
     }
     else {
-        res += std::to_string(_value) + std::string(typeid(_value).name()) + " ";
+        for(int i = 0; i < _size; i++){
+            res += _coeffs[i].__toString();
+        }
     }
     return res;
 }
@@ -354,14 +356,14 @@ std::string Tensor<T>::__toString() const {
 template <Arithmetic T>
 std::string Tensor<T>::toString() const {
     std::string res = "";
+    res += "tensor<" + std::string(typeid(_value).name()) + ">:";
     if(!isScalar()){
-        res += "tensor<" + std::string(typeid(_value).name()) + ">:\n";
-        for(int i = 0; i < _size; i++){
-            res += _coeffs[i].__toString();
-        }
+        res += "{\n";
+        res += __toString();
+        res += "}";
     }
     else {
-        res += std::to_string(_value) + std::string(typeid(_value).name()) + " ";
+        res += " " + std::to_string(_value) + std::string(typeid(_value).name());
     }
     return res;
 }
@@ -375,6 +377,39 @@ std::ostream& operator << (std::ostream& os, const Tensor<T>& tensor){
     os << tensor.toString();
     return os;
 }
+
+// Unary Operator
+// Elementwise: v1 *= v2;
+template <Arithmetic T>
+Tensor<T>& Tensor<T>::operator *= (Tensor<T>& other){
+    log("Unary Multiplication");
+    // Different sizes may cause overflow, нужно ли делать эту проверку
+    if(_size != other._size){
+        throw std::runtime_error("Tensor sizes must be the same!");
+    }
+    if(_rank == 1){
+        for(int i = 0; i < _size; i++) {
+            log(_coeffs[i]._value, "*=", other._coeffs[i]._value);
+            _coeffs[i]._value *= other._coeffs[i]._value;
+        }
+    }
+    else {
+        for(int i = 0; i < _size; i++) {
+            // log(_coeffs[i], "*=", other._coeffs[i]); // creates copies
+            _coeffs[i] *= other._coeffs[i];
+        }
+    }
+    return *this;
+}
+
+// // Binary Multiplication Operator
+// Tensor operator * (const Tensor& v1, const Tensor& v2){
+//     Tensor temp = v1; // v1 copy in Stack memory allocation
+//     temp *= v2; // умножаем v2 прямо на temp
+//     // Return Value Optimization (RVO):
+//     // problem is since temp is in Stack memory it should be deleted after this function is finished
+//     return temp;
+// }
 
 // ------
 

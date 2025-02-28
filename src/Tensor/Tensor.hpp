@@ -202,7 +202,12 @@ public:
     // --- Operator Overloadings ---
 
     // Index Operator []
-    inline Tensor& operator [] (const int index) const { return _coeffs[index]; }
+    inline Tensor& operator [] (const int index) {
+        if(isScalar()){
+            throw std::runtime_error("Can't access scalar tensor by index");
+        }
+        return _coeffs[index];
+    }
 
     // Typecast overloading
     // operator T () const {
@@ -218,6 +223,15 @@ public:
 
     // +=
     // +
+
+    // Unary Operator
+    // Elementwise: v1 *= v2;
+    Tensor<T>&  operator *= (Tensor<T>& other);
+
+    // // Binary Operator
+    // // friend - не является членом класса, но имеет доступ к private
+    // // Note: no "self" vector argument, therefore we use "friend" keyword
+    // friend Tensor operator * (const Vector & /*const*/ v1, const Vector /*const*/ & v2);
 
     // ------
 
