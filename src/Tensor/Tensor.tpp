@@ -389,7 +389,7 @@ std::ostream& operator << (std::ostream& os, const Tensor<T>& tensor){
 // Unary Operator
 // Elementwise: v1 *= v2;
 template <Arithmetic T>
-Tensor<T>& Tensor<T>::operator *= (Tensor<T>& other){
+Tensor<T>& Tensor<T>::operator *= (const Tensor<T>& other){
     log("Unary Multiplication");
     // Different sizes may cause overflow, нужно ли делать эту проверку
     if(_size != other._size){
@@ -410,14 +410,15 @@ Tensor<T>& Tensor<T>::operator *= (Tensor<T>& other){
     return *this;
 }
 
-// // Binary Multiplication Operator
-// Tensor operator * (const Tensor& v1, const Tensor& v2){
-//     Tensor temp = v1; // v1 copy in Stack memory allocation
-//     temp *= v2; // умножаем v2 прямо на temp
-//     // Return Value Optimization (RVO):
-//     // problem is since temp is in Stack memory it should be deleted after this function is finished
-//     return temp;
-// }
+// Binary Multiplication Operator
+template <Arithmetic U>
+Tensor<U> operator * (const Tensor<U>& t1, const Tensor<U>& t2){
+    Tensor<U> temp = t1; // t1 copy in Stack memory allocation
+    temp *= t2; // умножаем t2 прямо на temp
+    // Return Value Optimization (RVO):
+    // problem is since temp is in Stack memory it should be deleted after this function is finished
+    return temp;
+}
 
 // ------
 

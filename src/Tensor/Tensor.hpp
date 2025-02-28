@@ -244,12 +244,13 @@ public:
 
     // Unary Operator
     // Elementwise: v1 *= v2;
-    Tensor<T>&  operator *= (Tensor<T>& other);
+    Tensor<T>&  operator *= (const Tensor<T>& other);
 
-    // // Binary Operator
-    // // friend - не является членом класса, но имеет доступ к private
-    // // Note: no "self" vector argument, therefore we use "friend" keyword
-    // friend Tensor operator * (const Vector & /*const*/ v1, const Vector /*const*/ & v2);
+    // Binary Operator
+    // friend - не является членом класса, но имеет доступ к private
+    // Note: no "self" vector argument, therefore we use "friend" keyword
+    template <typename U>
+    friend Tensor<U> operator * (const Tensor<U> & /*const*/ v1, const Tensor<U> & /*const*/ v2);
 
     // ------
 
