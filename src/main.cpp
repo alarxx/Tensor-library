@@ -132,43 +132,64 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//
+//     // Tensor t1 = {1, 2, 3};
+//     // Tensor t2 = {4, 5, 6};
+//     Tensor t1 = {
+//         {1, 2, 3},
+//         {4, 5, 6}
+//     };
+//     std::cout << t1 << std::endl;
+//
+//     Tensor t2 = {
+//         {6, 5, 4},
+//         {3, 2, 1}
+//     };
+//     std::cout << t2 << std::endl;
+//
+//     // std::cout << "\nUnary multiplication example:" << std::endl;
+//     // t1 *= t2;
+//     // std::cout << std::endl;
+//     // std::cout << t1 << std::endl;
+//     // std::cout << t2 << std::endl;
+//
+//     std::cout << "\nBinary multiplication example:" << std::endl;
+//     Tensor res = t1 * t2; // without RVO copying could be 2 times
+//     std::cout << t1 << std::endl;
+//     std::cout << t2 << std::endl;
+//     std::cout << res << std::endl;
+//
+//     std::cout << "\nBinary scalar multiplication example:" << std::endl;
+//
+//     // Tensor vec(3); // double vector
+//     // std::cout << vec << std::endl;
+//     Tensor sc1 = scalar(2.); // double scalar
+//     Tensor sc2 = scalar(3.); // double scalar
+//     Tensor sc_mul_res = sc1 * sc2; // binary multiplication creates copy
+//     std::cout << sc_mul_res << std::endl;
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
-    // Tensor t1 = {1, 2, 3};
-    // Tensor t2 = {4, 5, 6};
-    Tensor t1 = {
-        {1, 2, 3},
-        {4, 5, 6}
-    };
-    std::cout << t1 << std::endl;
+    Tensor t1 = {1, 2};
+    Tensor t2 = {3, 4};
 
-    Tensor t2 = {
-        {6, 5, 4},
-        {3, 2, 1}
-    };
-    std::cout << t2 << std::endl;
+    std::cout << "\nConcat example:" << std::endl;
 
-    // std::cout << "\nUnary multiplication example:" << std::endl;
-    // t1 *= t2;
-    // std::cout << std::endl;
-    // std::cout << t1 << std::endl;
-    // std::cout << t2 << std::endl;
-
-    std::cout << "\nBinary multiplication example:" << std::endl;
-    Tensor res = t1 * t2; // without RVO copying could be 2 times
+    Tensor cat = concat(t1, t2); // reference
+    cat[0][0] = 42;
+    // Tensor cat = concat(std::move(t1), std::move(t2)); // move by rvalue
+    // Tensor cat = concat(scalar(1), scalar(2)); // rvalue
+    // Tensor cat = concat(scalar(1), scalar(2.)); // error: no matching function for call to ‘concat(Tensor<int>, Tensor<double>)’
+    // Tensor cat = concat(1, 2); // error: no matching function for call to ‘concat(int, int)’
     std::cout << t1 << std::endl;
     std::cout << t2 << std::endl;
-    std::cout << res << std::endl;
-
-    std::cout << "\nBinary scalar multiplication example:" << std::endl;
-
-    // Tensor vec(3); // double vector
-    // std::cout << vec << std::endl;
-    Tensor sc1 = scalar(2.); // double scalar
-    Tensor sc2 = scalar(3.); // double scalar
-    Tensor sc_mul_res = sc1 * sc2; // binary multiplication creates copy
-    std::cout << sc_mul_res << std::endl;
+    std::cout << cat << std::endl;
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
@@ -184,10 +205,10 @@ int main(){
 
 - [x] toString
 
-- [ ] += operator
-    - [ ] traversing till vector or matrix
-- [ ] + operator
-- [ ] no need in namespace
+- [x] += operator
+    - [x] traversing till vector or matrix
+- [x] + operator
+- [x] no need in namespace
 - [ ] iterator
 
 */

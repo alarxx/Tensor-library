@@ -144,8 +144,33 @@ public:
     // --- initializer_list
     Tensor(const std::initializer_list<T> list);
     Tensor(const std::initializer_list<std::initializer_list<T>> list);
-    Tensor(const std::initializer_list<Tensor<T>> list); // appending {tensors}
+    Tensor(const std::initializer_list<Tensor<T>> list); // concat {tensors}
+
+    /*
+        Как создать tensor из множества тензоров.
+
+        SFINAE для проверки соответствия типов тензоров.
+
+        std::cout << "v: " << std::is_same_v<Tensor<int>, Tensor<int>> << std::endl; // false
+        std::cout << "&: " << std::is_same_v<Tensor<int>&, Tensor<int>> << std::endl; // false
+        std::cout << "&&: " << std::is_same_v<Tensor<int>&&, Tensor<int>> << std::endl; // false
+        std::cout << "v: " << std::is_same_v<std::remove_reference_t<Tensor<int>>, Tensor<int>> << std::endl; // true
+        std::cout << "&: " << std::is_same_v<std::remove_reference_t<Tensor<int>&>, Tensor<int>> << std::endl; // true
+        std::cout << "&&: " << std::is_same_v<std::remove_reference_t<Tensor<int>&&>, Tensor<int>> << std::endl; // true
+     */
+    template <Arithmetic U, typename ... TArgs>
+    // requires (std::is_same_v<TArgs, Tensor<U>> && ... && true) // For some reason it allows Tensor& and Tensor&& in comparison to Tensor.
+    requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<U>> && ... && true)
+    friend Tensor<U> concat(const Tensor<U>& first, const TArgs& ... tensors);
+
+    // template <Arithmetic U, typename ... TArgs>
+    // requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<U>> && ... && true)
+    // friend Tensor<U> concat(const Tensor<U>&& first, const TArgs&& ... tensors);
+
+    template <Arithmetic U>
+    friend Tensor<U> concat(const int size, const Tensor<U> tensors[]);
     // ------
+
 
     /*
         Нужен был простой способ создать скаляр.

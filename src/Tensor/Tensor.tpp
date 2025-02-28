@@ -88,7 +88,7 @@ template <Arithmetic T>
     // after this, tensors look like scalars, but it's okay we'll move rvalues into them
 
     if(rank - 1 == 0) { // then it is a Scalar
-        log("Next is scalar tensor(", _size, "), so we return");
+        log("Next is scalar tensor, _size:(", _size, "), so we return");
         return;
     }
 
@@ -138,7 +138,7 @@ Tensor<T>::Tensor(const std::initializer_list<std::initializer_list<T>> list){
     }
 }
 
-// Appending {tensors}
+// Concat {tensors}
 template <Arithmetic T>
 Tensor<T>::Tensor(const std::initializer_list<Tensor<T>> list){
     /*
@@ -165,7 +165,7 @@ Tensor<T>::Tensor(const std::initializer_list<Tensor<T>> list){
      */
 
     _rank = (*list.begin())._rank + 1;
-    log("Appending tensors, rank: ", _rank);
+    log("Concat {tensors}, rank: ", _rank);
 
     _size = list.size();
     _coeffs = new Tensor<T>[_size];
@@ -180,6 +180,57 @@ Tensor<T>::Tensor(const std::initializer_list<Tensor<T>> list){
     }
 }
 
+// Copy concat
+template <Arithmetic U, typename ... TArgs>
+requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<U>> && ... && true)
+Tensor<U> concat(const Tensor<U>& first, const TArgs& ... args){
+    log("Concat (&)");
+    Tensor<U> tensors[] = {first, args...}; // creates copy (Ok)
+    // Tensor<U> tmp = {first, args...}; // Concat {tensors} creates copy (Bad)
+
+    int size = sizeof(tensors) / sizeof(tensors[0]);
+    int rank = tensors[0]._rank + 1;
+
+    // return concat(size, tensors); // Почему-то через функцию создает копии
+
+    Tensor<U> tmp(size);
+    tmp._rank = rank; // friend
+    // tmp._size = size; // already there
+
+    for(int i = 0; i < size; i++) {
+        tmp._coeffs[i]._rank = tensors[i]._rank;
+        tmp._coeffs[i]._size = tensors[i]._size;
+        tmp._coeffs[i] = std::move(tensors[i]); // move assignment
+    }
+    return tmp;
+}
+// // Move concat
+// template <Arithmetic U, typename ... TArgs>
+// requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<U>> && ... && true)
+// Tensor<U> concat(const Tensor<U>&& first, const TArgs&& ... args){
+//     log("Concat (&&)");
+//     // Tensor<U> tensors[] = {first, args...}; // creates copy (Bad)!!! we must use `emplace_back`
+//
+//     Tensor<U> tmp = {first, args...}; // Concat {tensors} creates copy (Bad)
+//
+//     return tmp;
+// }
+template <Arithmetic U>
+Tensor<U> concat(const int size, const Tensor<U> tensors[]){ // Copy
+    log("Concat (size, Tensor[]))");
+    Tensor<U> tmp(size);
+    int rank = tensors[0]._rank + 1;
+    tmp._rank = rank; // friend
+    // tmp._size = size; // already there
+
+    for(int i = 0; i < size; i++) {
+        tmp._coeffs[i]._rank = tensors[i]._rank;
+        tmp._coeffs[i]._size = tensors[i]._size;
+        tmp._coeffs[i] = std::move(tensors[i]); // move assignment
+    }
+    log("Concat (size, Tensor[])) return");
+    return tmp;
+}
 // ------
 
 // Tensor sc = scalar(42.0);
@@ -232,7 +283,7 @@ Tensor<T>::Tensor(const Tensor<T> & other) : Tensor() {
 // O(N)
 template <Arithmetic T>
 Tensor<T> & Tensor<T>::operator = (const Tensor<T> & other){
-    log("Copy Assignment Operator", (isScalar() ? " (Scalar)" : ""), " (rank=", other._rank, "->", _rank, ", size=", other._size, "->", _size, ")");
+    log("Copy Assignment Operator", (isScalar() ? " (Scalar)" + std::to_string(other._value) : ""), " (rank=", other._rank, "->", _rank, ", size=", other._size, "->", _size, ")");
 
     if(this != &other){
 
