@@ -27,10 +27,10 @@
 #include <concepts>
 #include <initializer_list>
 
-namespace {
-    template <typename T>
-    concept Arithmetic = std::is_arithmetic_v<T>; // C++20
-}
+// namespace {
+template <typename T>
+concept Arithmetic = std::is_arithmetic_v<T>; // C++20
+// }
 
 /*
     Я делаю Tensor homogeneous, то есть он хранит данные только одного типа.
