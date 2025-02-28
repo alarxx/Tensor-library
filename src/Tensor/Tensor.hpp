@@ -112,7 +112,11 @@ public:
     SFINAE проверка:
 
         template <typename ... TArgs, std::enable_if_t<(std::is_same_v<TArgs, int> && ... && true), int> = 0> // SFINAE
-        Tensor(const TArgs ... dims) {
+        Tensor(const TArgs ... dims);
+
+        template <Arithmetic T> // Definition
+        template <typename ... TArgs, std::enable_if_t<(std::is_same_v<TArgs, int> && ... && true), int> = 0>
+        Tensor<T>::Tensor(TArgs ... args) {}
 
     Wrong way to achieve SFINAE:
 
