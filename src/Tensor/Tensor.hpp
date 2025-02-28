@@ -59,7 +59,6 @@ template <Arithmetic T = double>
 class Tensor {
 
 private:
-    explicit Tensor(int rank, int dims[], int cursor = 0);
 
     inline void __init(int rank, int dims[], int cursor);
 
@@ -137,6 +136,8 @@ public:
         - https://federico-busato.github.io/Modern-CPP-Programming/11.Templates_II.pdf
     */
     explicit Tensor(std::integral auto ... args); // C++20, abbreviated function templates with concept
+
+    explicit Tensor(int rank, int dims[], int cursor = 0);
 
     explicit Tensor() : _value(0), _rank(0), _size(-1), _coeffs(nullptr) {}
 
