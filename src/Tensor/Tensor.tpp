@@ -390,16 +390,14 @@ std::ostream& operator << (std::ostream& os, const Tensor<T>& tensor){
 // Elementwise: v1 *= v2;
 template <Arithmetic T>
 Tensor<T>& Tensor<T>::operator *= (const Tensor<T>& other){
-    log("Unary Multiplication");
     // Different sizes may cause overflow, нужно ли делать эту проверку
     if(_size != other._size){
         throw std::runtime_error("Tensor sizes must be the same!");
     }
-    if(_rank == 1){
-        for(int i = 0; i < _size; i++) {
-            log(_coeffs[i]._value, "*=", other._coeffs[i]._value);
-            _coeffs[i]._value *= other._coeffs[i]._value;
-        }
+    log("Unary Multiplication (", _size, ")");
+    if(isScalar()){
+        log(_value, "*=", other._value);
+        _value *= other._value;
     }
     else {
         for(int i = 0; i < _size; i++) {

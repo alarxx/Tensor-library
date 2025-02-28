@@ -135,22 +135,18 @@
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
-    // Tensor vec(3); // double vector
-    // std::cout << vec << std::endl;
-    // Tensor sc = scalar(1.); // double scalar
-    // std::cout << sc << std::endl;
-
     // Tensor t1 = {1, 2, 3};
     // Tensor t2 = {4, 5, 6};
     Tensor t1 = {
         {1, 2, 3},
         {4, 5, 6}
     };
+    std::cout << t1 << std::endl;
+
     Tensor t2 = {
         {6, 5, 4},
         {3, 2, 1}
     };
-    std::cout << t1 << std::endl;
     std::cout << t2 << std::endl;
 
     // std::cout << "\nUnary multiplication example:" << std::endl;
@@ -160,10 +156,19 @@ int main(){
     // std::cout << t2 << std::endl;
 
     std::cout << "\nBinary multiplication example:" << std::endl;
-    Tensor tensor = t1 * t2; // without RVO copying could be 2 times
+    Tensor res = t1 * t2; // without RVO copying could be 2 times
     std::cout << t1 << std::endl;
     std::cout << t2 << std::endl;
-    std::cout << tensor;
+    std::cout << res << std::endl;
+
+    std::cout << "\nBinary scalar multiplication example:" << std::endl;
+
+    // Tensor vec(3); // double vector
+    // std::cout << vec << std::endl;
+    Tensor sc1 = scalar(2.); // double scalar
+    Tensor sc2 = scalar(3.); // double scalar
+    Tensor sc_mul_res = sc1 * sc2; // binary multiplication creates copy
+    std::cout << sc_mul_res << std::endl;
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
