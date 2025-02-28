@@ -89,9 +89,19 @@ public:
 
         Tensor tensor = { depth, rows, cols };
 
-    И проблема с таким инстанциированием в том, что это интуитивно выглядит похоже будто итоговый tensor будет массивом (rank=1, size=3).
+    И проблема с таким инстанциированием в том, что это интуитивно выглядит похоже будто итоговый tensor будет вектором (rank=1, size=3).
 
-    Оказывается создать variadic arguments(int ... dims), как я делал в Java, в C++ нельзя,
+    Сейчас initializer_list используется для nice syntax-а создания tensor-ов:
+
+        Tensor matrix = {
+            {1, 2, 3},
+            {1, 2, 3},
+            {1, 2, 3}
+        };
+
+    ---------------------------------------------------------------------------
+
+    Оказывается, создать variadic arguments(int ... dims), как я делал в Java, в C++ нельзя,
     но что-то похожее можно реализовать с variadic template-ами.
     Возникает конечно необходимость в constraint-е принимать только целые значения размерностей, то есть int,
     для этого можно использовать Pack expansion со SFINAE: `std::conjunction_v<std::is_same<TArgs, int>...>`
@@ -102,8 +112,18 @@ public:
 
     SFINAE проверка:
 
-        template <typename ... TArgs, typename = std::enable_if_t<(std::conjunction_v<std::is_same<TArgs, int>...>)>> // SFINAE
+        template <typename ... TArgs, std::enable_if_t<(std::is_same_v<TArgs, int> && ... && true), int> = 0> // SFINAE
         Tensor(const TArgs ... dims) {
+
+    Wrong way to achieve SFINAE:
+
+        // may cause redefinition error
+        template <typename ... TArgs, typename = std::enable_if_t<(std::conjunction_v<std::is_same<TArgs, int>...>)>>
+
+    reference:
+        - https://github.com/federico-busato/Modern-CPP-Programming/issues/183
+
+    ---------------------------------------------------------------------------
 
     Можно использовать `requires` clause из C++20:
 
