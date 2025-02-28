@@ -198,17 +198,17 @@ int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
     Tensor t1 = {1, 2, 3};
-    Tensor t2 = {3, 4, 5};
+    Tensor t2 = {4, 5, 6};
 
-    Tensor tensor(t1, t2); // concat copy constructor, 1 copy
+    // Tensor tensor(t1, t2); // concat copy constructor, 1 copy
     // Tensor tensor = {t1, t2}; // concat {tensors}, 2 copies
     // Tensor tensor({t1, t2}); // concat {tensors}, 2 copies
 
+    Tensor tensor(std::move(t1), std::move(t2)); // concat move constructor, 0 copies
 
-    // To implement:
-    // - [ ] concat move constructor !!!
-    // Tensor tensor(std::move(t1), std::move(t2)); // concat move constructor, 0 copies
-
+    std::cout << t1 << std::endl;
+    std::cout << t2 << std::endl;
+    std::cout << tensor << std::endl;
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
@@ -220,6 +220,7 @@ int main(){
 Да и в будущем это понадобится, потому что copy метод может делать 2 раза копию без RVO
 - [x] А appending функцию по идее без копирования можно сделать через TArgs... и move, но он без RVO снова будет делать копию? Я не знаю, по идее...
 
+- [x] concat move constructor !!!
 - [ ] concat functions (copy, move, by array)
 
 - [ ] Нужно как-то добавить casting между Tensor<double> и Tensor<int> например.

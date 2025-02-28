@@ -21,11 +21,13 @@
 #define DEBUG_LOG_TENSOR true
 
 #include <iostream>
+#include <cassert>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <concepts>
 #include <initializer_list>
+#include <vector>
 
 // namespace {
 template <typename T>
@@ -146,6 +148,22 @@ public:
     explicit Tensor() : _value(0), _rank(0), _size(-1), _coeffs(nullptr) {}
 
     /*
+        Нужен был простой способ создать скаляр.
+
+        Конструктор explicit Tensor(int ... args), поэтому мы не можем вызывать в форме:
+
+            Tensor tensor = 3; // Error
+
+        Это могло значить:
+
+            Tensor tensor(3); // creates vector of size 3
+
+        Но это создает вектор (1D), размером в 3 элемента.
+    */
+    template <Arithmetic U>
+    friend Tensor<U> scalar(U value);
+
+    /*
         Как создать tensor из множества тензоров.
 
         SFINAE для проверки соответствия типов тензоров.
@@ -165,7 +183,7 @@ public:
     // Move concat constructor
     template <typename ... TArgs>
     requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<T>> && ... && true) // requires all args to be tensors of the same type
-    explicit Tensor(const Tensor<T>&& first, const TArgs&& ... args);
+    explicit Tensor(Tensor<T>&& first, TArgs&& ... args);
 
     // --- initializer_list
     Tensor(const std::initializer_list<T> list);
@@ -179,29 +197,13 @@ public:
     friend Tensor<U> concat(const Tensor<U>& first, const TArgs& ... tensors);
 
     // Move concat
-    // template <Arithmetic U, typename ... TArgs>
-    // requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<U>> && ... && true)
-    // friend Tensor<U> concat(const Tensor<U>&& first, const TArgs&& ... tensors);
+    template <Arithmetic U, typename ... TArgs>
+    requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<U>> && ... && true)
+    friend Tensor<U> concat(const Tensor<U>&& first, const TArgs&& ... tensors);
 
     template <Arithmetic U>
     friend Tensor<U> concat(const int size, const Tensor<U> tensors[]);
     // ------
-
-    /*
-        Нужен был простой способ создать скаляр.
-
-        Конструктор explicit Tensor(int ... args), поэтому мы не можем вызывать в форме:
-
-            Tensor tensor = 3; // Error
-
-        Это могло значить:
-
-            Tensor tensor(3); // creates vector of size 3
-
-        Но это создает вектор (1D), размером в 3 элемента.
-    */
-    template <Arithmetic U>
-    friend Tensor<U> scalar(U value);
 
     // --- Rule of 5 ---
 
