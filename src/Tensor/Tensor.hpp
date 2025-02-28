@@ -146,6 +146,22 @@ public:
     Tensor(const std::initializer_list<Tensor<T>> list); // appending {tensors}
     // ------
 
+    /*
+        Нужен был простой способ создать скаляр.
+
+        Конструктор explicit Tensor(int ... args), поэтому мы не можем вызывать в форме:
+
+            Tensor tensor = 3; // Error
+
+        Это могло значить:
+
+            Tensor tensor(3); // creates vector of size 3
+
+        Но это создает вектор (1D), размером в 3 элемента.
+    */
+    template <Arithmetic U>
+    friend Tensor<U> scalar(U value);
+
     // --- Rule of 5 ---
 
     // Tensor лучше никогда не копировать и лучше применить rule of 5. И удалить copy constructor и copy assignment. ?
@@ -203,9 +219,11 @@ public:
 
     // Index Operator []
     inline Tensor& operator [] (const int index) {
-        if(isScalar()){
-            throw std::runtime_error("Can't access scalar tensor by index");
-        }
+        #if DEBUG_TENSOR
+            if(isScalar()){
+                throw std::runtime_error("Can't access scalar tensor by index");
+            }
+        #endif
         return _coeffs[index];
     }
 
@@ -249,7 +267,6 @@ public:
         class std::is_arithmetic<A> : public std::true_type {};
 
  */
-
 
 /*
     Implementation of template class is in .tpp file

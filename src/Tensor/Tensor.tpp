@@ -182,6 +182,14 @@ Tensor<T>::Tensor(const std::initializer_list<Tensor<T>> list){
 
 // ------
 
+// Tensor sc = scalar(42.0);
+template <Arithmetic T>
+Tensor<T> scalar(T value){
+    Tensor<T> tensor;
+    tensor = value;
+    // RVO
+    return tensor;
+}
 
 // --- Rule of 5 ---
 
