@@ -186,9 +186,21 @@ public:
     explicit Tensor(Tensor<T>&& first, TArgs&& ... args);
 
     // --- initializer_list
+    /*
+        initializer_list используется для nice syntax-а создания tensor-ов:
+
+            Tensor matrix = {
+                {1, 2, 3},
+                {1, 2, 3},
+                {1, 2, 3}
+            };
+     */
     Tensor(const std::initializer_list<T> list);
     Tensor(const std::initializer_list<std::initializer_list<T>> list);
     Tensor(const std::initializer_list<Tensor<T>> list); // concat {tensors}
+    // ------
+
+    // --- concat ---
 
     // Copy concat
     template <Arithmetic U, typename ... TArgs>
@@ -203,6 +215,7 @@ public:
 
     template <Arithmetic U>
     friend Tensor<U> concat(const int size, const Tensor<U> tensors[]);
+
     // ------
 
     // --- Rule of 5 ---
@@ -310,6 +323,7 @@ public:
         template <typename T>
         class std::is_arithmetic<A> : public std::true_type {};
 
+    Свой custom-ный тип может быть полезен если хотите Int с проверкой на Overflow.
  */
 
 /*
