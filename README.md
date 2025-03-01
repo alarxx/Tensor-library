@@ -2,7 +2,7 @@
 
 ## Tensor 
 
-Tensor - array of Tensors, except rank-0 Tensor (scalar)
+Tensor is a recursive array of Tensors, except rank-0 Tensor (scalar)
 ```
 [Tensor, Tensor, Tensor, Tensor]  
    |       |       |       |  
@@ -15,8 +15,147 @@ Tensor - array of Tensors, except rank-0 Tensor (scalar)
 
 ## Features
 
-- Tensors
+### Tensors
 
+#### Constructors
+
+Tensor может быть только of arithmetic type.
+Для проверки типов я использую [`concepts`](https://github.com/federico-busato/Modern-CPP-Programming), а не чистый SFINAE, поэтому target C++20.
+
+Создать 3D tensor можно так, by default tensor of type double:
+```c++
+Tensor tensor(depth, rows, cols); // Tensor<double>, rank-3
+```
+
+You can specify type:
+```c++
+Tensor<int> tensor(depth, rows, cols); // specified tensor of type int
+```
+
+#### Scalar creation
+
+У меня нет copy конструктора принимающего скаляр, а `Tensor t = 42` не сработает,
+во-первых потому что у меня конструктор explicit,
+во-вторых он implicitly преобразуется в `Tensor t(42)`, и вообще такой метод конфликтует с конструктором dims.
+Но, scalar copy assignment operator сработает.
+
+Как создать scalar tensor:
+```c++
+Tensor sc = scalar(42); // Tensor<int>
+```
+
+Под капотом происходит так:
+```c++
+Tensor sc;
+sc = 42;
+```
+
+#### Accessing elements
+
+```c++
+Tensor matrix(2, 2); // Tensor<double>
+cout << matrix;
+// {{0. 0.},
+//  {0. 0.}}
+
+// index operator matrix[i] returns tensor object
+
+matrix[0][0] = 42; // scalar copy assignment = , implicit casting to double
+
+double sc = matrix[0][0].value(); // get scalar value from tensor object
+
+cout << matrix;
+// {{42. 0.},
+//  { 0. 0.}}
+```
+
+#### Initializer list
+
+Создать tensor можно вручную, что реализовано с `initializer_list`:
+```c++
+Tensor vector = {1, 2, 3}; // 1D vector
+
+Tensor matrix = { // 2D matrix
+   {1, 2, 3},
+   {4, 5, 6},
+   {7, 8, 9}
+};
+```
+
+Тут стоит отметить, что конструктор принимающий dims - `explicit`, то есть передавать мы можем только явно, например: `Tensor t(rows, cols)`.
+Без `explicit` с `Tensor t = {rows, cols}` вызывал бы конструктор dims, а не `initializer_list`.
+
+#### RAII and Rule of 5
+
+Проект реализует [RAII](https://en.cppreference.com/w/cpp/language/raii)
+i.e. Scope-Bound Resource Management
+для управления выделением и освобождением памяти of raw recursive arrays.
+
+Copy and move constructors:
+```c++
+Tensor vector = {1, 2, 3};
+
+Tensor copied = vector;
+
+Tensor stealed = std::move(vector);
+
+cout << vector; // 0i
+```
+
+Copy and move assignments:
+```c++
+Tensor vector = {1, 2, 3};
+
+Tensor copied(3); // sizes must  match
+copied = vector;
+
+cout << vector; // tensor<i>: {1i, 2i, 3i}
+
+Tensor stealed(3);
+stealed = std::move(vector);
+
+cout << vector; // tensor<i>: 0i
+```
+
+#### Concat tensors
+
+Тензоры одинаковой размерности можно объединять в один тензор на ранк выше:
+```c++
+Tensor v1 = {1, 2, 3};
+Tensor v2 = {4, 5, 6};
+Tensor v3 = {7, 8, 9};
+
+Tensor copied(v1, v2, v3); // 1 time copy
+
+Tensor stealed(std::move(v1), std::move(v2), std::move(v3)); // 0 copy, steals data
+```
+
+#### Elementwise multiplication
+
+Unary multiplication:
+```c++
+Tensor v1 = {1, 2, 3};
+Tensor v2 = {4, 5, 6};
+
+v1 *= v2; // 0 copy, but may be overhead of recursion and
+
+cout << v1; // {4, 10, 18}
+cout << v2; // {4, 5, 6}
+```
+
+Binary multiplication:
+```c++
+Tensor v1 = {1, 2, 3};
+Tensor v2 = {4, 5, 6};
+
+Tensor mul = v1 * v2; // 1 copy + RVO
+
+cout << v1; // {1, 2, 3}
+cout << v2; // {4, 5, 6}
+cout << mul; // {4, 10, 18}
+```
+
+---
 
 ## Licence
 
@@ -56,9 +195,13 @@ Third party copyrights are property of their respective owners.
 
 Эти разъяснения условий не меняют и не вносят новые юридические требования к MPL.
 
+---
+
 ## Contact
 
 Alar Akilbekov - alar.akilbekov@gmail.com
+
+---
 
 ## References:
 - Weidman, S. (2019). Deep learning from scratch: Building with Python from first principles (First edition). O’Reilly Media, Inc.
