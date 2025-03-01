@@ -308,6 +308,7 @@ Tensor<U> concat(const int size, const Tensor<U> tensors[]){ // Copy
     log("Concat (size, Tensor[])) return");
     return tmp;
 }
+
 // ------
 
 // --- Rule of 5 ---
@@ -465,16 +466,17 @@ Tensor<T> & Tensor<T>::operator = (const T & scalar){
 
 template <Arithmetic T>
 std::string Tensor<T>::__toString() const {
+    // log("rank: ", _rank); // 3 2 1 0 0 0 3 2 1 0 0 0
     std::string res = "";
-    if(_rank == 1){
-        for(int i = 0; i < _size; i++){
-            res += std::to_string(_coeffs[i]._value) + std::string(typeid(_coeffs[i]._value).name()) + " ";
-        }
-        res += "\n";
+    if(_rank == 0){
+        res += std::to_string(_value) + std::string(typeid(_value).name()) + " ";
     }
-    else {
+    else { // _rank != 0
         for(int i = 0; i < _size; i++){
             res += _coeffs[i].__toString();
+        }
+        if(_rank <= 2){ // vector and matrix oriented output
+            res += "\n";
         }
     }
     return res;
@@ -483,10 +485,11 @@ std::string Tensor<T>::__toString() const {
 template <Arithmetic T>
 std::string Tensor<T>::toString() const {
     std::string res = "";
-    res += "tensor<" + std::string(typeid(_value).name()) + ">:";
+    res += "tensor(" + std::to_string(_rank) + ")<" + std::string(typeid(_value).name()) + ">:";
     if(!isScalar()){
         res += "{\n";
         res += __toString();
+        res.pop_back(); // last '\n'
         res += "}";
     }
     else {
@@ -509,14 +512,23 @@ template <Arithmetic U>
 // Elementwise: v1 *= v2;
 template <Arithmetic T>
 Tensor<T>& Tensor<T>::operator *= (const Tensor<T>& other){
-    // Different sizes may cause overflow, нужно ли делать эту проверку
-    if(_size != other._size){
-        throw std::runtime_error("Tensor sizes must be the same!");
-    }
-    log("Unary Multiplication (", _size, ")");
-    if(isScalar()){
-        log(_value, "*=", other._value);
+    #if DEBUG_TENSOR
+        // Different sizes may cause overflow, нужно ли делать эту проверку
+        // Я думаю, лучшим решением будет user-у просто перед умножением проверять размеры, а не проверять тут миллион раз
+        if(_size != other._size){
+            throw std::runtime_error("Tensor sizes must be the same!");
+        }
+    #endif
+    log("Unary Multiplication (", _rank, ")");
+    if(_rank == 0/*isScalar()*/){
+        log("scalar: ", _value, "*=", other._value);
         _value *= other._value;
+    }
+    else if(_rank == 1){ // in order to optimize recursive calls overhead
+        log("vector: *= ");
+        for(int i = 0; i < _size; i++) {
+            _coeffs[i]._value *= other._coeffs[i]._value;
+        }
     }
     else {
         for(int i = 0; i < _size; i++) {
