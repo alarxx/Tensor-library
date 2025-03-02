@@ -330,6 +330,7 @@ public:
     Implementation of template class is in .tpp file
  */
 #include "Tensor.tpp"
+#include "concat.tpp"
 
 
 #endif

@@ -225,6 +225,8 @@ int main(){
 
 - [x] concat move constructor !!!
 - [ ] concat functions (copy, move, by array)
+- [ ] В чем будет разница если я просто уберу explicit в Tensor(tensors...) и уберу initializer_list?
+- [ ] Кажется можно создать бесконечно рекурсивный initializer_list принимающий любые rank-и: { { { {{1, 2, 3},}, }, }, ... }
 
 - [ ] Нужно как-то добавить casting между Tensor<double> и Tensor<int> например.
 
