@@ -32,22 +32,34 @@ You can specify type:
 Tensor<int> tensor(depth, rows, cols); // specified tensor of type int
 ```
 
-#### Scalar creation
+Integer dims only:
+```c++
+Tensor t(2, 2) // Ok, provided integers, creates 2x2 matrix
+Tensor t(2., 2.) // Error due to incorrect type double
+```
 
-У меня нет copy конструктора принимающего скаляр, а `Tensor t = 42` не сработает,
-во-первых потому что у меня конструктор explicit,
-во-вторых он implicitly преобразуется в `Tensor t(42)`, и вообще такой метод конфликтует с конструктором dims.
-Но, scalar copy assignment operator сработает.
+#### Scalar creation
 
 Как создать scalar tensor:
 ```c++
 Tensor sc = scalar(42); // Tensor<int>
 ```
 
-Под капотом происходит так:
+Factory function scalar нужна потому что `Tensor t(42)` вызовет конструктор dims, который создаст вектор соответствующего размера, а `Tensor t = {42}` вызовет initializer_list конструктор, который создаст вектор с одним соответствующим элементом, но не скаляр!
+
+У меня нет copy конструктора принимающего скаляр.
+`Tensor t = 42` не сработает,
+во-первых потому что у меня конструктор explicit,
+во-вторых если бы он преобразовывался в `Tensor t(42)`, то такой конструктор конфликтовал бы с конструктором dims.
+Но, scalar copy assignment operator сработает, если сначала создать пустой Tensor.
+
+Под капотом `scalar(42)` работает так:
 ```c++
-Tensor sc;
-sc = 42;
+scalar(T value){
+   Tensor<T> sc;
+   sc = value;
+   return sc;
+}
 ```
 
 #### Accessing elements
