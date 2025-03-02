@@ -271,6 +271,8 @@ public:
 
     inline int size() const { return _size; }
     inline int rank() const { return _rank; }
+    inline Tensor copy() const { return Tensor(*this); }
+    inline Tensor move() { return Tensor(std::move(*this)); }
 
     std::string toString() const;
 
