@@ -437,7 +437,7 @@ std::string Tensor<T>::toString() const {
     if(!isScalar()){
         res += "{\n";
         res += __toString();
-        res.pop_back(); // last '\n'
+        if(_rank >= 2) res.pop_back(); // last '\n'
         res += "}";
     }
     else {

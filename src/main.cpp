@@ -132,44 +132,44 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
-int main(){
-    std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
-
-    // Tensor t1 = {1, 2, 3};
-    // Tensor t2 = {4, 5, 6};
-    Tensor t1 = {
-        {1, 2, 3},
-        {4, 5, 6}
-    };
-    std::cout << t1 << std::endl;
-
-    Tensor t2 = {
-        {6, 5, 4},
-        {3, 2, 1}
-    };
-    std::cout << t2 << std::endl;
-
-    std::cout << "\nUnary multiplication example:" << std::endl;
-    t1 *= t2;
-    std::cout << t1 << std::endl;
-    std::cout << t2 << std::endl;
-
-    // std::cout << "\nBinary multiplication example:" << std::endl;
-    // Tensor res = t1 * t2; // without RVO copying could be 2 times
-    // std::cout << t1 << std::endl;
-    // std::cout << t2 << std::endl;
-    // std::cout << res << std::endl;
-    //
-    std::cout << "\nBinary scalar multiplication example:" << std::endl;
-    // // Tensor vec(3); // double vector
-    // // std::cout << vec << std::endl;
-    Tensor sc1 = scalar(2.); // double scalar
-    Tensor sc2 = scalar(3.); // double scalar
-    Tensor sc_mul_res = sc1 * sc2; // binary multiplication creates copy
-    std::cout << sc_mul_res << std::endl;
-
-    std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
-}
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//
+//     // Tensor t1 = {1, 2, 3};
+//     // Tensor t2 = {4, 5, 6};
+//     Tensor t1 = {
+//         {1, 2, 3},
+//         {4, 5, 6}
+//     };
+//     std::cout << t1 << std::endl;
+//
+//     Tensor t2 = {
+//         {6, 5, 4},
+//         {3, 2, 1}
+//     };
+//     std::cout << t2 << std::endl;
+//
+//     std::cout << "\nUnary multiplication example:" << std::endl;
+//     t1 *= t2;
+//     std::cout << t1 << std::endl;
+//     std::cout << t2 << std::endl;
+//
+//     // std::cout << "\nBinary multiplication example:" << std::endl;
+//     // Tensor res = t1 * t2; // without RVO copying could be 2 times
+//     // std::cout << t1 << std::endl;
+//     // std::cout << t2 << std::endl;
+//     // std::cout << res << std::endl;
+//     //
+//     std::cout << "\nBinary scalar multiplication example:" << std::endl;
+//     // // Tensor vec(3); // double vector
+//     // // std::cout << vec << std::endl;
+//     Tensor sc1 = scalar(2.); // double scalar
+//     Tensor sc2 = scalar(3.); // double scalar
+//     Tensor sc_mul_res = sc1 * sc2; // binary multiplication creates copy
+//     std::cout << sc_mul_res << std::endl;
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
 
 // int main(){
 //     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
@@ -192,29 +192,33 @@ int main(){
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
-// int main(){
-//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
-//
-//     Tensor t1 = {{1, 2, 3}, {1, 2, 3}}; // 2D
-//     Tensor t2 = {{4, 5, 6}, {4, 5, 6}};
-//
-//     Tensor tensor(t1, t2); // concat copy constructor, 1 copy
-//     // Tensor tensor = {t1, t2}; // concat {tensors}, 2 copies
-//     // Tensor tensor({t1, t2}); // concat {tensors}, 2 copies
-//
-//     // Tensor tensor(std::move(t1), std::move(t2)); // concat move constructor, 0 copies
-//
-//     Tensor tensor2(t1, t2);
-//     Tensor bigtensor(tensor, tensor2); // 3D
-//
-//     std::cout << t1 << std::endl;
-//     std::cout << t2 << std::endl;
-//     std::cout << tensor << std::endl;
-//     std::cout << tensor2 << std::endl;
-//     std::cout << bigtensor << std::endl;
-//
-//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
-// }
+int main(){
+    std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+
+    // 1D
+    Tensor t1 = {1, 2, 3};
+    Tensor t2 = {4, 5, 6};
+    // 2D
+    // Tensor t1 = {{1, 2, 3}, {1, 2, 3}};
+    // Tensor t2 = {{4, 5, 6}, {4, 5, 6}};
+
+    Tensor tensor(t1, t2); // concat copy constructor, 1 copy
+    // Tensor tensor = {t1, t2}; // concat {tensors}, 2 copies
+    // Tensor tensor({t1, t2}); // concat {tensors}, 2 copies
+
+    // Tensor tensor(std::move(t1), std::move(t2)); // concat move constructor, 0 copies
+
+    // Tensor tensor2(t1, t2);
+    // Tensor bigtensor(tensor, tensor2); // 3D
+
+    std::cout << t1 << std::endl;
+    std::cout << t2 << std::endl;
+    std::cout << tensor << std::endl;
+    // std::cout << tensor2 << std::endl;
+    // std::cout << bigtensor << std::endl;
+
+    std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+}
 
 /*
 - [x] Нужно добавить copy конструктор и assignment operator ?
