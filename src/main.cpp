@@ -202,11 +202,12 @@ int main(){
     // Tensor t1 = {{1, 2, 3}, {1, 2, 3}};
     // Tensor t2 = {{4, 5, 6}, {4, 5, 6}};
 
-    Tensor tensor(t1, t2); // concat copy constructor, 1 copy
-    // Tensor tensor = {t1, t2}; // concat {tensors}, 2 copies
-    // Tensor tensor({t1, t2}); // concat {tensors}, 2 copies
+    // Tensor tensor(t1, t2); // concat copy constructor, 1 copy
+    // Tensor tensor = {t1, t2}; // same
+    // Tensor tensor({t1, t2}); // Error: class template argument deduction failed
 
     // Tensor tensor(std::move(t1), std::move(t2)); // concat move constructor, 0 copies
+    Tensor tensor = { std::move(t1), std::move(t2) };
 
     // Tensor tensor2(t1, t2);
     // Tensor bigtensor(tensor, tensor2); // 3D
@@ -229,7 +230,7 @@ int main(){
 
 - [x] concat move constructor !!!
 - [ ] concat functions (copy, move, by array)
-- [ ] В чем будет разница если я просто уберу explicit в Tensor(tensors...) и уберу initializer_list?
+- [x] В чем будет разница если я просто уберу explicit в Tensor(tensors...) и уберу initializer_list? Разницы нет, поэтому я убрал
 - [ ] Кажется можно создать бесконечно рекурсивный initializer_list принимающий любые rank-и: { { { {{1, 2, 3},}, }, }, ... }
 
 - [ ] Нужно как-то добавить casting между Tensor<double> и Tensor<int> например.

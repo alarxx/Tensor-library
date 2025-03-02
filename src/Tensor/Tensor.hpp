@@ -179,11 +179,11 @@ public:
     // Copy concat constructor
     template <typename ... TArgs>
     requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<T>> && ... && true) // requires all args to be tensors of the same type
-    explicit Tensor(const Tensor<T>& first, const TArgs& ... args);
+    /*explicit*/ Tensor(const Tensor<T>& first, const TArgs& ... args);
     // Move concat constructor
     template <typename ... TArgs>
     requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<T>> && ... && true) // requires all args to be tensors of the same type
-    explicit Tensor(Tensor<T>&& first, TArgs&& ... args);
+    /*explicit*/ Tensor(Tensor<T>&& first, TArgs&& ... args);
 
     // --- initializer_list
     /*
@@ -197,7 +197,7 @@ public:
      */
     Tensor(const std::initializer_list<T> list);
     Tensor(const std::initializer_list<std::initializer_list<T>> list);
-    Tensor(const std::initializer_list<Tensor<T>> list); // concat {tensors}
+    // Tensor(const std::initializer_list<Tensor<T>> list); // concat {tensors}
     // ------
 
     // --- concat ---
