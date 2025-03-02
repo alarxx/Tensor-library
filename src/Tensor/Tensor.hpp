@@ -20,6 +20,12 @@
 #define DEBUG_TENSOR true
 #define DEBUG_LOG_TENSOR true
 
+// Макрос для создания вложенных std::initializer_list
+#define INITIALIZER_LIST_1(T) std::initializer_list<T>
+#define INITIALIZER_LIST_2(T) std::initializer_list<INITIALIZER_LIST_1(T)>
+#define INITIALIZER_LIST_3(T) std::initializer_list<INITIALIZER_LIST_2(T)>
+#define INITIALIZER_LIST_4(T) std::initializer_list<INITIALIZER_LIST_3(T)>
+
 #include <iostream>
 #include <cassert>
 #include <stdexcept>
@@ -197,9 +203,14 @@ public:
                 {1, 2, 3},
                 {1, 2, 3}
             };
+
+        Кажется, через templates можно создать бесконечно рекурсивный initializer_list принимающий любые rank-и: { { { {{1, 2, 3},}, }, }, ... } ?
+        Нет, нельзя, кажется, никак нельзя, компилятор не может deduct U в initializer_list<U> при передаче {{1, 2}, {3, 4}}.
      */
-    Tensor(const std::initializer_list<T> list);
-    Tensor(const std::initializer_list<std::initializer_list<T>> list);
+    Tensor(const INITIALIZER_LIST_1(T) list);
+    Tensor(const INITIALIZER_LIST_2(T) list);
+    Tensor(const INITIALIZER_LIST_3(T) list);
+    Tensor(const INITIALIZER_LIST_4(T) list);
     // Tensor(const std::initializer_list<Tensor<T>> list); // concat {tensors}
     // ------
 
