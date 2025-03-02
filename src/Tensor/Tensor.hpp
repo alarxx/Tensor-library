@@ -142,6 +142,9 @@ public:
         - https://federico-busato.github.io/Modern-CPP-Programming/11.Templates_II.pdf
     */
     explicit Tensor(std::integral auto ... args); // C++20, abbreviated function templates with concept
+    explicit Tensor(auto ... args){
+        throw std::runtime_error("Incorrect type: only ints in explicit Tensor(int ... dims)");
+    }
 
     explicit Tensor(int rank, int dims[], int cursor = 0);
 

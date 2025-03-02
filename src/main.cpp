@@ -192,31 +192,42 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//
+//     // 1D
+//     Tensor t1 = {1, 2, 3};
+//     Tensor t2 = {4, 5, 6};
+//     // 2D
+//     // Tensor t1 = {{1, 2, 3}, {1, 2, 3}};
+//     // Tensor t2 = {{4, 5, 6}, {4, 5, 6}};
+//
+//     // Tensor tensor(t1, t2); // concat copy constructor, 1 copy
+//     // Tensor tensor = {t1, t2}; // same
+//     // Tensor tensor({t1, t2}); // Error: class template argument deduction failed
+//
+//     // Tensor tensor(std::move(t1), std::move(t2)); // concat move constructor, 0 copies
+//     Tensor tensor = { std::move(t1), std::move(t2) };
+//
+//     // Tensor tensor2(t1, t2);
+//     // Tensor bigtensor(tensor, tensor2); // 3D
+//
+//     std::cout << t1 << std::endl;
+//     std::cout << t2 << std::endl;
+//     std::cout << tensor << std::endl;
+//     // std::cout << tensor2 << std::endl;
+//     // std::cout << bigtensor << std::endl;
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
-    // 1D
-    Tensor t1 = {1, 2, 3};
-    Tensor t2 = {4, 5, 6};
-    // 2D
-    // Tensor t1 = {{1, 2, 3}, {1, 2, 3}};
-    // Tensor t2 = {{4, 5, 6}, {4, 5, 6}};
-
-    // Tensor tensor(t1, t2); // concat copy constructor, 1 copy
-    // Tensor tensor = {t1, t2}; // same
-    // Tensor tensor({t1, t2}); // Error: class template argument deduction failed
-
-    // Tensor tensor(std::move(t1), std::move(t2)); // concat move constructor, 0 copies
-    Tensor tensor = { std::move(t1), std::move(t2) };
-
-    // Tensor tensor2(t1, t2);
-    // Tensor bigtensor(tensor, tensor2); // 3D
-
-    std::cout << t1 << std::endl;
-    std::cout << t2 << std::endl;
+    // Tensor tensor = {1, 2, 3}; // vector of ints
+    Tensor tensor(3); // vector<double> of size 3
+    // Tensor tensor(3.); // Error
     std::cout << tensor << std::endl;
-    // std::cout << tensor2 << std::endl;
-    // std::cout << bigtensor << std::endl;
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
