@@ -36,8 +36,34 @@
 #include <vector>
 
 // namespace {
-template <typename T>
-concept Arithmetic = std::is_arithmetic_v<T>; // C++20
+template <typename T> // C++20
+concept Arithmetic = requires(T a, T b) {
+    /*
+        Specialization of std::is_arithmetic for custom class A.
+        Может быть интересно, если хотите использовать custom-ный тип в Tensor.
+        Если мы включим, то is_arithmetic_v<A> = true, и он будет проходить проверку SFINAE.
+        I'd not recommend to do it, actually.
+
+            class A {};
+
+            template <typename T>
+            class std::is_arithmetic<A> : public std::true_type {};
+
+        Свой custom-ный тип может быть полезен если хотите Int с проверкой на Overflow.
+    */
+    // requires std::is_arithmetic_v<T>;
+
+    // specific check for what we need
+    { a += b };
+    { a -= b };
+    { a *= b };
+    { a /= b };
+
+    { a + b } -> std::same_as<T>;
+    { a - b } -> std::same_as<T>;
+    { a * b } -> std::same_as<T>;
+    { a / b } -> std::same_as<T>;
+};
 // }
 
 /*
@@ -327,20 +353,6 @@ public:
     // ------
 
 };
-
-/*
-    Specialization of std::is_arithmetic for custom class A.
-    Может быть интересно, если хотите использовать custom-ный тип в Tensor.
-    Если мы включим, то is_arithmetic_v<A> = true, и он будет проходить проверку SFINAE.
-    I'd not recommend to do it, actually.
-
-        class A {};
-
-        template <typename T>
-        class std::is_arithmetic<A> : public std::true_type {};
-
-    Свой custom-ный тип может быть полезен если хотите Int с проверкой на Overflow.
- */
 
 /*
     Implementation of template class is in .tpp file
