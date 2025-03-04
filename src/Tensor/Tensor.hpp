@@ -183,6 +183,31 @@ public:
     explicit Tensor() : _value(0), _rank(0), _size(-1), _coeffs(nullptr) {}
 
     /*
+        Tensor from array
+
+        Нужно возвращать tensor of array type, но этот тип нужно вытаскивать рекурсивно, i.e. int[][] -> int:
+            std::cout << typeid(decltype(arr)).name() << std::endl; // int[][]
+            std::cout << typeid(std::decay_t<decltype(arr)>).name() << std::endl; // int[]
+            std::cout << typeid(std::remove_all_extents_t<decltype(arr)>).name() << std::endl; // recursively returns primitive type
+
+        Initial enter via from_array function, and the then it goes to recursive _from_array, which should be private, actually, but it's a friend function, so I couldn't make it private.
+        from_array uses _from_array, so _from_array must be declared and implemented first.
+     */
+    template <typename U>
+    requires Arithmetic<U>
+    /*private*/ friend Tensor<U> _from_array(
+        const std::vector<int> dims,
+        void * arr,
+        const long unsigned int cursor
+    );
+    template <typename U, int SIZE>
+    requires Arithmetic<std::remove_all_extents_t<U>> // По идее не обязательно здесь делать эту проверку, дальше Tensor<?> проверит
+    friend Tensor<std::remove_all_extents_t<U>> from_array(
+        const std::vector<int> dims,
+        U (&arr)[SIZE]
+    );
+
+    /*
         Нужен был простой способ создать скаляр.
 
         Конструктор explicit Tensor(int ... args), поэтому мы не можем вызывать в форме:

@@ -203,31 +203,53 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//
+//     // 1D
+//     // Tensor t1 = {1, 2, 3};
+//     // Tensor t2 = {4, 5, 6};
+//     // 2D
+//     Tensor t1 = {{1, 2, 3}, {1, 2, 3}};
+//     // Tensor t2 = {{4, 5, 6}, {4, 5, 6}};
+//
+//     // Tensor tensor(t1, t2); // concat copy constructor, 1 copy
+//     // Tensor tensor = {t1, t2}; // same
+//     // Tensor tensor({t1, t2}); // Error: class template argument deduction failed
+//
+//     // Tensor tensor(std::move(t1), std::move(t2)); // concat move constructor, 0 copies
+//     // Tensor tensor = { std::move(t1), std::move(t2) };
+//
+//     // Tensor tensor2(t1, t2);
+//     // Tensor bigtensor(tensor, tensor2); // 3D
+//
+//     std::cout << t1 << std::endl;
+//     // std::cout << t2 << std::endl;
+//     // std::cout << tensor << std::endl;
+//     // std::cout << tensor2 << std::endl;
+//     // std::cout << bigtensor << std::endl;
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+    int va[3] = {1, 2, 3};
+    std::cout << "\nvector from array example:" << std::endl;
+    Tensor<int> vector = from_array({3}, va);
+    std::cout << vector << std::endl;
 
-    // 1D
-    // Tensor t1 = {1, 2, 3};
-    // Tensor t2 = {4, 5, 6};
-    // 2D
-    Tensor t1 = {{1, 2, 3}, {1, 2, 3}};
-    // Tensor t2 = {{4, 5, 6}, {4, 5, 6}};
+    // so you have raw array of any dimensionality
+    int ma[2][3] = {{1, 2, 3}, {1, 2, 3}};
 
-    // Tensor tensor(t1, t2); // concat copy constructor, 1 copy
-    // Tensor tensor = {t1, t2}; // same
-    // Tensor tensor({t1, t2}); // Error: class template argument deduction failed
+    std::cout << "\nmatrix from array example:" << std::endl;
+    // you can pass it directly like this:
+    Tensor matrix = from_array({2, 3}, ma);
+    // or like this passing dims lvalue:
+    // std::vector dims = {2, 3};
+    // Tensor t = from_array(dims, arr);
 
-    // Tensor tensor(std::move(t1), std::move(t2)); // concat move constructor, 0 copies
-    // Tensor tensor = { std::move(t1), std::move(t2) };
-
-    // Tensor tensor2(t1, t2);
-    // Tensor bigtensor(tensor, tensor2); // 3D
-
-    std::cout << t1 << std::endl;
-    // std::cout << t2 << std::endl;
-    // std::cout << tensor << std::endl;
-    // std::cout << tensor2 << std::endl;
-    // std::cout << bigtensor << std::endl;
+    std::cout << matrix << std::endl;
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
@@ -244,6 +266,8 @@ int main(){
 - [x] В чем будет разница если я просто уберу explicit в Tensor(tensors...) и уберу initializer_list? Разницы нет, поэтому я убрал
 - [-] Кажется можно создать бесконечно рекурсивный initializer_list принимающий любые rank-и: { { { {{1, 2, 3},}, }, }, ... }
     нет, нельзя, кажется никак нельзя, компилятор не может привести {{1, 2}, {3, 4}} к initializer_list<U>
+- [x] explicit Tensor({dims}, U * array)
+- [ ] explicit Tensor({dims}, vector<vector<vector<...>>>
 
 - [ ] Нужно как-то добавить casting между Tensor<double> и Tensor<int> например.
 
