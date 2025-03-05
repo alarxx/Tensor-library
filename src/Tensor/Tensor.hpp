@@ -183,7 +183,7 @@ public:
     explicit Tensor() : _value(0), _rank(0), _size(-1), _coeffs(nullptr) {}
 
     /*
-        Tensor from array
+        Tensor from any dimensional raw array
 
         Нужно возвращать tensor of array type, но этот тип нужно вытаскивать рекурсивно, i.e. int[][] -> int:
             std::cout << typeid(decltype(arr)).name() << std::endl; // int[][]
