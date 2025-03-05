@@ -295,48 +295,6 @@ Tensor<T>::Tensor(const INITIALIZER_LIST_4(T) list){
     int i = 0; for(auto & e: list){ _coeffs[i]._rank = 1; _coeffs[i]._size = e.size(); _coeffs[i++] = Tensor(e); }
 }
 
-// // Concat {tensors}
-// template <Arithmetic T>
-// Tensor<T>::Tensor(const std::initializer_list<Tensor<T>> list){
-//     /*
-//
-//     N vs. 2N
-//     Используя initializer_list в любом случае создается создается копия.
-//     Передавая в initializer_list создаются новые const объекты, которые после удаляются (3 set of instances).
-//     Можно передать через копирование и через move semantics.
-//     В случае копирования у нас получается 2 раза создаются копии.
-//     В любом случае создается копия.
-//     И мне не нравится это решение, если в любом случае создавать копию,
-//     то мы могли бы делать копию передавая по call-by-value с той же сложностью, которую сейчас мы получаем с std::move,
-//     если бы сам лист не создавал копию const объектов из-за чего потом нельзя делать move и снова приходится делать копию.
-//
-//     Copy constructor:
-//         Tensor tensor = {t1, t2}; // copy two times
-//
-//     Move by std::move(tensor), лучше всегда делать так, иначе копия будет создаваться 2 раза:
-//         Tensor tensor = { std::move(t1), std::move(t2) }; // move, copy one time
-//
-//     Move by rvalue:
-//         Tensor tensor = {Tensor({1, 2}), Tensor({3, 4})}; // rvalue - move
-//
-//      */
-//
-//     _rank = (*list.begin())._rank + 1;
-//     log("Concat {tensors}, rank: ", _rank);
-//
-//     _size = list.size();
-//     _coeffs = new Tensor<T>[_size];
-//
-//     int i = 0;
-//     // for(typename std::initialsizer_list<Tensor>::iterator it = list.begin(); it != list.end(); it++, i++) {
-//     for(auto & t: list) {
-//         _coeffs[i]._rank = t._rank;
-//         _coeffs[i]._size = t._size;
-//         // _coeffs[i] = std::move(*it); // even move makes copy assignment due to list elements are const
-//         _coeffs[i++] = t; // copy assignment
-//     }
-// }
-
 // ------
 
 // --- Rule of 5 ---
