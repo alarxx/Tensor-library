@@ -232,24 +232,58 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//     int va[3] = {1, 2, 3};
+//     std::cout << "\nvector from array example:" << std::endl;
+//     Tensor<int> vector = from_array({3}, va);
+//     Tensor vector = from_array({3}, va); // deduction works
+//     std::cout << vector << std::endl;
+//
+//     // so you have raw array of any dimensionality
+//     int ma[2][3] = {{1, 2, 3}, {1, 2, 3}};
+//
+//     std::cout << "\nmatrix from array example:" << std::endl;
+//     // you can pass it directly like this:
+//     Tensor matrix = from_array({2, 3}, ma);
+//     // or like this passing dims lvalue:
+//     // std::vector dims = {2, 3};
+//     // Tensor t = from_array(dims, arr);
+//
+//     std::cout << matrix << std::endl;
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
-    int va[3] = {1, 2, 3};
-    std::cout << "\nvector from array example:" << std::endl;
-    Tensor<int> vector = from_array({3}, va);
+
+    // int va[3] = {1, 2, 3};
+    std::vector<int> vv = {1, 2, 3};
+    std::vector<std::vector<int>> mv = {
+        // {1, 2, 3}, // Случай непрямоугольности я явно не запращею, но я не расчитывал на такое, поэтому нужно тестить.
+        {1, 2},
+        {3, 4}
+    };
+
+    std::cout << "\ntensor from std::vector vector example:" << std::endl;
+    Tensor vector = from_stl_vector(vv);
     std::cout << vector << std::endl;
 
-    // so you have raw array of any dimensionality
-    int ma[2][3] = {{1, 2, 3}, {1, 2, 3}};
-
-    std::cout << "\nmatrix from array example:" << std::endl;
-    // you can pass it directly like this:
-    Tensor matrix = from_array({2, 3}, ma);
-    // or like this passing dims lvalue:
-    // std::vector dims = {2, 3};
-    // Tensor t = from_array(dims, arr);
-
+    std::cout << "\ntensor from std::vector matrix example:" << std::endl;
+    Tensor matrix = from_stl_vector(mv);
     std::cout << matrix << std::endl;
+
+    // В случае непрямоугольности копирование работает и не обрезает до прямоугольности.
+    // Tensor matrix_copy = matrix;
+    // matrix_copy = matrix;
+    // std::cout << matrix_copy << std::endl;
+
+    // Получается непрямоугольность будет работать и с умножением.
+    // matrix_copy *= matrix;
+    // std::cout << matrix_copy << std::endl;
+    // Tensor mul = matrix * matrix_copy;
+    // std::cout << mul << std::endl;
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
@@ -267,7 +301,13 @@ int main(){
 - [-] Кажется можно создать бесконечно рекурсивный initializer_list принимающий любые rank-и: { { { {{1, 2, 3},}, }, }, ... }
     нет, нельзя, кажется никак нельзя, компилятор не может привести {{1, 2}, {3, 4}} к initializer_list<U>
 - [x] explicit Tensor({dims}, U * array)
-- [ ] explicit Tensor({dims}, vector<vector<vector<...>>>
+    - [ ] Можно ли сделать, чтобы в entry функцию можно было передавать массив по ссылке? Сейчас потому что int(&arr)[N]
+- [x] explicit Tensor(vector<vector<vector<...>>>
+- [ ] Tensor может быть не прямоугольным? Это когда nested тензоры могут быть разного size.
+        Я этого не запрещал, но я расчитывал на прямоугольность. Нужно тестить.
+        Просто проблема, что в shape() я буду считать размер по первым тензорам.
+        - В случае непрямоугольности копирование работает и не обрезает до прямоугольности.
+        - Непрямоугольность будет работать и с умножением.
 
 - [ ] Нужно как-то добавить casting между Tensor<double> и Tensor<int> например.
 

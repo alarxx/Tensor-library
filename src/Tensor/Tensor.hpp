@@ -35,6 +35,105 @@
 #include <initializer_list>
 #include <vector>
 
+
+/*
+    nested_vector_info
+
+    inspired by std::remove_all_extents_t, but with vector rather than raw array
+        - https://en.cppreference.com/w/cpp/types/remove_all_extents
+
+        template <typename U>
+        void print_type(const std::vector<U>& vector){
+            std::cout << typeid(typename nested_vector_info<U>::base_type).name() << std::endl; // i
+        }
+
+        int main(){
+            std::vector<std::vector<int>> matrix = {
+                {1, 2},
+                {3, 4}
+            };
+            print_type(matrix);
+        }
+
+*/
+// Base case
+template <typename T>
+class nested_vector_info {
+public:
+    using base_type = T;
+    static constexpr int depth = 0;
+};
+// Recursive case
+template <typename T>
+class nested_vector_info<std::vector<T>> {
+public:
+    using base_type = typename nested_vector_info<T>::base_type;
+    static constexpr int depth = 1 + nested_vector_info<T>::depth;
+};
+/*
+    Partial specialization for lvalue-references, just "redirects"
+    Иначе при передаче ссылки срабатывает base case
+    Похоже на Deduction Guide, когда мы указываем тип при определенных параметрах конструктора
+
+    Base case:
+
+        template <typename T> struct A { using type = void; };
+
+    int specialization:
+
+        template <> struct A<int> { using type = int; };
+
+    Это специализация когда передается ссылка, получается мы избавляемся от ссылки:
+
+        // Uncomment it to call int specialization when int& is used
+        // Otherwise base case will be called
+        template <typename T> struct A<T&> : public A<T> {};
+
+    Move reference specialization:
+
+        template <typename T> struct A<T&&> : public A<T& or just T> {};
+
+    Usage:
+
+        int main(){
+            A<int> a;
+            std::cout << typeid(decltype(a)::type).name() << std::endl; // i
+
+            A<int&> aref;
+            std::cout << typeid(decltype(aref)::type).name() << std::endl; // i or v
+
+            A<float&> fref;
+            std::cout << typeid(decltype(fref)::type).name() << std::endl; // v
+        }
+ */
+template <typename T>
+class nested_vector_info<T&> : public nested_vector_info<T> {};
+// Partial specialization for rvalue-references
+template <typename T>
+class nested_vector_info<T&&> : public nested_vector_info<T> {};
+// Alias for short
+template <typename T>
+using nested_vector_info_t = typename nested_vector_info<T>::base_type;
+
+/*
+    is_vector
+
+        std::vector<int> va = {1, 2, 3};
+        std::cout << is_vector_v<decltype(va)> << std::endl; // 1
+
+        int arr[3] = {1, 2, 3};
+        std::cout << is_vector_v<decltype(arr)> << std::endl; // 0
+ */
+template <typename T>
+class is_vector : public std::false_type {};
+
+template <typename T>
+class is_vector<std::vector<T>> : public std::true_type {};
+
+template <typename T>
+constexpr bool is_vector_v = is_vector<T>::value;
+
+
 // namespace {
 template <typename T> // C++20
 concept Arithmetic = requires(T a, T b) {
@@ -205,6 +304,14 @@ public:
     friend Tensor<std::remove_all_extents_t<U>> from_array(
         const std::vector<int> dims,
         U (&arr)[SIZE]
+    );
+
+    // Tensor from vector
+    template <typename U>
+    requires Arithmetic<nested_vector_info_t<U>>
+    friend Tensor<nested_vector_info_t<U>>
+    from_stl_vector(
+        std::vector<U>& vector
     );
 
     /*
