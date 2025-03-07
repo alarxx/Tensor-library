@@ -311,6 +311,9 @@ int main(){
         std::cout << shape[i] << std::endl;
     }
 
+    tensor[0][0].value() = 5;
+    std::cout << tensor << std::endl;
+
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
 
@@ -343,6 +346,11 @@ int main(){
     - [x] traversing till vector or matrix
 - [x] + operator
 - [x] no need in namespace
+- [ ] refactor: completely remove concat {tensor} constructor by initializer_list implementation
+        Это было плохим решением удалять, можно передавать vector, вдруг in runtime будут составлять вектор
+        Сейчас конструктор работает только вручную, если вписать элементы туда.
+        В concat есть метод через array, но кажется лучше удалить его, зачем он если vector удобнее
 - [ ] iterator
+- [ ] matmul
 
 */

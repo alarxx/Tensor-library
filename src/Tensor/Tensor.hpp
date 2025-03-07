@@ -415,7 +415,7 @@ public:
 
     // ------
 
-    inline T value() const {
+    inline T& value() {
         #if DEBUG_TENSOR
             if(!isScalar()){
                 throw std::runtime_error("Error: Geting a value of a non-scalar tensor!");
