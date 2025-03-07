@@ -453,6 +453,11 @@ public:
             if(isScalar()){
                 throw std::runtime_error("Can't access scalar tensor by index");
             }
+            // buffer overflow, нужно ли делать эту проверку
+            // Я думаю, лучшим решением будет user-у просто проверять размеры, а не проверять тут миллион раз
+            if(index >= _size){
+                throw std::runtime_error("Index out of bounds!");
+            }
         #endif
         return _coeffs[index];
     }
