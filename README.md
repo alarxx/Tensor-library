@@ -167,6 +167,98 @@ cout << v2; // {4, 5, 6}
 cout << mul; // {4, 10, 18}
 ```
 
+#### Create tensor from any dimensional raw array
+
+```c++
+// so you have raw array of any dimensionality
+int ma[2][3] = {
+   {1, 2, 3},
+   {1, 2, 3}
+};
+
+// you can pass dims directly like this, as rvalue:
+Tensor matrix = from_array({2, 3}, ma); // Tensor<int> - deduction works
+
+// or like this passing dims lvalue:
+// std::vector dims = {2, 3};
+// Tensor matrix = from_array(dims, ma);
+// Это может быть полезно если в рантайме как-то пытаетесь преобразовывать, а не вручную
+
+cout << matrix << endl;
+/*
+tensor(2)<i>:{
+1i 2i 3i
+1i 2i 3i
+}
+*/
+```
+
+#### Create tensor from STL vector
+
+```c++
+std::vector<std::vector<int>> mv = {
+   {1, 2},
+   {3, 4}
+};
+
+Tensor matrix = from_stl_vector(mv);
+
+cout << matrix << endl;
+/*
+tensor(2)<i>:{
+1i 2i
+3i 4i
+}
+*/
+```
+
+#### Non-rectangular tensors
+
+Tensor может быть не прямоугольным?
+Это когда nested тензоры могут быть разного size.
+
+Случай непрямоугольности я явно не запращею,
+но я расчитывал на то, что tensor прямоугольный, поэтому нужно тестить.
+При передаче размерности в контструктор создается прямоугольный tensor.
+
+Я думаю, что не буду создавать явные проверки или дополнительную логику дополнения до прямоугольности с поиском самой длинной строки и тому подобное.
+
+Просто то, что в `shape()` я буду считать размер по первым тензорам... ???
+
+- В случае непрямоугольности копирование работает и не обрезает до прямоугольности.
+- Непрямоугольность будет работать и с умножением.
+- initializer_list конструкторы работают при передаче непрямоугольных листов
+
+```c++
+std::vector<std::vector<int>> mv = {
+   {1, 2, 3},
+   {3, 4}
+};
+
+// Конвертирует непрямоугольные векторы соответсвенно
+Tensor matrix = from_stl_vector(mv);
+
+// Копирование
+Tensor matrix_copy = matrix; // constructor
+matrix_copy = matrix; // assignment
+cout << matrix_copy << endl;
+
+// Получается непрямоугольность будет работать и с умножением.
+matrix_copy *= matrix; // Unary elementwise
+cout << matrix_copy << endl; // elements squared
+/*
+1 4 9
+9 16
+*/
+
+Tensor mul = matrix * matrix_copy; // Binary elementwise
+cout << mul << endl; // elements cubed
+/*
+1 8 27
+27 64
+*/
+```
+
 ---
 
 ## Licence
