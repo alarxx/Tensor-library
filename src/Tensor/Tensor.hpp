@@ -295,14 +295,14 @@ public:
     template <typename U>
     requires Arithmetic<U>
     /*private*/ friend Tensor<U> _from_array(
-        const std::vector<int> dims,
+        const std::vector<int>& dims,
         void * arr,
         const long unsigned int cursor
     );
     template <typename U, int SIZE>
     requires Arithmetic<std::remove_all_extents_t<U>> // По идее не обязательно здесь делать эту проверку, дальше Tensor<?> проверит
     friend Tensor<std::remove_all_extents_t<U>> from_array(
-        const std::vector<int> dims,
+        const std::vector<int>& dims,
         U (&arr)[SIZE]
     );
 
