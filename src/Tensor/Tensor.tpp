@@ -326,7 +326,7 @@ Tensor<T>::Tensor(const INITIALIZER_LIST_3(T) list){
      _rank = 3; // После _rank все одинаково, просто рекурсивно вызываются конструкторы меньшего порядка
      log("INIT_LIST_", _rank);
     _size = list.size(); _coeffs = new Tensor<T>[_size];
-    int i = 0; for(auto & e: list){ _coeffs[i]._rank = 1; _coeffs[i]._size = e.size(); _coeffs[i++] = Tensor(e); }
+    int i = 0; for(auto & e: list){ _coeffs[i]._rank = _rank - 1; _coeffs[i]._size = e.size(); _coeffs[i++] = Tensor(e); }
 }
 
 template <Arithmetic T>
@@ -334,7 +334,7 @@ Tensor<T>::Tensor(const INITIALIZER_LIST_4(T) list){
     _rank = 4;
     log("INIT_LIST_", _rank);
     _size = list.size(); _coeffs = new Tensor<T>[_size];
-    int i = 0; for(auto & e: list){ _coeffs[i]._rank = 1; _coeffs[i]._size = e.size(); _coeffs[i++] = Tensor(e); }
+    int i = 0; for(auto & e: list){ _coeffs[i]._rank = _rank - 1; _coeffs[i]._size = e.size(); _coeffs[i++] = Tensor(e); }
 }
 
 // ------
