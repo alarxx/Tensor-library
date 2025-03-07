@@ -276,6 +276,49 @@ cout << mul << endl; // elements cubed
 Заметь что нет superior проверки на совпадения всех размеров вложенных тензоров, то есть не запрещается создавать непрямоугольные тензоры,
 но расчитывать на это не стоит, тензор сделан с расчетом на прямоугольность размерностей.
 
+#### Space Complexity
+Memory Consumption
+
+```c++
+Tensor tensor(2, 2); // Tensor 2x2
+cout << sizeof(tensor) << endl; // 24
+
+std::vector<std::vector<int>> mv = {
+   {1, 2},
+   {3, 4}
+}; // std::vector 2x2
+cout << sizeof(mv) << endl; // 24
+```
+
+Tensor 2x2 - 2D Tensor, который весит 24 bytes.
+2D Tensor хранит массив 1D Tensor-ов по 24 bytes.
+1D Tensor хранит массив Scalar-Tensor-ов, которые тоже весят 24 byte-а.
+
+`Shape = (Row x Col)`
+
+`1 + Row + Row x Col объектов`
+
+Каждый объект весит 24 byte-а:
+```
+24 + Row * 24 + Row * Col * 24 bytes.
+```
+
+У std::vector то же самое, только scalar-ы весят 4 или 8 bytes:
+```
+24 + Row * 24 + Row * Col * 4/8 bytes
+```
+
+То есть эта имплементация занимает в 3/6 раз больше памяти, чем если пользовать nested std::vector.
+
+Если пользовать raw multidimensional array, то там вообще без overhead-а по memory:
+```
+Row * Col * 4/8 bytes
+```
+
+Это связано с тем, что Tensor это массив Tensor-ов.
+Лучший подход мог бы быть Multidimensional Array with Mappings.
+В таком подходе память выделяется целиком, в одном непрерывном массиве.
+
 ---
 
 ## Licence
