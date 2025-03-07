@@ -316,8 +316,40 @@ Row * Col * 4/8 bytes
 ```
 
 Это связано с тем, что Tensor это массив Tensor-ов.
-Лучший подход мог бы быть Multidimensional Array with Mappings.
+
+Лучший подход мог бы быть - "Multidimensional Array with Mappings".
 В таком подходе память выделяется целиком, в одном непрерывном массиве.
+
+Также я думал о создании рекурсивных template-ов, в таком случае было бы очень эффективно по памяти, но приходилось бы указывать очень длинные типы:
+```c++
+template <typename T = double>
+class Tensor { // Base case
+public:
+   T value;
+   Tensor(){ cout << "Base case" << endl; }
+};
+
+template <typename T>
+class Tensor<Tensor<T>> {
+public:
+   Tensor * coeffs;
+   Tensor(){ cout << "Recursive case" << endl; }
+   Tensor(std::integral auto ... args){
+      int dims[] = {args...};
+      rank = sizeof...(args);
+      for(int i = 0; i < rank; i++){
+         cout << dims[i] << endl;
+      }
+      size = dims[0];
+      coeffs = new Tensor<T>[size];
+   }
+};
+
+int main(){
+   Tensor<Tensor<double>> tensor(2); // after calls Base case
+   // Tensor<Tensor<Tensor<double>>> tensor(2, 2); // after calls Recursive case
+}
+```
 
 ---
 
