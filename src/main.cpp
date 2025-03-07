@@ -255,37 +255,48 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
-int main(){
-    std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//
+//     // int va[3] = {1, 2, 3};
+//     std::vector<int> vv = {1, 2, 3};
+//     std::vector<std::vector<int>> mv = {
+//         // {1, 2, 3}, // Случай непрямоугольности я явно не запращею, но я не расчитывал на такое, поэтому нужно тестить.
+//         {1, 2},
+//         {3, 4}
+//     };
+//
+//     std::cout << "\ntensor from std::vector vector example:" << std::endl;
+//     Tensor vector = from_stl_vector(vv);
+//     std::cout << vector << std::endl;
+//
+//     std::cout << "\ntensor from std::vector matrix example:" << std::endl;
+//     Tensor matrix = from_stl_vector(mv);
+//     std::cout << matrix << std::endl;
+//
+//     // В случае непрямоугольности копирование работает и не обрезает до прямоугольности.
+//     // Tensor matrix_copy = matrix;
+//     // matrix_copy = matrix;
+//     // std::cout << matrix_copy << std::endl;
+//
+//     // Получается непрямоугольность будет работать и с умножением.
+//     // matrix_copy *= matrix;
+//     // std::cout << matrix_copy << std::endl;
+//     // Tensor mul = matrix * matrix_copy;
+//     // std::cout << mul << std::endl;
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
 
-    // int va[3] = {1, 2, 3};
-    std::vector<int> vv = {1, 2, 3};
+int main(){
+    Tensor tensor;
+    std::cout << sizeof(tensor) << std::endl; // 24
+
     std::vector<std::vector<int>> mv = {
-        // {1, 2, 3}, // Случай непрямоугольности я явно не запращею, но я не расчитывал на такое, поэтому нужно тестить.
         {1, 2},
         {3, 4}
     };
-
-    std::cout << "\ntensor from std::vector vector example:" << std::endl;
-    Tensor vector = from_stl_vector(vv);
-    std::cout << vector << std::endl;
-
-    std::cout << "\ntensor from std::vector matrix example:" << std::endl;
-    Tensor matrix = from_stl_vector(mv);
-    std::cout << matrix << std::endl;
-
-    // В случае непрямоугольности копирование работает и не обрезает до прямоугольности.
-    // Tensor matrix_copy = matrix;
-    // matrix_copy = matrix;
-    // std::cout << matrix_copy << std::endl;
-
-    // Получается непрямоугольность будет работать и с умножением.
-    // matrix_copy *= matrix;
-    // std::cout << matrix_copy << std::endl;
-    // Tensor mul = matrix * matrix_copy;
-    // std::cout << mul << std::endl;
-
-    std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+    std::cout << sizeof(mv) << std::endl; // 24
 }
 
 /*

@@ -394,7 +394,9 @@ public:
 
     // Tensor лучше никогда не копировать и лучше применить rule of 5. И удалить copy constructor и copy assignment. ?
 
-    virtual ~Tensor(); // don't know yet will there be inheritance from Tensor, probably it's okay to make destructor virtual
+    /*virtual*/ ~Tensor();
+    // don't know yet will there be inheritance from Tensor, probably it's okay to make destructor virtual
+    // virtual добавляет 1 указатель на vtable (8 byte), поэтому без virtual.
 
     // Copy Constructor
     Tensor(const Tensor<T> & other);
