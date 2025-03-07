@@ -288,15 +288,30 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
-int main(){
-    Tensor tensor;
-    std::cout << sizeof(tensor) << std::endl; // 24
+// int main(){
+//     Tensor tensor;
+//     std::cout << sizeof(tensor) << std::endl; // 24
+//
+//     std::vector<std::vector<int>> mv = {
+//         {1, 2},
+//         {3, 4}
+//     };
+//     std::cout << sizeof(mv) << std::endl; // 24
+// }
 
-    std::vector<std::vector<int>> mv = {
-        {1, 2},
-        {3, 4}
-    };
-    std::cout << sizeof(mv) << std::endl; // 24
+int main(){
+    std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+
+    Tensor tensor(2, 3);
+
+    std::cout << "\ntensor shape example:" << std::endl;
+
+    std::vector<int> shape = tensor.shape();
+    for(int i = 0; i < shape.size(); i++){
+        std::cout << shape[i] << std::endl;
+    }
+
+    std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
 
 /*

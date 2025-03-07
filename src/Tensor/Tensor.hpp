@@ -434,6 +434,20 @@ public:
     inline Tensor copy() const { return Tensor(*this); }
     inline Tensor move() { return Tensor(std::move(*this)); }
 
+private:
+    inline void _shape(Tensor<T>& t, std::vector<int>& vec){
+        if(t._rank == 0)
+            return;
+        vec.push_back(t._size);
+        _shape(t[0], vec);
+    }
+public:
+    inline std::vector<int> shape(){
+        std::vector<int> vec;
+        _shape(*this, vec);
+        return vec;
+    }
+
     std::string toString() const;
 
     /*
