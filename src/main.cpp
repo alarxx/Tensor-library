@@ -319,13 +319,29 @@
 
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
-
     // Tensor tensor(2, 3);
-    Tensor tensor = {
+
+    // Tensor tensor = {
+    //     {1, 2, 3},
+    //     {4, 5, 6},
+    //     {7, 8, 9},
+    // };
+
+    // int arr[3][3] = {
+    //     {1, 2, 3},
+    //     {4, 5, 6},
+    //     {7, 8, 9}
+    // };
+    // Tensor tensor = from_array({3, 3}, arr);
+
+    std::vector<std::vector<int>> vect = {
         {1, 2, 3},
         {4, 5, 6},
-        {7, 8, 9},
+        {7, 8, 9}
     };
+    Tensor tensor = from_stl_vector(vect);
+
+    tensor *= tensor;
 
     std::cout << "\nIterator example:" << std::endl;
 

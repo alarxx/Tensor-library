@@ -13,8 +13,6 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
-#include "Tensor.hpp"
-
 // Copy concat
 template <Arithmetic U, typename ... TArgs>
 requires (std::is_same_v<std::remove_reference_t<TArgs>, Tensor<U>> && ... && true)
