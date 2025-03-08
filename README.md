@@ -212,6 +212,32 @@ tensor(2)<i>:{
 */
 ```
 
+#### Iterator
+
+Iterator example:
+```c++
+Tensor tensor = {
+   {1, 2, 3},
+   {4, 5, 6},
+   {7, 8, 9},
+};
+
+for(auto & t: tensor){
+   std::cout << t << std::endl;
+}
+/*
+   tensor(1)<i>:{
+   1i 2i 3i
+   }
+   tensor(1)<i>:{
+   4i 5i 6i
+   }
+   tensor(1)<i>:{
+   7i 8i 9i
+   }
+*/
+```
+
 #### Non-rectangular tensors
 
 Tensor может быть не прямоугольным?
