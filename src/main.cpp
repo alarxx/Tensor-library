@@ -299,20 +299,50 @@
 //     std::cout << sizeof(mv) << std::endl; // 24
 // }
 
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//
+//     Tensor tensor(2, 3);
+//
+//     std::cout << "\ntensor shape example:" << std::endl;
+//
+//     std::vector<int> shape = tensor.shape();
+//     for(int i = 0; i < shape.size(); i++){
+//         std::cout << shape[i] << std::endl;
+//     }
+//
+//     tensor[0][0].value() = 5;
+//     std::cout << tensor << std::endl;
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
-    Tensor tensor(2, 3);
+    // Tensor tensor(2, 3);
+    Tensor tensor = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9},
+    };
 
-    std::cout << "\ntensor shape example:" << std::endl;
+    std::cout << "\nIterator example:" << std::endl;
 
-    std::vector<int> shape = tensor.shape();
-    for(int i = 0; i < shape.size(); i++){
-        std::cout << shape[i] << std::endl;
+    for(auto & t: tensor){
+        std::cout << t << std::endl;
     }
-
-    tensor[0][0].value() = 5;
-    std::cout << tensor << std::endl;
+    /*
+        tensor(1)<i>:{
+        1i 2i 3i
+        }
+        tensor(1)<i>:{
+        4i 5i 6i
+        }
+        tensor(1)<i>:{
+        7i 8i 9i
+        }
+     */
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
@@ -350,7 +380,7 @@ int main(){
         Это было плохим решением удалять, можно передавать vector, вдруг in runtime будут составлять вектор
         Сейчас конструктор работает только вручную, если вписать элементы туда.
         В concat есть метод через array, но кажется лучше удалить его, зачем он если vector удобнее
-- [ ] iterator
+- [x] iterator
 - [ ] matmul
 
 */

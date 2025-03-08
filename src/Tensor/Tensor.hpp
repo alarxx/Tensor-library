@@ -35,6 +35,10 @@
 #include <initializer_list>
 #include <vector>
 
+#include <iterator>
+#include <cstddef> // ptrdiff_t
+#include "iterator/iterator.hpp"
+#include "iterator/constant_iterator.hpp"
 
 /*
     nested_vector_info
@@ -502,6 +506,33 @@ public:
     // Note: no "self" vector argument, therefore we use "friend" keyword
     template <typename U>
     friend Tensor<U> operator * (const Tensor<U> & /*const*/ v1, const Tensor<U> & /*const*/ v2);
+
+    // ------
+
+    // --- iterator ---
+
+    using iterator = ::iterator<Tensor<T>>; // iterator variable shadowing, so we use :: - global namespace.
+    using constant_iterator = ::constant_iterator<Tensor<T>>;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using constant_reverse_iterator = std::reverse_iterator<constant_iterator>;
+
+    // _coeffs[0] = *(_coeffs + 0)
+    // &(*(_coeffs + 0)) = _coeffs
+    iterator begin(){ return iterator(_coeffs); }
+    iterator end(){ return iterator(&_coeffs[_size]); }
+
+    constant_iterator cbegin() const { return constant_iterator(&_coeffs[0]); }
+    constant_iterator cend() const { return constant_iterator(&_coeffs[_size]); }
+
+    reverse_iterator rbegin(){ return reverse_iterator(end()); }
+    reverse_iterator rend(){ return reverse_iterator(begin()); }
+
+    constant_reverse_iterator crbegin() const {
+        return constant_reverse_iterator(cend()); // &_coeffs[N - 1]
+    }
+    constant_reverse_iterator crend() const {
+        return constant_reverse_iterator(cbegin()); // &_coeffs[-1]
+    }
 
     // ------
 
