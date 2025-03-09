@@ -80,7 +80,7 @@ protected:
     T _value;
     int _rank; // not mathematically correct name, его тоже можно вычислить рекурсивно, оставляю для debug-а
     int _size; // better be unsigned int
-    Tensor * _coeffs;
+    Tensor<T> * _coeffs;
     // int * _shape; // Я думаю это излишне и лучше вычислять shape recursively in runtime
 
 public:
