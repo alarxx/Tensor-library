@@ -382,6 +382,11 @@ public:
     template <typename U>
     friend Tensor<U> operator * (const Tensor<U> & /*const*/ v1, const Tensor<U> & /*const*/ v2);
 
+    // --- matmul ---
+    template <Arithmetic U>
+    friend Tensor<U> matmul(/*const*/ Tensor<U>& left, /*const*/ Tensor<U>& right);
+    // ------
+
     // ------
 
     // --- iterator ---
@@ -425,5 +430,6 @@ public:
 #include "impl/arithmetic_operator.tpp"
 #include "impl/from_array.tpp"
 #include "impl/from_stl_vector.tpp"
+#include "impl/matmul.tpp"
 
 #endif

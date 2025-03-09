@@ -317,48 +317,76 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
+// int main(){
+//     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
+//     // Tensor tensor(2, 3);
+//
+//     // Tensor tensor = {
+//     //     {1, 2, 3},
+//     //     {4, 5, 6},
+//     //     {7, 8, 9},
+//     // };
+//
+//     // int arr[3][3] = {
+//     //     {1, 2, 3},
+//     //     {4, 5, 6},
+//     //     {7, 8, 9}
+//     // };
+//     // Tensor tensor = from_array({3, 3}, arr);
+//
+//     std::vector<std::vector<int>> vect = {
+//         {1, 2, 3},
+//         {4, 5, 6},
+//         {7, 8, 9}
+//     };
+//     Tensor tensor = from_stl_vector(vect);
+//
+//     tensor *= tensor;
+//
+//     std::cout << "\nIterator example:" << std::endl;
+//
+//     for(auto & t: tensor){
+//         std::cout << t << std::endl;
+//     }
+//     /*
+//         tensor(1)<i>:{
+//         1i 2i 3i
+//         }
+//         tensor(1)<i>:{
+//         4i 5i 6i
+//         }
+//         tensor(1)<i>:{
+//         7i 8i 9i
+//         }
+//      */
+//
+//     std::cout << sizeof(Tensor<int>) << std::endl;
+//
+//     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
+// }
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
-    // Tensor tensor(2, 3);
 
-    // Tensor tensor = {
-    //     {1, 2, 3},
-    //     {4, 5, 6},
-    //     {7, 8, 9},
-    // };
+    Tensor m1 = {{ // 3 x 2
+        {1, 1},
+        {2, 2},
+        {3, 3}
+    }};
 
-    // int arr[3][3] = {
-    //     {1, 2, 3},
-    //     {4, 5, 6},
-    //     {7, 8, 9}
-    // };
-    // Tensor tensor = from_array({3, 3}, arr);
+    Tensor m2 = {{ // 2 x 3
+        {1, 1, 1},
+        {2, 2, 2}
+    }};
 
-    std::vector<std::vector<int>> vect = {
-        {1, 2, 3},
-        {4, 5, 6},
-        {7, 8, 9}
-    };
-    Tensor tensor = from_stl_vector(vect);
+    std::cout << "\nMatMul example:" << std::endl;
 
-    tensor *= tensor;
+    Tensor res = matmul(m1, m2); // 3 x 3
+    // matmul(m1, m2); // 2 x 2
 
-    std::cout << "\nIterator example:" << std::endl;
-
-    for(auto & t: tensor){
-        std::cout << t << std::endl;
-    }
-    /*
-        tensor(1)<i>:{
-        1i 2i 3i
-        }
-        tensor(1)<i>:{
-        4i 5i 6i
-        }
-        tensor(1)<i>:{
-        7i 8i 9i
-        }
-     */
+    std::cout << m1 << std::endl;
+    std::cout << m2 << std::endl;
+    std::cout << res << std::endl;
 
     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 }
@@ -397,6 +425,6 @@ int main(){
         Сейчас конструктор работает только вручную, если вписать элементы туда.
         В concat есть метод через array, но кажется лучше удалить его, зачем он если vector удобнее
 - [x] iterator
-- [ ] matmul
+- [x] matmul
 
 */
