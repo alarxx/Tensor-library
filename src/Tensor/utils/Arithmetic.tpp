@@ -13,6 +13,7 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
 
 // namespace {
 template <typename T> // C++20
@@ -44,3 +45,5 @@ concept Arithmetic = requires(T a, T b) {
     { a / b } -> std::same_as<T>;
 };
 // }
+
+} // namespace tensor

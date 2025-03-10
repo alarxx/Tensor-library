@@ -13,6 +13,8 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
+
 // Unary Operator
 // Elementwise: v1 *= v2;
 template <Arithmetic T>
@@ -53,3 +55,5 @@ template <Arithmetic U>
     // problem is since temp is in Stack memory it should be deleted after this function is finished
     return temp;
 }
+
+} // namespace tensor

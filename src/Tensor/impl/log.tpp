@@ -13,6 +13,8 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
+
 // --- Logging ---
 template <typename T>
 concept __is_stream_supported = requires (T t){
@@ -37,3 +39,5 @@ void log(T t, TArgs ... args){
     #endif
 }
 // ------
+
+} // namespace tensor

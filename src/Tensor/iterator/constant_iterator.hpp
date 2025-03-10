@@ -5,6 +5,8 @@
 #include <iterator> // random_access_iterator_tag
 #include <cstddef> // ptrdiff_t
 
+namespace tensor {
+
 /*
     --- constant_iterator ---
 
@@ -69,3 +71,5 @@ class constant_reverse_iterator {...}
 */
 
 #endif
+
+} // namespace tensor

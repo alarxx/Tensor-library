@@ -13,6 +13,8 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
+
 // --- initializer_list ---
 
 // Tensor vector = {1, 2, 3};
@@ -70,3 +72,5 @@ Tensor<T>::Tensor(const INITIALIZER_LIST_4(T) list){
 }
 
 // ------
+
+} // namespace tensor

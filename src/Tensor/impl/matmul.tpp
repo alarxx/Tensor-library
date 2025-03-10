@@ -13,6 +13,8 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
+
 template <Arithmetic U>
 /*friend*/ Tensor<U> matmul(/*const*/ Tensor<U>& left, /*const*/ Tensor<U>& right){
     #if DEBUG_TENSOR
@@ -71,3 +73,5 @@ template <Arithmetic U>
 
     return result;
 }
+
+} // namespace tensor

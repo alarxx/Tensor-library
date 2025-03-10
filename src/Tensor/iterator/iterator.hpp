@@ -5,6 +5,8 @@
 #include <iterator> // random_access_iterator_tag
 #include <cstddef> // ptrdiff_t
 
+namespace tensor {
+
 /*
     --- iterator ---
 
@@ -139,3 +141,5 @@ public:
 */
 
 #endif
+
+} // namespace tensor

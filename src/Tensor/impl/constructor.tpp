@@ -13,6 +13,7 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
 
 // Constructor : Tensor tensor(depth, rows, cols)
 template <Arithmetic T>
@@ -242,3 +243,5 @@ Tensor<T> & Tensor<T>::operator = (const T & scalar){
 }
 
 // ------
+
+} // namespace tensor

@@ -13,6 +13,8 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
+
 // Copy concat constructor
 template <Arithmetic T>
 template <typename ... TArgs>
@@ -81,3 +83,5 @@ Tensor<T>::Tensor(Tensor<T>&& first, TArgs&& ... args) {
     }
 
 }
+
+} // namespace tensor

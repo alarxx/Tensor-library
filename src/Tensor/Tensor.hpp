@@ -44,6 +44,7 @@
 #include "utils/nested_vector_info.tpp"
 #include "utils/Arithmetic.tpp"
 
+namespace tensor {
 /*
     Я делаю Tensor homogeneous, то есть он хранит данные только одного типа.
 
@@ -391,8 +392,8 @@ public:
 
     // --- iterator ---
 
-    using iterator = ::iterator<Tensor<T>>; // iterator variable shadowing, so we use :: - global namespace.
-    using constant_iterator = ::constant_iterator<Tensor<T>>;
+    using iterator = tensor::iterator<Tensor<T>>; // iterator variable shadowing, so we use :: - global namespace.
+    using constant_iterator = tensor::constant_iterator<Tensor<T>>;
     using reverse_iterator = std::reverse_iterator<iterator>;
     using constant_reverse_iterator = std::reverse_iterator<constant_iterator>;
 
@@ -417,6 +418,8 @@ public:
     // ------
 
 };
+
+} // namespace tensor
 
 /*
     Implementation of template class is in .tpp file

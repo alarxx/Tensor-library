@@ -365,6 +365,15 @@
 //     std::cout << "\n--- Tensor.cpp execution ended! ---" << std::endl;
 // }
 
+// using namespace tensor;
+using tensor::Tensor;
+// using tensor::matmul;
+
+template <tensor::Arithmetic T>
+Tensor<T> matmul(Tensor<T> a, Tensor<T> b){
+    return Tensor<T>();
+}
+
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
@@ -381,7 +390,7 @@ int main(){
 
     std::cout << "\nMatMul example:" << std::endl;
 
-    Tensor res = matmul(m1, m2); // 3 x 3
+    Tensor res = tensor::matmul(m1, m2); // 3 x 3
     // matmul(m1, m2); // 2 x 2
 
     std::cout << m1 << std::endl;

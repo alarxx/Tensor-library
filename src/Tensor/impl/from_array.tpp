@@ -13,6 +13,8 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
+
 // --- Tensor from array ---
 
 template <typename U>
@@ -72,3 +74,5 @@ requires Arithmetic<std::remove_all_extents_t<U>>
 }
 
 // ------
+
+} // namespace tensor

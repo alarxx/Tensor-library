@@ -13,6 +13,7 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
 
 /*
     is_vector
@@ -31,3 +32,5 @@ class is_vector<std::vector<T>> : public std::true_type {};
 
 template <typename T>
 constexpr bool is_vector_v = is_vector<T>::value;
+
+} // namespace tensor

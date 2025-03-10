@@ -13,6 +13,7 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
 
 // --- toString ---
 
@@ -63,3 +64,5 @@ template <Arithmetic U>
 }
 
 // ------
+
+} // namespace tensor

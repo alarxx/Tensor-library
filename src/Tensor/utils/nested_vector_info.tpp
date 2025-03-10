@@ -13,6 +13,7 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
 
 /*
     nested_vector_info
@@ -100,3 +101,5 @@ class nested_vector_info<T&&> : public nested_vector_info<T> {};
 // Alias for short
 template <typename T>
 using nested_vector_info_t = typename nested_vector_info<T>::base_type;
+
+} // namespace tensor

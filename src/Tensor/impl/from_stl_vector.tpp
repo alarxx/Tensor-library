@@ -13,6 +13,8 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+namespace tensor {
+
 // Tensor from vector
 // Получается, будут создаваться разные функции под разное количество вложенности std::vector-ов, но их size расчитывается in-runtime, например.
 template <typename U>
@@ -53,3 +55,5 @@ from_stl_vector(
     }
     return tensor;
 }
+
+} // namespace tensor
