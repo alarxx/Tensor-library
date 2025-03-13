@@ -432,6 +432,9 @@ C++:
 - Make: https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html
 - CMake: https://cmake.org/cmake/help/v3.31/guide/tutorial/index.html
 
+CUDA:
+- CUDA C++ Programming Guide. https://docs.nvidia.com/cuda/cuda-c-programming-guide/
+
 Fundamental Deep Learning Books:
 - Bishop, C. M., & Nasrabadi, N. M. (2006). Pattern recognition and machine learning (Vol. 4, No. 4, p. 738). New York: springer.
 - Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep learning. The MIT press.
