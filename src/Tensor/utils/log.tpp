@@ -13,24 +13,34 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+// Requires:
+// #include <iostream>
+
 namespace tensor {
 
-/*
-    is_vector
-
-        std::vector<int> va = {1, 2, 3};
-        std::cout << is_vector_v<decltype(va)> << std::endl; // 1
-
-        int arr[3] = {1, 2, 3};
-        std::cout << is_vector_v<decltype(arr)> << std::endl; // 0
- */
+// --- Logging ---
 template <typename T>
-class is_vector : public std::false_type {};
+concept __is_stream_supported = requires (T t){
+    // SFINAE constrains
+    std::declval<std::ostream&>() << t;
+};
 
 template <typename T>
-class is_vector<std::vector<T>> : public std::true_type {};
+requires __is_stream_supported<T>
+void log(T t){
+    #if DEBUG_LOG_TENSOR
+        std::cout << t << std::endl;
+    #endif
+}
 
-template <typename T>
-constexpr bool is_vector_v = is_vector<T>::value;
+template <typename T, typename ... TArgs>
+requires __is_stream_supported<T>
+void log(T t, TArgs ... args){
+    #if DEBUG_LOG_TENSOR
+        std::cout << t;
+        log(args...);
+    #endif
+}
+// ------
 
 } // namespace tensor

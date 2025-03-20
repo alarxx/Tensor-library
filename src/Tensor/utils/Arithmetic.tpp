@@ -13,6 +13,10 @@
     Copyright © 2025 Alar Akilbekov. All rights reserved.
  */
 
+// Requires:
+// #include <type_traits>
+// #include <concepts>
+
 namespace tensor {
 
 // namespace {
