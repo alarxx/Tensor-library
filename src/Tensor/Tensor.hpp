@@ -38,9 +38,10 @@ class Tensor {
 protected:
     T _value;
     int _rank; // not mathematically correct name, его тоже можно вычислить рекурсивно, оставляю для debug-а
+    // Не получится выводить rank, например так: sizeof(_coeffs) / (_size * sizeof(T))
     int _size; // better be unsigned int
     // Tensor<T> * _coeffs;
-    T * _coeffs;
+    T * _coeffs; // _size = _coeffs.length
     int * _shape; // _rank = _shape.length
 
 public:
