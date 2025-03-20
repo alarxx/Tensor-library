@@ -11,6 +11,89 @@ Tensor is a recursive array of Tensors, except rank-0 Tensor (scalar)
 [Tensor, Tensor...]  
 ```
 
+## Why branch
+
+Замена рекурсивной имплементации на хранение данных в одном длинном массиве.
+Рекурсивная реализация по "Space Complexity" занимает в 3-6 раз больше.
+Доступ к элементам в рекурсивной реализации O(n), в реализации с mapping-ом индексов можно считать за O(1).
+В рекурсивной имплементации O(n) потому что для доступа к scalar-у идет рекурсивный проход по массивам rank раз, также кажется cost of access array operation высокий.
+Хранение в длинном массиве должно быть удобным для SIMD.
+
+#### Space Complexity
+Memory Consumption
+
+```c++
+Tensor tensor(2, 2); // Tensor 2x2
+cout << sizeof(tensor) << endl; // 24
+
+std::vector<std::vector<int>> mv = {
+   {1, 2},
+   {3, 4}
+}; // std::vector 2x2
+cout << sizeof(mv) << endl; // 24
+```
+
+Tensor 2x2 - 2D Tensor, который весит 24 bytes.
+2D Tensor хранит массив 1D Tensor-ов по 24 bytes.
+1D Tensor хранит массив Scalar-Tensor-ов, которые тоже весят 24 byte-а.
+
+`Shape = (Row x Col)`
+
+`1 + Row + Row x Col объектов`
+
+Каждый объект весит 24 byte-а:
+```
+24 + Row * 24 + Row * Col * 24 bytes.
+```
+
+У std::vector то же самое, только scalar-ы весят 4 или 8 bytes:
+```
+24 + Row * 24 + Row * Col * 4/8 bytes
+```
+
+То есть эта имплементация занимает в 3/6 раз больше памяти, чем если пользовать nested std::vector.
+
+Если пользовать raw multidimensional array, то там вообще без overhead-а по memory:
+```
+Row * Col * 4/8 bytes
+```
+
+Это связано с тем, что Tensor это массив Tensor-ов.
+
+Лучший подход мог бы быть - **"Multidimensional Array with Mappings"**.
+В таком подходе память выделяется целиком, в одном непрерывном массиве.
+
+Также я думал о создании рекурсивных template-ов, в таком случае было бы очень эффективно по памяти, но приходилось бы указывать очень длинные типы:
+```c++
+template <typename T = double>
+class Tensor { // Base case
+public:
+   T value;
+   Tensor(){ cout << "Base case" << endl; }
+};
+
+template <typename T>
+class Tensor<Tensor<T>> {
+public:
+   Tensor * coeffs;
+   Tensor(){ cout << "Recursive case" << endl; }
+   Tensor(std::integral auto ... args){
+      int dims[] = {args...};
+      rank = sizeof...(args);
+      for(int i = 0; i < rank; i++){
+         cout << dims[i] << endl;
+      }
+      size = dims[0];
+      coeffs = new Tensor<T>[size];
+   }
+};
+
+int main(){
+   Tensor<Tensor<double>> tensor(2); // after calls Base case
+   // Tensor<Tensor<Tensor<double>>> tensor(2, 2); // after calls Recursive case
+}
+```
+
 ---
 
 ## Features
@@ -301,81 +384,6 @@ cout << mul << endl; // elements cubed
 
 Заметь что нет superior проверки на совпадения всех размеров вложенных тензоров, то есть не запрещается создавать непрямоугольные тензоры,
 но расчитывать на это не стоит, тензор сделан с расчетом на прямоугольность размерностей.
-
-#### Space Complexity
-Memory Consumption
-
-```c++
-Tensor tensor(2, 2); // Tensor 2x2
-cout << sizeof(tensor) << endl; // 24
-
-std::vector<std::vector<int>> mv = {
-   {1, 2},
-   {3, 4}
-}; // std::vector 2x2
-cout << sizeof(mv) << endl; // 24
-```
-
-Tensor 2x2 - 2D Tensor, который весит 24 bytes.
-2D Tensor хранит массив 1D Tensor-ов по 24 bytes.
-1D Tensor хранит массив Scalar-Tensor-ов, которые тоже весят 24 byte-а.
-
-`Shape = (Row x Col)`
-
-`1 + Row + Row x Col объектов`
-
-Каждый объект весит 24 byte-а:
-```
-24 + Row * 24 + Row * Col * 24 bytes.
-```
-
-У std::vector то же самое, только scalar-ы весят 4 или 8 bytes:
-```
-24 + Row * 24 + Row * Col * 4/8 bytes
-```
-
-То есть эта имплементация занимает в 3/6 раз больше памяти, чем если пользовать nested std::vector.
-
-Если пользовать raw multidimensional array, то там вообще без overhead-а по memory:
-```
-Row * Col * 4/8 bytes
-```
-
-Это связано с тем, что Tensor это массив Tensor-ов.
-
-Лучший подход мог бы быть - "Multidimensional Array with Mappings".
-В таком подходе память выделяется целиком, в одном непрерывном массиве.
-
-Также я думал о создании рекурсивных template-ов, в таком случае было бы очень эффективно по памяти, но приходилось бы указывать очень длинные типы:
-```c++
-template <typename T = double>
-class Tensor { // Base case
-public:
-   T value;
-   Tensor(){ cout << "Base case" << endl; }
-};
-
-template <typename T>
-class Tensor<Tensor<T>> {
-public:
-   Tensor * coeffs;
-   Tensor(){ cout << "Recursive case" << endl; }
-   Tensor(std::integral auto ... args){
-      int dims[] = {args...};
-      rank = sizeof...(args);
-      for(int i = 0; i < rank; i++){
-         cout << dims[i] << endl;
-      }
-      size = dims[0];
-      coeffs = new Tensor<T>[size];
-   }
-};
-
-int main(){
-   Tensor<Tensor<double>> tensor(2); // after calls Base case
-   // Tensor<Tensor<Tensor<double>>> tensor(2, 2); // after calls Recursive case
-}
-```
 
 ---
 
