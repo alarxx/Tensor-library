@@ -17,6 +17,7 @@
 #ifndef _TENSOR_H_
 #define _TENSOR_H_
 
+#define DEBUG_TENSOR true
 #define DEBUG_LOG_TENSOR true
 
 #include <iostream>
@@ -106,6 +107,21 @@ public:
     }
 
     inline bool isScalar() const { return _rank == 0 && _size == -1 && _coeffs == nullptr && _shape == nullptr; }
+    inline bool isVector() const { return _rank == 1 && _size != -1 && _coeffs != nullptr && _shape != nullptr; }
+    inline bool isMatrix() const { return _rank == 2 && _size != -1 && _coeffs != nullptr && _shape != nullptr; }
+
+    inline int size() const { return _size; }
+    inline int rank() const { return _rank; }
+    inline int * shape() const { return _shape; }
+
+    inline T& value(){
+        #if DEBUG_TENSOR
+            if(!isScalar()){
+                throw std::runtime_error("Error: Geting a value of a non-scalar tensor!");
+            }
+        #endif
+        return _value;
+    }
 
     inline int index(const int * const dims) const {
         int index = 0;

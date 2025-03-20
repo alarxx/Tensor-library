@@ -7,6 +7,8 @@ using tensor::Tensor;
 int main(){
     std::cout << "--- Tensor.cpp execution started! ---" << std::endl;
 
+    std::cout << "sizeof(Tensor): " << sizeof(Tensor<double>) << std::endl;
+
     Tensor scalar;
     scalar.set(45.);
     std::cout << scalar.get() << std::endl;
