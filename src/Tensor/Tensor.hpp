@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include <type_traits>
 #include <concepts>
 
@@ -37,70 +38,109 @@ protected:
     T _value;
     int _rank; // not mathematically correct name, его тоже можно вычислить рекурсивно, оставляю для debug-а
     int _size; // better be unsigned int
-    Tensor<T> * _coeffs;
+    // Tensor<T> * _coeffs;
+    T * _coeffs;
+    int * _shape; // _rank = _shape.length
 
 public:
-    explicit Tensor() : _value(0), _rank(0), _size(-1), _coeffs(nullptr) {}
+    explicit Tensor() : _value(0), _rank(0), _size(-1), _coeffs(nullptr), _shape(nullptr) {}
 
     explicit Tensor(std::integral auto ... args){
         log("Basic Constructor");
 
         int dims[] = {args...}; // arguments expansion
+        int length = sizeof...(args);
 
-        if(dims[0] <= 0){
-            throw std::runtime_error("Error: Null tensor, dims[0] is invalid!");
+        if(length <= 0){ // never less actually
+            throw std::runtime_error("Error: empty dims!");
         }
 
-        int rank = sizeof(dims) == 0 ? 0 : sizeof(dims) / sizeof(dims[0]);
+        _rank = length;
+        _shape = new int[length]; // dims is in Stack memory
+        for(int i = 0; i < length; i++){
+            _shape[i] = dims[0];
+        }
 
-        __init(rank, dims, 0);
+
+        // this constructor is never scalar, at least vector of size 1 * dims[0]
+        _size = 1;
+        for(int i = 0; i < _rank; i++){
+            _size *= _shape[i];
+        }
+
+        log("_rank: ", _rank, "; _size: ", _size);
+
+        _coeffs = new T[_size];
     }
 
-    explicit Tensor(int rank, int dims[], int cursor) {
-        log("Too Complex Constructor");
+    // // Copy Assignment Operator (Scalar)
+    // // tensor[index] = number;
+    // Tensor<T> & operator = (const T & scalar);
+    // // Index Operator []
 
-        if(rank < 0){
-            throw std::runtime_error("Error: Null tensor, rank is invalid!");
+    inline T get(std::integral auto ... args){
+        if(isScalar()){
+            return _value;
         }
-        __init(rank, dims, cursor);
+        int dims[] = {args...}; // arguments expansion
+        int length = sizeof...(args);
+        if(length != _rank){
+            throw std::runtime_error("Error: invalid indexes!");
+        }
+        return _coeffs[index(dims)];
     }
 
-private:
-    inline void __init(int rank, int dims[], int cursor){
-        log("Init Constructor");
-
-        // 0D: (0, {})
-        // 1D: (1, {4})
-        // 2D: (2, {4, 4})
-        // 3D: (3, {4, 4, 4})
-        log(cursor, ") rank-", rank, " Constructor of Tensor");
-
-        _rank = rank;
-        _size = dims[cursor];
-        if(_rank < 0){
-            throw std::runtime_error("Error: rank is invalid!");
+    inline Tensor<T> & set(T value, std::integral auto ... args){
+        if(isScalar()){
+            _value = value;
         }
-        else if(_size <= 0){
-            throw std::runtime_error("Error: size is invalid!");
+        else {
+            int dims[] = {args...}; // arguments expansion
+            int length = sizeof...(args);
+            if(length != _rank){
+                throw std::runtime_error("Error: invalid indexes!");
+            }
+            _coeffs[index(dims)] = value;
+        }
+        return *this;
+    }
+
+    inline bool isScalar() const { return _rank == 0 && _size == -1 && _coeffs == nullptr && _shape == nullptr; }
+
+    inline int index(const int * const dims) const {
+        int index = 0;
+        if(dims[0] >= _shape[0]){
+            throw std::runtime_error("Error: out of bounds!");
+        }
+        for(int i = 0; i < _rank - 1; i++){
+            index += _shape[i + 1] * dims[i];
+        }
+        index += dims[_rank - 1]; // last element
+        return index;
+    }
+
+    std::string toString(){
+        if(isScalar()){
+            return "tensor<" + std::string(typeid(T).name()) + ">: " + std::to_string(_value);
         }
 
-        // --- recursively initialization of nested tensors ---
-        _coeffs = new Tensor<T>[_size];
-        // after this, tensors look like scalars, but it's okay we'll move rvalues into them
-
-        if(rank - 1 == 0) { // then it is a Scalar
-            log("Next is scalar tensor, _size:(", _size, "), so we return");
-            return;
-        }
+        std::string result = "tensor<" + std::string(typeid(T).name()) + ">: \n";
 
         for(int i = 0; i < _size; i++){
-            // Чтобы он не выглядел как scalar, мы назначаем _rank и _size
-            _coeffs[i]._rank = rank - 1;
-            _coeffs[i]._size = dims[cursor + 1];
-            _coeffs[i] = Tensor(rank - 1, dims, cursor + 1); // Move Assignment =
+            result += std::string(" ") + std::to_string(_coeffs[i]);
+            if((i + 1) % _shape[_rank - 1] == 0){
+                result += "\n";
+            }
+            if(_rank > 2){
+                if((i + 1) % (_shape[_rank - 1] * _shape[_rank - 2]) == 0){
+                    result += "\n";
+                }
+            }
         }
-        // ------
+        if(_rank > 2) result.pop_back(); // last '\n'
+        return result;
     }
+
 };
 
 } // namespace tensor
