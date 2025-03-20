@@ -23,3 +23,10 @@ int main(){
 
     std::cout << "--- Tensor.cpp execution ended! ---" << std::endl;
 }
+
+/*
+
+ - [ ] Full functionality of c++recursive
+ - [ ] Slices using index operator []
+
+ */
