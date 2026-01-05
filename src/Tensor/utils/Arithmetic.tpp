@@ -19,6 +19,10 @@ namespace tensor {
 template <typename T> // C++20
 concept Arithmetic = requires(T a, T b) {
     /*
+        Why not `requires std::is_arithmetic_v<T>;`?
+
+        is_arithmetic проверяет только встроенные типы, а что если мы захотим создать другой custom-ный тип.
+
         Specialization of std::is_arithmetic for custom class A.
         Может быть интересно, если хотите использовать custom-ный тип в Tensor.
         Если мы включим, то is_arithmetic_v<A> = true, и он будет проходить проверку SFINAE.
