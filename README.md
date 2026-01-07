@@ -21,6 +21,7 @@ Tensor is a recursive array of Tensors, except rank-0 Tensor (scalar)
 
 2026-01-07
 Need to do:
+- [ ] Concat, it's better to left only concat friend function
 - [ ] Tensor operataions: unary/binary (operator +-*/ overloading), matmul, ...
 Weidman, S. (2019)
 - [ ] AutoGrad
