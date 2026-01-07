@@ -19,6 +19,8 @@ Tensor is a recursive array of Tensors, except rank-0 Tensor (scalar)
 В рекурсивной имплементации O(n) потому что для доступа к scalar-у идет рекурсивный проход по массивам rank раз, также кажется cost of access array operation высокий.
 Хранение в длинном массиве должно быть удобным для SIMD.
 
+All the below might be irrelevant for mapping branch...
+
 #### Space Complexity
 Memory Consumption
 
@@ -406,7 +408,7 @@ Description: <Description>
 
 Provided “as is”, without warranty of any kind.
 
-Copyright © 2025 Alar Akilbekov. All rights reserved.
+Copyright © 2026 Alar Akilbekov. All rights reserved.
 
 Third party copyrights are property of their respective owners.
 ```
