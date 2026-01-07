@@ -54,9 +54,9 @@ concept Arithmetic = requires(T a, T b){
 template <Arithmetic T = float>
 class Tensor {
 private:
-    T * coeffs;
-    int * dims; // shape
     int rank; // not mathematically correct name, его тоже можно вычислить рекурсивно, оставляю для debug-а
+    int * dims; // shape
+    T * coeffs;
 public:
     using type = T;
 
@@ -66,11 +66,8 @@ public:
     2D: (2, {4, 4}) - matrix
     3D: (3, {4, 4, 4})
     */
-    explicit Tensor() {
+    explicit Tensor() : rank(0), dims(nullptr), coeffs(new T[1]) {
         // scalar
-        rank = 0;
-        dims = nullptr;
-        coeffs = new T[1];
     }
 
     // --- scalar(value) ---
