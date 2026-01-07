@@ -26,6 +26,45 @@ Weidman, S. (2019)
 - [ ] AutoGrad
 - [ ] DL classes
 
+```c++
+template <Arithmetic T = float>
+class Tensor {
+private:
+   T * coeffs;
+   int * dims;
+   int rank;
+public:
+   using type = T;
+
+   explicit Tensor() : rank(0), dims(nullptr), coeffs(new T[1]) {}
+
+   template <Arithmetic U>
+   friend Tensor<U> scalar(U value);
+
+   explicit Tensor(int rank, int dims[]);
+
+   explicit Tensor(std::integral auto ... args);
+
+   Tensor(const INITIALIZER_LIST_1(T) list);
+   Tensor(const INITIALIZER_LIST_2(T) list);
+   Tensor(const INITIALIZER_LIST_3(T) list);
+   Tensor(const INITIALIZER_LIST_4(T) list);
+
+   ~Tensor();
+   Tensor(const Tensor<T> & other);
+   Tensor<T> & operator = (const Tensor<T> & other);
+   Tensor(Tensor<T> && other);
+   Tensor<T> & operator = (Tensor<T> && other); // tensor[index] = Tensor();
+
+   inline T& get(std::integral auto ... args);
+
+   std::string toString() const;
+
+   template <Arithmetic U>
+   friend std::ostream& operator<<(std::ostream& os, const Tensor<U>& tensor);
+};
+```
+
 All the below might be irrelevant for mapping branch...
 
 #### Space Complexity
