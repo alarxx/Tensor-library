@@ -40,6 +40,11 @@ int main(){
     int dims[]{3, 3, 3};
     Tensor<float> t(3, dims);
 
+    int depth = 2, rows = 3, cols = 3;
+    Tensor tensor(depth, rows, cols); // Tensor<float>, rank-3    std::cout << tensor << std::endl;
+    std::cout << tensor << std::endl;
+
+
     /*
     Tensor t(3, 3, 3);
     std::cout << t << std::endl;

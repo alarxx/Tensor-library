@@ -153,7 +153,19 @@ Tensor может быть только of arithmetic type.
 
 Создать 3D tensor можно так, by default tensor of type float:
 ```c++
+int depth = 2, rows = 3, cols = 3;
 Tensor tensor(depth, rows, cols); // Tensor<float>, rank-3
+cout << tensor;
+/*
+tensor(3D)<f>:
+ 0. 0. 0.
+ 0. 0. 0.
+ 0. 0. 0.
+
+ 0. 0. 0.
+ 0. 0. 0.
+ 0. 0. 0.
+*/
 ```
 
 You can specify type:
@@ -163,7 +175,7 @@ Tensor<int> tensor(depth, rows, cols); // specified tensor of type int
 
 For dims allowed only int values:
 ```c++
-double depth = 3.0, rows = 3.0 cols = 3.0;
+double depth = 3.0, rows = 3.0, cols = 3.0;
 Tensor<int> tensor(depth, rows, cols); // Error due to incorrect type double
 ```
 
