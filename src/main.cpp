@@ -10,7 +10,7 @@
 
     Provided “as is”, without warranty of any kind.
 
-    Copyright © 2026 Alar Akilbekov. All rights reserved.
+    Copyright © 2022-2026 Alar Akilbekov. All rights reserved.
  */
 
 #include <iostream>
