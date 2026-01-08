@@ -2,13 +2,9 @@
 
 ## Tensor 
 
-Tensor is a recursive array of Tensors, except rank-0 Tensor (scalar)
+Tensor is a multidimensional array implemented with mappings (basically, one large array), allowing fast access operations and suitable for SIMT operations.
 ```
-[Tensor, Tensor, Tensor, Tensor]  
-   |       |       |       |  
-   |       |     [...]   [...]  
-   |  [Tensor, Tensor, ...]  
-[Tensor, Tensor...]  
+Tensor = [batch * depth * rows * cols]
 ```
 
 ## Why branch
@@ -68,7 +64,7 @@ public:
 
 All the below might be irrelevant for mapping branch...
 
-#### Space Complexity
+#### Space Complexity (for c++recursive branch)
 Memory Consumption
 
 ```c++
@@ -154,9 +150,9 @@ int main(){
 Tensor может быть только of arithmetic type.
 Для проверки типов я использую [`concepts`](https://en.cppreference.com/w/cpp/language/constraints), а не чистый SFINAE, поэтому target C++20.
 
-Создать 3D tensor можно так, by default tensor of type double:
+Создать 3D tensor можно так, by default tensor of type float:
 ```c++
-Tensor tensor(depth, rows, cols); // Tensor<double>, rank-3
+Tensor tensor(depth, rows, cols); // Tensor<float>, rank-3
 ```
 
 You can specify type:
@@ -164,49 +160,48 @@ You can specify type:
 Tensor<int> tensor(depth, rows, cols); // specified tensor of type int
 ```
 
-Integer dims only:
+For dims allowed only int values:
 ```c++
-Tensor t(2, 2) // Ok, provided integers, creates 2x2 matrix
-Tensor t(2., 2.) // Error due to incorrect type double
+double depth = 3.0, rows = 3.0 cols = 3.0;
+Tensor<int> tensor(depth, rows, cols); // Error due to incorrect type double
 ```
 
 #### Scalar creation
 
 Как создать scalar tensor:
 ```c++
-Tensor sc = scalar(42); // Tensor<int>
+Tensor sc = scalar(42); // type deduction: Tensor<int>
 ```
 
-Factory function scalar нужна потому что `Tensor t(42)` вызовет конструктор dims, который создаст вектор соответствующего размера, а `Tensor t = {42}` вызовет initializer_list конструктор, который создаст вектор с одним соответствующим элементом, но не скаляр!
+"scalar" (factory function) нужна потому что `Tensor t(42)` вызовет конструктор dims, который создаст длинный вектор соответствующего размера, а `Tensor t = {42}` вызовет initializer_list конструктор, который создаст вектор с одним соответствующим элементом, но не скаляр!
 
 У меня нет copy конструктора принимающего скаляр.
 `Tensor t = 42` не сработает,
 во-первых потому что у меня конструктор explicit,
 во-вторых если бы он преобразовывался в `Tensor t(42)`, то такой конструктор конфликтовал бы с конструктором dims.
-Но, scalar copy assignment operator сработает, если сначала создать пустой Tensor.
+Можно создать scalar copy assignment operator `sc = 42`, но я считаю это плохим решением, так как он добавляет неявные абстракции.
+Лучше явно писать `sc.get() = 42`.
 
 Под капотом `scalar(42)` работает так:
 ```c++
 scalar(T value){
-   Tensor<T> sc;
-   sc = value;
-   return sc;
+   Tensor<U> tensor;
+   *tensor.coeffs = value; // tensor[0] or tensor.get()
+   return tensor; // RVO
 }
 ```
 
 #### Accessing elements
 
 ```c++
-Tensor matrix(2, 2); // Tensor<double>
+Tensor matrix(2, 2); // Tensor<float>
 cout << matrix;
 // {{0. 0.},
 //  {0. 0.}}
 
-// index operator matrix[i] returns tensor object
+matrix.get(0, 0) = 42; // assignment by reference, implicit casting to float
 
-matrix[0][0] = 42; // scalar copy assignment = , implicit casting to double
-
-double sc = matrix[0][0].value(); // get scalar value from tensor object
+float sc = matrix.get(0, 0); // 42, get scalar value from tensor object
 
 cout << matrix;
 // {{42. 0.},
@@ -224,6 +219,8 @@ Tensor matrix = { // 2D matrix
    {4, 5, 6},
    {7, 8, 9}
 };
+
+// 3D, 4D as well
 ```
 
 Тут стоит отметить, что конструктор принимающий dims - `explicit`, то есть передавать мы можем только явно, например: `Tensor t(rows, cols)`.
@@ -233,35 +230,35 @@ Tensor matrix = { // 2D matrix
 
 Проект реализует [RAII](https://en.cppreference.com/w/cpp/language/raii)
 i.e. Scope-Bound Resource Management
-для управления выделением и освобождением памяти of raw recursive arrays.
+для управления выделением и освобождением памяти of raw array.
 
 Copy and move constructors:
 ```c++
 Tensor vector = {1, 2, 3};
 
-Tensor copied = vector;
+Tensor copied = vector; // O(N) copy
 
-Tensor stealed = std::move(vector);
+Tensor stealed = std::move(vector); // O(1)
 
-cout << vector; // 0i
+cout << vector; // tensor(null)
 ```
 
 Copy and move assignments:
 ```c++
-Tensor vector = {1, 2, 3};
+Tensor vector = {1, 2, 3}; // Tensor<int>
 
-Tensor copied(3); // sizes must  match
-copied = vector;
+Tensor copied; // doesn't require dims to match
+copied = vector; // O(N) copy
 
 cout << vector; // tensor<i>: {1i, 2i, 3i}
 
-Tensor stealed(3);
-stealed = std::move(vector);
+Tensor stealed;
+stealed = std::move(vector); // O(1)
 
-cout << vector; // tensor<i>: 0i
+cout << vector; // tensor(null)
 ```
 
-#### Concat tensors
+#### Concat tensors (not implemented in c++mappings branch)
 
 Тензоры одинаковой размерности можно объединять в один тензор на ранк выше:
 ```c++
@@ -274,7 +271,7 @@ Tensor copied(v1, v2, v3); // 1 time copy
 Tensor stealed(std::move(v1), std::move(v2), std::move(v3)); // 0 copy, steals data
 ```
 
-#### Elementwise multiplication
+#### Elementwise multiplication (not implemented in c++mappings branch)
 
 Unary multiplication:
 ```c++
@@ -299,7 +296,7 @@ cout << v2; // {4, 5, 6}
 cout << mul; // {4, 10, 18}
 ```
 
-#### Create tensor from any dimensional raw array
+#### Create tensor from any dimensional raw array (not implemented in c++mappings branch)
 
 ```c++
 // so you have raw array of any dimensionality
@@ -325,7 +322,7 @@ tensor(2)<i>:{
 */
 ```
 
-#### Create tensor from STL vector
+#### Create tensor from STL vector (not implemented in c++mappings branch)
 
 ```c++
 std::vector<std::vector<int>> mv = {
@@ -344,7 +341,7 @@ tensor(2)<i>:{
 */
 ```
 
-#### Iterator
+#### Iterator (not implemented in c++mappings branch)
 
 Iterator example:
 ```c++
@@ -370,7 +367,7 @@ for(auto & t: tensor){
 */
 ```
 
-#### Non-rectangular tensors
+#### Non-rectangular tensors (for c++recursive branch)
 
 Tensor может быть не прямоугольным?
 Это когда nested тензоры могут быть разного size.
@@ -417,7 +414,7 @@ cout << mul << endl; // elements cubed
 */
 ```
 
-#### Buffer Overflow and Index out of bounds
+#### Buffer Overflow and Index out of bounds (for c++recursive branch)
 
 Не знаю нужны ли эти проверки of buffer overflow. Они удобные, но создают лишний overhead?
 
@@ -491,6 +488,15 @@ C++:
 
 CUDA:
 - CUDA C++ Programming Guide. https://docs.nvidia.com/cuda/cuda-c-programming-guide/
+- NVIDIA (Course) - Getting Started with Accelerated Computing in Modern CUDA C++
+- NVIDIA (Course) - Fundamentals of Accelerated Computing with CUDA Python
+
+PyTorch:
+- https://docs.pytorch.org
+
+PyTorch DDP:
+- https://docs.pytorch.org/tutorials/intermediate/ddp_tutorial.html
+- https://sebastianraschka.com/teaching/pytorch-1h/
 
 Fundamental Deep Learning Books:
 - Bishop, C. M., & Nasrabadi, N. M. (2006). Pattern recognition and machine learning (Vol. 4, No. 4, p. 738). New York: springer.
@@ -509,6 +515,7 @@ OpenCV:
 - Прохоренок, Н. А. (2018). OpenCV и Java. Обработка изображений и компьютерное зрение. БХВ-Петербург.
 
 YouTube:
+- Евгений Разинков. (2025). AI: от основ до трансформеров. https://www.youtube.com/watch?v=MGmrCV6AbAI&list=PL6-BrcpR2C5Q1ivGTQcglILJG6odT2oCY
 - Евгений Разинков. (2023). Machine Learning (2023, spring). https://www.youtube.com/playlist?list=PL6-BrcpR2C5SCyFvs9Xojv24povpBCI6W
 - Евгений Разинков. (2022). Лекции по машинному обучению (осень, 2022). https://www.youtube.com/playlist?list=PL6-BrcpR2C5QYSAfoG8mbQUsI9zPVnlBV
 - Евгений Разинков. (2021). Лекции по Advanced Computer Vision (2021). https://www.youtube.com/playlist?list=PL6-BrcpR2C5RV6xfpM7_k5321kJrcKEO0
