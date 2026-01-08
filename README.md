@@ -7,7 +7,9 @@ Tensor is a multidimensional array implemented with mappings (basically, one lar
 Tensor = [batch * depth * rows * cols]
 ```
 
-## Why branch
+---
+
+## Why c++mapping branch
 
 Замена рекурсивной имплементации на хранение данных в одном длинном массиве.
 Рекурсивная реализация по "Space Complexity" занимает в 3-6 раз больше.
@@ -15,14 +17,6 @@ Tensor = [batch * depth * rows * cols]
 в реализации с mapping-ом индексов only simple arithmetic and 1 memory access is performed, it is faster.
 В рекурсивной имплементации O(rank) потому что для доступа к scalar-у идет рекурсивный проход по массивам rank раз, также кажется cost of access array operation высокий.
 Хранение в длинном массиве должно быть удобным для SIMD/SIMT.
-
-2026-01-07
-Need to do:
-- [ ] Concat, it's better to left only concat friend function
-- [ ] Tensor operataions: unary/binary (operator +-*/ overloading), matmul, ...
-Weidman, S. (2019)
-- [ ] AutoGrad
-- [ ] DL classes
 
 ```c++
 template <Arithmetic T = float>
@@ -63,82 +57,15 @@ public:
 };
 ```
 
-All the below might be irrelevant for mapping branch...
+## TODO
 
-#### Space Complexity (for c++recursive branch)
-Memory Consumption
-
-```c++
-Tensor tensor(2, 2); // Tensor 2x2
-cout << sizeof(tensor) << endl; // 24
-
-std::vector<std::vector<int>> mv = {
-   {1, 2},
-   {3, 4}
-}; // std::vector 2x2
-cout << sizeof(mv) << endl; // 24
-```
-
-Tensor 2x2 - 2D Tensor, который весит 24 bytes.
-2D Tensor хранит массив 1D Tensor-ов по 24 bytes.
-1D Tensor хранит массив Scalar-Tensor-ов, которые тоже весят 24 byte-а.
-
-`Shape = (Row x Col)`
-
-`1 + Row + Row x Col объектов`
-
-Каждый объект весит 24 byte-а:
-```
-24 + Row * 24 + Row * Col * 24 bytes.
-```
-
-У std::vector то же самое, только scalar-ы весят 4 или 8 bytes:
-```
-24 + Row * 24 + Row * Col * 4/8 bytes
-```
-
-То есть эта имплементация занимает в 3/6 раз больше памяти, чем если пользовать nested std::vector.
-
-Если пользовать raw multidimensional array, то там вообще без overhead-а по memory:
-```
-Row * Col * 4/8 bytes
-```
-
-Это связано с тем, что Tensor это массив Tensor-ов.
-
-Лучший подход мог бы быть - **"Multidimensional Array with Mappings"**.
-В таком подходе память выделяется целиком, в одном непрерывном массиве.
-
-Также я думал о создании рекурсивных template-ов, в таком случае было бы очень эффективно по памяти, но приходилось бы указывать очень длинные типы:
-```c++
-template <typename T = double>
-class Tensor { // Base case
-public:
-   T value;
-   Tensor(){ cout << "Base case" << endl; }
-};
-
-template <typename T>
-class Tensor<Tensor<T>> {
-public:
-   Tensor * coeffs;
-   Tensor(){ cout << "Recursive case" << endl; }
-   Tensor(std::integral auto ... args){
-      int dims[] = {args...};
-      rank = sizeof...(args);
-      for(int i = 0; i < rank; i++){
-         cout << dims[i] << endl;
-      }
-      size = dims[0];
-      coeffs = new Tensor<T>[size];
-   }
-};
-
-int main(){
-   Tensor<Tensor<double>> tensor(2); // after calls Base case
-   // Tensor<Tensor<Tensor<double>>> tensor(2, 2); // after calls Recursive case
-}
-```
+2026-01-07
+Need to do:
+- [ ] Concat, it's better to left only concat friend function
+- [ ] Tensor operataions: unary/binary (operator +-*/ overloading), matmul, ...
+Weidman, S. (2019)
+- [ ] AutoGrad
+- [ ] DL classes
 
 ---
 
@@ -402,70 +329,6 @@ for(auto & t: tensor){
    }
 */
 ```
-
-#### Non-rectangular tensors (for c++recursive branch)
-
-Tensor может быть не прямоугольным?
-Это когда nested тензоры могут быть разного size.
-
-Случай непрямоугольности я явно не запращею,
-но я расчитывал на то, что tensor прямоугольный, поэтому нужно тестить.
-При передаче размерности в контструктор создается прямоугольный tensor.
-
-Я думаю, что не буду создавать явные проверки или дополнительную логику дополнения до прямоугольности с поиском самой длинной строки и тому подобное.
-
-Просто то, что в `shape()` я буду считать размер по первым тензорам... ???
-
-- В случае непрямоугольности копирование работает и не обрезает до прямоугольности.
-- Непрямоугольность будет работать и с умножением.
-- initializer_list конструкторы работают при передаче непрямоугольных листов
-
-```c++
-std::vector<std::vector<int>> mv = {
-   {1, 2, 3},
-   {3, 4}
-};
-
-// Конвертирует непрямоугольные векторы соответсвенно
-Tensor matrix = from_stl_vector(mv);
-
-// Копирование
-Tensor matrix_copy = matrix; // constructor
-matrix_copy = matrix; // assignment
-cout << matrix_copy << endl;
-
-// Получается непрямоугольность будет работать и с умножением.
-matrix_copy *= matrix; // Unary elementwise
-cout << matrix_copy << endl; // elements squared
-/*
-1 4 9
-9 16
-*/
-
-Tensor mul = matrix * matrix_copy; // Binary elementwise
-cout << mul << endl; // elements cubed
-/*
-1 8 27
-27 64
-*/
-```
-
-#### Buffer Overflow and Index out of bounds (for c++recursive branch)
-
-Не знаю нужны ли эти проверки of buffer overflow. Они удобные, но создают лишний overhead?
-
-Проверка Index out of bounds есть в index `operator []`.
-Но ни одна внутренняя имплементация функций tensor-а не использует этот operator, а напрямую используется raw array `_coeffs`.
-
-Зачем-то я проверяю совпадение `_rank` и `_size` в assignment `operator =`,
-я думаю это удобно, хотя можно было просто сделать полное приравнение.
-
-Я проверяю на совпадение size при unary multiplication `operator *=`.
-Так как имплементация использует raw array, нет проверки на out of bounds,
-и несовпадающий `_size` может вызывать buffer overflow с одной из сторон.
-
-Заметь что нет superior проверки на совпадения всех размеров вложенных тензоров, то есть не запрещается создавать непрямоугольные тензоры,
-но расчитывать на это не стоит, тензор сделан с расчетом на прямоугольность размерностей.
 
 ---
 
