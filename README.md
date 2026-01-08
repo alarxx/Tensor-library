@@ -171,6 +171,17 @@ tensor(3D)<f>:
 You can specify type:
 ```c++
 Tensor<int> tensor(depth, rows, cols); // specified tensor of type int
+cout << tensor;
+/*
+tensor(3D)<i>:
+ 0 0 0
+ 0 0 0
+ 0 0 0
+
+ 0 0 0
+ 0 0 0
+ 0 0 0
+*/
 ```
 
 For dims allowed only int values:
@@ -219,6 +230,18 @@ float sc = matrix.get(0, 0); // 42, get scalar value from tensor object
 cout << matrix;
 // {{42. 0.},
 //  { 0. 0.}}
+```
+
+Would be nice to implement the idea to call `tensor[d][r][c]`.
+Here is the problem with proxy "TensorView" which should not make copy, imo.
+Also, I don't want to overcomplicate things.
+```c++
+class Tensor {
+   ...
+   inline Tensor& operator [] (const int index) {
+      return coeffs[index]; // must return Tensor object
+   }
+}
 ```
 
 #### Initializer list

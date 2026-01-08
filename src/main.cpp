@@ -41,7 +41,7 @@ int main(){
     Tensor<float> t(3, dims);
 
     int depth = 2, rows = 3, cols = 3;
-    Tensor tensor(depth, rows, cols); // Tensor<float>, rank-3    std::cout << tensor << std::endl;
+    Tensor<int> tensor(depth, rows, cols); // Tensor<float>, rank-3    std::cout << tensor << std::endl;
     std::cout << tensor << std::endl;
 
 
