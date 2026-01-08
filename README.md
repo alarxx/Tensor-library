@@ -64,6 +64,7 @@ Need to do:
 - [ ] Concat, it's better to left only concat friend function
 - [ ] Tensor operataions: unary/binary (operator +-*/ overloading), matmul, ...
 Weidman, S. (2019)
+- [ ] CUDA backend
 - [ ] AutoGrad
 - [ ] DL classes
 
