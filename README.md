@@ -11,9 +11,10 @@ Tensor = [batch * depth * rows * cols]
 
 Замена рекурсивной имплементации на хранение данных в одном длинном массиве.
 Рекурсивная реализация по "Space Complexity" занимает в 3-6 раз больше.
-Доступ к элементам в рекурсивной реализации O(n), в реализации с mapping-ом индексов можно считать за O(1).
-В рекурсивной имплементации O(n) потому что для доступа к scalar-у идет рекурсивный проход по массивам rank раз, также кажется cost of access array operation высокий.
-Хранение в длинном массиве должно быть удобным для SIMD.
+Доступ к элементам в рекурсивной реализации needs to follow each pointer individually, resulting in many memory accesses,
+в реализации с mapping-ом индексов only simple arithmetic and 1 memory access is performed, it is faster.
+В рекурсивной имплементации O(rank) потому что для доступа к scalar-у идет рекурсивный проход по массивам rank раз, также кажется cost of access array operation высокий.
+Хранение в длинном массиве должно быть удобным для SIMD/SIMT.
 
 2026-01-07
 Need to do:
