@@ -475,6 +475,6 @@ inline U& Tensor<U>::get(std::integral auto ... args){
     return coeffs[index];
 }
 
-} // namespace tensor
+}; // namespace tensor
 
 #endif
