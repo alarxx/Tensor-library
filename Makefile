@@ -14,7 +14,8 @@
 	fyi_file \
 	cmake-build \
 	cmake-run \
-	cmake-clean
+	cmake-clean \
+	cmake-install
 
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -25,6 +26,7 @@ help:
 	@echo "... cmake-build 	 - Build CMake"
 	@echo "... cmake-run-<i> - Build and Run"
 	@echo "... cmake-clean 	 - Remove build/"
+	@echo "... cmake-install - Build and Install"
 	@echo "..."
 	@echo "... FYI:"
 	@echo "... 	print_sources"
@@ -127,3 +129,6 @@ cmake-run-2: cmake-build
 
 cmake-clean:
 	rm -rf build
+
+cmake-install: cmake-build
+	su -c "cmake --install build"
