@@ -116,7 +116,12 @@ public:
     // inline Tensor& operator [] (const int index) {
     //     return coeffs[index];
     // }
+private:
+    int indexOf(std::integral auto... args) const;
+public:
     inline T& get(std::integral auto ... args);
+    // const Tensor can call only const methods
+    inline const T& get(std::integral auto ... args) const;
 
     // --- toString ---
     std::string toString() const;
@@ -457,9 +462,8 @@ Tensor<T> & Tensor<T>::operator = (Tensor<T> && other){
 
 // ------
 
-
 template <Arithmetic U>
-inline U& Tensor<U>::get(std::integral auto ... args){
+int Tensor<U>::indexOf(std::integral auto... args) const {
     int _dims[] = {args...}; // arguments expansion (not compute free operation)
     if(rank != sizeof...(args)){ // number of dim entries
         throw std::runtime_error("Error: incorrect number of indexes");
@@ -472,7 +476,17 @@ inline U& Tensor<U>::get(std::integral auto ... args){
         }
         index += _dims[d] * stride;
     }
-    return coeffs[index];
+    return index;
+}
+
+template <Arithmetic U>
+inline U& Tensor<U>::get(std::integral auto ... args){
+    return coeffs[indexOf(args...)];
+}
+
+template <Arithmetic U>
+inline const U& Tensor<U>::get(std::integral auto ... args) const {
+    return coeffs[indexOf(args...)];
 }
 
 }; // namespace tensor

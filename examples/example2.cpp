@@ -31,7 +31,7 @@ using   tensor::Tensor,
 int main(){
 
     Tensor sc1 = scalar(42.0);
-    Tensor sc2 = scalar(45.0);
+    const Tensor sc2 = scalar(45.0);
     sc1.get() = sc2.get();
     sc1.get() += 1;
     std::cout << "scalar: " << sc1.get() << std::endl; // 46
