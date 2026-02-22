@@ -125,6 +125,21 @@ public:
     template <Arithmetic U>
     friend std::ostream& operator<<(std::ostream& os, const Tensor<U>& tensor);
 
+
+    // --- ---
+    int getRank() const { return rank; }
+
+    int * getDims() const { return dims; }
+
+    T * getCoeffs() { return coeffs; }
+
+    int getLength() const {
+        int s = 1;
+        for (int d = 0; d < rank; ++d){
+            s *= dims[d];
+        }
+        return s;
+    }
 };
 
 

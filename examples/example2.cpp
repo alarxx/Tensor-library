@@ -44,6 +44,11 @@ int main(){
     Tensor<int> tensor(depth, rows, cols); // Tensor<float>, rank-3    std::cout << tensor << std::endl;
     std::cout << tensor << std::endl;
 
+    tensor.get(0, 0, 0) = 123;
+    std::cout << tensor.getRank() << std::endl;
+    std::cout << tensor.getLength() << std::endl;
+    std::cout << tensor.getDims()[0] << std::endl;
+    std::cout << tensor.getCoeffs()[0] << std::endl;
 
     /*
     Tensor t(3, 3, 3);
