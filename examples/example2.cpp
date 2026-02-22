@@ -22,7 +22,7 @@
 #include <initializer_list>
 #include <vector>
 
-#include "Tensor/Tensor.hpp"
+#include "TensorX/Tensor.hpp"
 
 // using namespace tensor;
 using   tensor::Tensor,

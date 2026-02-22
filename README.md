@@ -70,6 +70,16 @@ Weidman, S. (2019)
 
 ---
 
+## CMake
+
+```sh
+rm -r build
+cmake -S ./ -B ./build
+cd ./build
+make
+./examples/example1
+```
+
 ## Features
 
 ### Tensors

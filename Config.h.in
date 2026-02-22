@@ -1,0 +1,11 @@
+// configure_file()
+
+#pragma once
+
+#define TensorX_VERSION_MAJOR @TensorX_VERSION_MAJOR@
+#define TensorX_VERSION_MINOR @TensorX_VERSION_MINOR@
+
+#define MY_CUSTOM_VARIABLE "@MY_CUSTOM_VARIABLE@"
+
+// in case option is after configure_file()
+#cmakedefine USE_EXAMPLES

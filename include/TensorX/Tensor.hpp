@@ -1,7 +1,3 @@
-#pragma once
-#ifndef TENSOR_HPP
-#define TENSOR_HPP
-
 /*
     SPDX-License-Identifier: MPL-2.0
     --------------------------------
@@ -15,7 +11,11 @@
     Provided “as is”, without warranty of any kind.
 
     Copyright © 2022-2026 Alar Akilbekov. All rights reserved.
- */
+*/
+
+#pragma once
+#ifndef TENSOR_HPP
+#define TENSOR_HPP
 
 // Макрос для создания вложенных std::initializer_list
 #define INITIALIZER_LIST_1(T) std::initializer_list<T>

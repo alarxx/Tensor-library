@@ -11,13 +11,20 @@
 	print_sources \
 	print_headers \
 	print_objects \
-	fyi_file
+	fyi_file \
+	cmake-build \
+	cmake-run \
+	cmake-clean
 
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... build  	- Build"
 	@echo "... run  	- Build and Run"
-	@echo "... clean 	- Remove build/"
+	@echo "... clean 	- Remove out/build/"
+	@echo "..."
+	@echo "... cmake-build 	 - Build CMake"
+	@echo "... cmake-run-<i> - Build and Run"
+	@echo "... cmake-clean 	 - Remove build/"
 	@echo "..."
 	@echo "... FYI:"
 	@echo "... 	print_sources"
@@ -105,3 +112,18 @@ clean:
 	rm ${TARGET_LOCATION}
 	rm -r ${PROJECT_BINARY_DIR}
 	@echo Clean done!
+
+
+# CMake
+cmake-build:
+	cmake -S . -B build
+	cmake --build build
+
+cmake-run-1: cmake-build
+	./build/examples/example1
+
+cmake-run-2: cmake-build
+	./build/examples/example2
+
+cmake-clean:
+	rm -rf build
