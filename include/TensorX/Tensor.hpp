@@ -192,9 +192,16 @@ Tensor<U>::Tensor(int rank, int dims[]){ // int dims[] is int * dims
     if(rank < 0){
         throw std::runtime_error("Error: Null tensor, rank is invalid!");
     }
-    if(dims == nullptr){
+    else if (rank == 0){
+        this->rank = rank;
+        this->dims = nullptr;
+        this->coeffs = new U[1];
+        return;
+    }
+    else if(dims == nullptr){
         throw std::runtime_error("Error: Null tensor, dims is invalid!");
     }
+
     this->rank = rank;
     this->dims = new int[rank];
     for(int i = 0; i < rank; i++){
