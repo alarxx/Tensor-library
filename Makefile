@@ -15,7 +15,10 @@
 	cmake-build \
 	cmake-run \
 	cmake-clean \
-	cmake-install
+	cmake-install \
+	submodules \
+	install-opencv \
+	clean-opencv
 
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -23,10 +26,13 @@ help:
 	@echo "... run  	- Build and Run"
 	@echo "... clean 	- Remove out/build/"
 	@echo "..."
-	@echo "... cmake-build 	 - Build CMake"
-	@echo "... cmake-run-<i> - Build and Run"
-	@echo "... cmake-clean 	 - Remove build/"
-	@echo "... cmake-install - Build and Install"
+	@echo "... cmake-build		- Build CMake"
+	@echo "... cmake-run-<i>	- Build and Run"
+	@echo "... cmake-clean		- Remove build/"
+	@echo "... cmake-install	- Build and Install"
+	@echo "... submodules		- Fetch Git Submodules"
+	@echo "... install-opencv	- Build and Install OpenCV"
+	@echo "... clean-opencv		- Clean OpenCV"
 	@echo "..."
 	@echo "... FYI:"
 	@echo "... 	print_sources"
@@ -127,8 +133,26 @@ cmake-run-1: cmake-build
 cmake-run-2: cmake-build
 	./build/examples/example2
 
+cmake-run-3: cmake-build
+	./build/examples/example3
+
 cmake-clean:
 	rm -rf build
 
 cmake-install: cmake-build
 	su -c "cmake --install build"
+
+submodules:
+	git submodule update --init --recursive --progress
+
+# OpenCV
+install-opencv:
+	# Build OpenCV with Ninja:
+	cd opencv && cmake -S . -B build -G Ninja -DWITH_QT=ON -DWITH_GTK=OFF
+	cd opencv/build && ninja
+	# Install OpenCV
+	cd opencv/build && su -c "ninja install"
+
+clean-opencv:
+	rm -rf opencv/build
+	# doesn't clean from system

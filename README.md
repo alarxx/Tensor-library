@@ -343,6 +343,67 @@ for(auto & t: tensor){
 
 ---
 
+## System
+
+- OS: Debian 12 (Bookworm)
+- Compiler: GCC 12.2.0
+- C++ standard: C++20
+- CMake: 3.25.1
+- Ninja: 1.11.1
+
+## Dependencies
+
+### Git Submodules
+
+```sh
+make submodules
+```
+
+#### Detailed process on submodules
+
+```sh
+git submodule add -b 4.x git@github.com:opencv/opencv.git
+```
+
+Set branches:
+```sh
+git submodule set-branch -b 4.x opencv
+```
+
+Initialize and update submodules to recorded commits:
+```sh
+git submodule update --init --recursive --progress
+```
+
+Merge updates, fetching new commits:
+```sh
+git submodule update --remote [--recursive]
+```
+
+### Build and Install OpenCV
+
+```sh
+make install-opencv
+```
+
+[Build and Install OpenCV](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html) <br>
+OpenCV example: [OpenCV with CMake](https://docs.opencv.org/4.x/db/df5/tutorial_linux_gcc_cmake.html) <br>
+
+---
+
+You might want to install the following.
+
+Install Ninja build system:
+```sh
+apt install ninja-build
+ninja --version
+```
+
+Install Qt GUI:
+```sh
+apt install -y qtcreator qtbase5-dev qt5-qmake cmake
+```
+
 ## Licence
 
 Tensor-library is licensed under the terms of [MPL-2.0](https://mozilla.org/MPL/2.0/), which is simple and straightforward to use, allowing this project to be combined and distributed with any proprietary software, even with static linking. If you modify, only the originally covered files must remain under the same MPL-2.0.
