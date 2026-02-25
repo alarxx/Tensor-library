@@ -6,6 +6,7 @@ project(TensorX VERSION 1.0 LANGUAGES CXX)
 
 # Static library target named MathFunctions (see also Shared Library)
 add_library(TensorX STATIC src/Tensor.cpp)
+set_target_properties(TensorX PROPERTIES POSITION_INDEPENDENT_CODE ON) # -fPIC
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 20) # 98
