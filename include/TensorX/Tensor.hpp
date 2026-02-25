@@ -34,6 +34,8 @@
 
 namespace tensor {
 
+inline constexpr bool debug = false;
+
 template <typename T>
 concept Arithmetic = requires(T a, T b){
     // requires std::is_arithmetic_v<T>;
@@ -319,7 +321,8 @@ Tensor<T>::Tensor(const INITIALIZER_LIST_4(T) list){
 
 template <Arithmetic T>
 Tensor<T>::~Tensor(){
-    std::cout << "Destructor" << std::endl;
+    if constexpr (debug) std::cout << "Destructor" << std::endl;
+
     rank = -1;
     if(coeffs != nullptr){
         delete[] coeffs;
@@ -336,7 +339,7 @@ Tensor<T>::~Tensor(){
 // O(N)
 template <Arithmetic T>
 Tensor<T>::Tensor(const Tensor<T> & other) {
-    std::cout << "Copy Constructor" << std::endl;
+    if constexpr (debug) std::cout << "Copy Constructor" << std::endl;
 
     /*
     No need in delete[] coeffs and dims, because it is a constructor
@@ -366,7 +369,7 @@ Tensor<T>::Tensor(const Tensor<T> & other) {
 // O(N)
 template <Arithmetic T>
 Tensor<T> & Tensor<T>::operator = (const Tensor<T> & other){
-    std::cout << "Copy Assignment Operator" << std::endl;
+    if constexpr (debug) std::cout << "Copy Assignment Operator" << std::endl;
     if(this != &other){
         /*
         // Copy assignment should not require rank and dims match,
@@ -414,7 +417,7 @@ Tensor<T> & Tensor<T>::operator = (const Tensor<T> & other){
 // O(1)
 template <Arithmetic T>
 Tensor<T>::Tensor(Tensor<T> && other){
-    std::cout << "Move Constructor" << std::endl;
+    if constexpr (debug) std::cout << "Move Constructor" << std::endl;
     // this = other
     rank = other.rank;
     dims = other.dims;
@@ -430,7 +433,7 @@ Tensor<T>::Tensor(Tensor<T> && other){
 // O(1)
 template <Arithmetic T>
 Tensor<T> & Tensor<T>::operator = (Tensor<T> && other){
-    std::cout << "Move Assignment Operator" << std::endl;
+    if constexpr (debug) std::cout << "Move Assignment Operator" << std::endl;
     if(this != &other){
         /*
         // Copy assignment should not require rank and dims match,
