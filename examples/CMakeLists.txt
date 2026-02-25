@@ -21,6 +21,7 @@ target_link_libraries(example2 PRIVATE ${EXTRA_LIBS})
 target_link_libraries(example3 PRIVATE ${EXTRA_LIBS})
 # vs. target_link_directories() - where to search for .a/.so (not needed, in general)
 
+target_compile_definitions(example3 PRIVATE IMAGE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/images")
 
 # # Install
 # install(TARGETS Tutorial DESTINATION bin/Tutorial)

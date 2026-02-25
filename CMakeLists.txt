@@ -16,8 +16,8 @@ message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER_ID}")
 
 # OpenCV
 find_package(OpenCV REQUIRED)
-target_include_directories(${PROJECT_NAME} PUBLIC ${OpenCV_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${OpenCV_LIBS})
+target_include_directories(TensorX PUBLIC ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(TensorX PUBLIC ${OpenCV_LIBS})
 
 # option() without specifying [value] defaults to OFF
 option(USE_EXAMPLES "Build example executables" ON)
