@@ -20,6 +20,7 @@
 
 #include "TensorX/Tensor.hpp"
 #include "ops.hpp"
+#include "convolution.hpp"
 
 
 namespace tensor {

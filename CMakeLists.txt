@@ -15,7 +15,7 @@ message(STATUS "Compiler used: ${CMAKE_CXX_COMPILER}")
 message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER_ID}")
 
 # OpenCV
-find_package(OpenCV REQUIRED)
+find_package(OpenCV CONFIG REQUIRED)
 target_include_directories(TensorX PUBLIC ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(TensorX PUBLIC ${OpenCV_LIBS})
 
