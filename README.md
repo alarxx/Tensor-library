@@ -13,7 +13,7 @@ Tensor = [batch * depth * rows * cols]
 
 ---
 
-## Why c++mapping branch
+## Why cxx-mapping branch
 
 Замена рекурсивной имплементации на хранение данных в одном длинном массиве.
 Рекурсивная реализация по "Space Complexity" занимает в 3-6 раз больше.
@@ -71,6 +71,10 @@ Weidman, S. (2019)
 - [ ] CUDA backend
 - [ ] AutoGrad
 - [ ] DL classes
+2026-02-27
+- [ ] Rename CMake binary to tensorxx
+- [ ] Rename the PyPI to tensorxx
+
 
 ---
 
