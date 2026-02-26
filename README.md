@@ -1,5 +1,9 @@
 # Tensor-library (C++)
 
+## Python binding
+
+https://github.com/alarxx/tensorx-python
+
 ## Tensor 
 
 Tensor is a multidimensional array implemented with mappings (basically, one large array), allowing fast access operations and suitable for SIMT operations.
