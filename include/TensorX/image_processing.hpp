@@ -153,10 +153,10 @@ namespace tensor {
         const T low, const T high,
         const T WEAK = (T) 50, const T STRONG = (T) 255
     ){
-        struct Pixel {
-            int x;
-            int y;
-            Pixel(int _x, int _y): x(_x), y(_y){}
+        class Pixel {
+        public:
+            int row, col;
+            Pixel(int _row, int _col): row(_row), col(_col){}
         };
 
         int H = image.getDims()[0];
@@ -194,22 +194,22 @@ namespace tensor {
             q.pop();
 
             // recursive behavior
-            out.get(p.x, p.y) = STRONG;
+            out.get(p.row, p.col) = STRONG;
 
             // 3x3 - 8-neighbor relationship
-            for(int dx = -1; dx <= 1; ++dx){
-                for(int dy = -1; dy <= 1; ++dy){
-                    if(dx == 0 && dy == 0) continue;
+            for(int dr = -1; dr <= 1; ++dr){
+                for(int dc = -1; dc <= 1; ++dc){
+                    if(dr == 0 && dc == 0) continue;
 
-                    int nx = p.x + dx;
-                    int ny = p.y + dy;
+                    int nr = p.row + dr;
+                    int nc = p.col + dc;
 
-                    if(nx < 0 || nx >= H || ny < 0 || ny >= W) continue;
+                    if(nr < 0 || nr >= H || nc < 0 || nc >= W) continue;
 
-                    if(strongweak.get(nx, ny) == WEAK){
-                        strongweak.get(nx, ny) = STRONG;
+                    if(strongweak.get(nr, nc) == WEAK){
+                        strongweak.get(nr, nc) = STRONG;
                         // recursive behavior
-                        q.emplace(nx, ny);
+                        q.emplace(nr, nc);
                     }
                 }
             }
