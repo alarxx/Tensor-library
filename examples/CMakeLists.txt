@@ -7,7 +7,7 @@ add_executable(example3 example3.cpp)
 # "" is a list, e.g. "one;two;three"
 set(EXTRA_LIBS "")
 set(EXTRA_INCLUDES "")
-list(APPEND EXTRA_LIBS TensorX)
+list(APPEND EXTRA_LIBS tensorxx)
 # list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/MathFunctions")
 
 # Transitive property

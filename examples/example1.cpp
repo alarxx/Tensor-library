@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <TensorX/Config.h>
+#include <tensorxx/Config.h>
 
 
 void print_cxx_std(){
@@ -25,5 +25,5 @@ int main(int argc, char* argv[]){
 
     std::cout << "Config.h.in" << std::endl;
     std::cout << "\t MY_CUSTOM_VARIABLE: " << MY_CUSTOM_VARIABLE << std::endl;
-    std::cout << "\t Version: " << TensorX_VERSION_MAJOR << "." << TensorX_VERSION_MINOR << std::endl;
+    std::cout << "\t Version: " << tensorxx_VERSION_MAJOR << "." << tensorxx_VERSION_MINOR << std::endl;
 }

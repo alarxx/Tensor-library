@@ -14,7 +14,7 @@
 #ifndef _TENSORCONVOLUTION_
 #define _TENSORCONVOLUTION_
 
-#include "TensorX/Tensor.hpp"
+#include "Tensor.hpp"
 #include "ops.hpp"
 
 #include <cassert>

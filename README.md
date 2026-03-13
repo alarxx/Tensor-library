@@ -72,21 +72,11 @@ Weidman, S. (2019)
 - [ ] AutoGrad
 - [ ] DL classes
 2026-02-27
-- [ ] Rename CMake binary to tensorxx
+- [x] Rename CMake binary to tensorxx
 - [ ] Rename the PyPI to tensorxx
 
 
 ---
-
-## CMake
-
-```sh
-rm -r build
-cmake -S ./ -B ./build
-cd ./build
-make
-./examples/example1
-```
 
 ## Features
 
@@ -358,6 +348,21 @@ for(auto & t: tensor){
 - C++ standard: C++20
 - CMake: 3.25.1
 - Ninja: 1.11.1
+
+## CMake
+
+To build and run example1:
+```sh
+rm -r build
+cmake -S ./ -B ./build
+cd ./build
+make
+./examples/example1
+```
+or:
+```sh
+make cmake-run-1
+```
 
 ## Dependencies
 

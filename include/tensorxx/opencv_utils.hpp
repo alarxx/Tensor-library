@@ -18,7 +18,7 @@
 
 #include <opencv2/opencv.hpp>
 
-#include "TensorX/Tensor.hpp"
+#include "Tensor.hpp"
 
 
 namespace tensor {

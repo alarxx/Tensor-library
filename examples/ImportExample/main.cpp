@@ -1,5 +1,5 @@
 #include <iostream>
-#include "TensorX/Tensor.hpp"
+#include "tensorxx/Tensor.hpp"
 
 int main(){
     std::cout << "Hello, Tensor Library!" << std::endl;

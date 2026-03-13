@@ -14,7 +14,7 @@
 #ifndef _TENSOROPS_
 #define _TENSOROPS_
 
-#include "TensorX/Tensor.hpp"
+#include "Tensor.hpp"
 
 #include <string>
 #include <algorithm>

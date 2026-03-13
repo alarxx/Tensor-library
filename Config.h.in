@@ -2,8 +2,8 @@
 
 #pragma once
 
-#define TensorX_VERSION_MAJOR @TensorX_VERSION_MAJOR@
-#define TensorX_VERSION_MINOR @TensorX_VERSION_MINOR@
+#define tensorxx_VERSION_MAJOR @tensorxx_VERSION_MAJOR@
+#define tensorxx_VERSION_MINOR @tensorxx_VERSION_MINOR@
 
 #define MY_CUSTOM_VARIABLE "@MY_CUSTOM_VARIABLE@"
 

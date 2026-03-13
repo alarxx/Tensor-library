@@ -4,14 +4,14 @@
 
 #include <opencv2/opencv.hpp>
 
-#include "TensorX/Tensor.hpp"
+#include "tensorxx/Tensor.hpp"
 
-#include "TensorX/opencv_utils.hpp" // imread_gray, imshow
-#include "TensorX/utils.hpp" // array2string
-#include "TensorX/convolution.hpp" // conv
-#include "TensorX/ops.hpp" // find_median, find_mean
-#include "TensorX/image_processing.hpp"
-#include "TensorX/dev.hpp" // test, draw_edge_components
+#include "tensorxx/opencv_utils.hpp" // imread_gray, imshow
+#include "tensorxx/utils.hpp" // array2string
+#include "tensorxx/convolution.hpp" // conv
+#include "tensorxx/ops.hpp" // find_median, find_mean
+#include "tensorxx/image_processing.hpp"
+#include "tensorxx/dev.hpp" // test, draw_edge_components
 
 
 using tensor::Tensor;

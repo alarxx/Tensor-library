@@ -2,7 +2,7 @@
 
 #include <opencv2/opencv.hpp>
 
-#include "TensorX/Tensor.hpp"
+#include "Tensor.hpp"
 #include "ops.hpp"
 #include "opencv_utils.hpp"
 

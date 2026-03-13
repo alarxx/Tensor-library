@@ -18,7 +18,7 @@
 #include <cmath>
 #include <climits>
 
-#include "TensorX/Tensor.hpp"
+#include "Tensor.hpp"
 #include "ops.hpp"
 #include "convolution.hpp"
 

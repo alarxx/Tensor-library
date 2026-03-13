@@ -11,12 +11,12 @@ message(STATUS "Compiler used: ${CMAKE_CXX_COMPILER}")
 message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER_ID}")
 
 # Config mode: CONFIG
-find_package(TensorX REQUIRED
-    PATHS "${CMAKE_SOURCE_DIR}/TensorX/build"
+find_package(Tensor-library REQUIRED
+    PATHS "${CMAKE_SOURCE_DIR}/Tensor-library/build"
 )
 
 # Add the main executable
 add_executable(${PROJECT_NAME} main.cpp)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE TensorX::TensorX)
+target_link_libraries(${PROJECT_NAME} PRIVATE tensorxx::tensorxx)
 
