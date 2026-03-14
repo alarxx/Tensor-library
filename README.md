@@ -2,7 +2,7 @@
 
 ## Python binding
 
-https://github.com/alarxx/tensorx-python
+Tensor-library (Python): https://github.com/alarxx/tensorxx
 
 ## Tensor 
 
